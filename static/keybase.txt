@@ -1,0 +1,57 @@
+==================================================================
+https://keybase.io/ifox
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://whatthefox.dev
+  * I am ifox (https://keybase.io/ifox) on keybase.
+  * I have a public key ASBrFaq__7ZDj9wWlos6ZE-9Wnr8htYH2lVXr_imXprYUAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012049b10671a99345e2d812869f521da83d02961ff31fa63a30491991e58ef0f4e20a",
+      "host": "keybase.io",
+      "kid": "01206b15aabfffb6438fdc16968b3a644fbd5a7afc86d607da5557aff8a65e9ad8500a",
+      "uid": "b203675886bcfe96451cba88979a2e19",
+      "username": "ifox"
+    },
+    "merkle_root": {
+      "ctime": 1624330030,
+      "hash": "b141ec1be3ac6b519bf0aa68d60f54606073e561cf7baef0ff7e9de4568885051b3cd0b7b9c436c5f210e86af22c1df94d1f9bb5500e763c5e2e3e7e3c143ba2",
+      "hash_meta": "e7760fbb28c289c41eb41c2f67ecf4042d704ef71091e7e4a16749f28afa3957",
+      "seqno": 20231269
+    },
+    "service": {
+      "entropy": "JcHlfBEZi9J0z2touM/VjO4O",
+      "hostname": "whatthefox.dev",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.6.1"
+  },
+  "ctime": 1624330046,
+  "expire_in": 504576000,
+  "prev": "7aa7b8bfcf666713a34bcab07a69e277abfd57f826606f42805ba72b5f359051",
+  "seqno": 49,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgaxWqv/+2Q4/cFpaLOmRPvVp6/IbWB9pVV6/4pl6a2FAKp3BheWxvYWTESpcCMcQgeqe4v89mZxOjS8qwemnid6v9V/gmYG9CgFunK181kFHEILkvir4++g1Pz2eRTzJssenODCy6AApXGLk0h6/YJ6f1AgHCo3NpZ8RAZ9trZpFtYDAzi6uh0MJKXo+E1Mpkc0mp8KklucYBUBiQYABnGnZd2ncR+W079GJ10PNrRUO5Z7+7ZWRDkozOC6hzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIF0yr2hpUfMQjkKMDLm6JpxjXVWzxw0cCDWJ3A+z8FtOo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/ifox
+
+==================================================================
+

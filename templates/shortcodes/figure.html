@@ -1,0 +1,6 @@
+<figure>
+  <img src="{{ src }}" {% if alt %}alt="{{ alt }}" {% endif %}>
+  <figcaption>
+    <p>{% if not config.extra.figures.hide_numbers %}Figure {{ nth }}: {% endif %}{{ body | safe }}</p>
+  </figcaption>
+</figure>
