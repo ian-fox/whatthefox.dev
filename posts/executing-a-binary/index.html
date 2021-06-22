@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/folio/galleria.folio.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/mapbox-gl@2.1.1/dist/mapbox-gl.min.css" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" rel="stylesheet" />
+  <link href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;deep-thought.css" rel="stylesheet" />
+
+  
+  
+
+  <title>
+    
+What the Fox? | Executing a Binary
+
+  </title>
+
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/mathtex-script-type.min.js" integrity="sha384-LJ2FmexL77rmGm6SIpxq7y+XA6bkLzGZEgCywzKOZG/ws4va9fUVu2neMjvc3zdv" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous" onload="renderMathInElement(document.body, {
+				delimiters: [
+					{left: '$$', right: '$$', display: true},
+					{left: '$', right: '$', display: false},
+					{left: '\\(', right: '\\)', display: false},
+					{left: '\\[', right: '\\]', display: true}
+				]
+			});"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item has-text-weight-bold" href="https:&#x2F;&#x2F;whatthefox.dev">What the Fox?</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;tags">
+            Tags
+          </a>
+          
+          <a class="navbar-item" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;categories">
+            Categories
+          </a>
+          
+          <a class="navbar-item" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;cv.pdf">
+            CV
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Executing a Binary
+          </h1>
+          <p class="subtitle"></p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>Ian Fox published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2021-07-10T02:19:01-04:00">July 10, 2021</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>10 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>1914 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;categories&#x2F;blog&#x2F;">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>blog</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;tags&#x2F;computers&#x2F;">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>computers</span>
+    </span>
+  </a>
+  
+  <a href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;tags&#x2F;linux&#x2F;">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>linux</span>
+    </span>
+  </a>
+  
+  <a href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;tags&#x2F;oh-no-my-binaries&#x2F;">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>oh no, my binaries!</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p><em>This is the second post in a series. See the previous one <a href="https://whatthefox.dev/posts/oh-no-my-binaries/">here</a>.</em></p>
+<p>Things are looking grim. We do not have much to work with. But there is still hope!</p>
+<p>One thing you may have noticed if you're following along in the <a href="https://github.com/ian-fox/ohnomybinaries">simulator</a> is that once everything gets blown away, you still have your ssh connection, and you can still <em>try</em> to run commands. Most of them will reply with a <code>command not found</code> message, but at least something is still alive to print that!</p>
+<p>How does that happen if we deleted everything?</p>
+<span id="continue-reading"></span>
+<p>When you run a command like <code>bash</code>, Linux will go to the file on disk for the bash executable and load a copy of it into memory. From then on, the file isn't actually necessary. The information will stay in memory until the process ends, at which point you'd need to start it again by once again loading it from disk.</p>
+<h2 id="examining-the-landscape">Examining the Landscape</h2>
+<p>So we deleted everything (well, most things, more on that later) from disk, but any processes which are still in memory will remain there for now. This includes our ssh connection (which is why we didn't immediately get kicked out), and our shell (which is the thing telling us <code>command not found</code>). If we exit our session we're going to have some serious problems, but at least for now we still have access to those.</p>
+<p>Most of the tools we'd normally use are gone, but we still have some options: the shell itself contains a few builtin commands which don't require calling an external binary. If we run <code>help</code> we can see what those are.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ help
+Built-in commands:
+------------------
+	. : [ [[ alias bg break cd chdir command continue echo eval exec
+	exit export false fg getopts hash help history jobs kill let
+	local printf pwd read readonly return set shift source test times
+	trap true type ulimit umask unalias unset wait
+</span></code></pre>
+<p><em>By the way, in these snippets the convention will be that if the prompt starts with <code>$</code> we're inside the container in the lab environment (i.e. we are on the system which we accidentally blew up), and if the prompt starts with <code>&gt;</code> it will be commands running on a separate computer (such as the one we are running ssh from).</em></p>
+<p>Any commands not in that list (like <code>ls</code> or <code>chmod</code>) are not available to us. We have our shell builtins, but not much else. This is considerably fewer commands than we're used to having, but in combination with input and output redirection and some other shell magic it's enough to get us started.</p>
+<p>For example, let's take stock of our surroundings. We can't use <code>ls</code>, but the shell has a feature that can help us here: globbing. In a shell command, a <code>*</code> gets expanded to the names of the files in a directory. So we can do the following:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo *
+dev etc home lib media mnt proc root run sys tmp var
+</span></code></pre>
+<p>We also have the ability to enter arbitrary text through our ssh connection, so that will be our method of sending data until we can get our hands on a copy of <code>curl</code> or <code>wget</code> or <code>scp</code> to do the heavy lifting of downloading the rest of the files we'll need (pasting through ssh is not the fastest).</p>
+<p>We can also create files by redirecting the output of echo, like so:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo &quot;Hello, World&quot; &gt; greeting
+-sh: can&#39;t create greeting: Permission denied
+</span></code></pre>
+<p>Whoops, we're still sitting at the root, and we don't have permission to write there. Fortunately we still have <code>/tmp</code>, and that <em>is</em> writable.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo &quot;Hello, World!&quot; &gt; /tmp/greeting
+$ echo /tmp/*
+greeting
+</span></code></pre>
+<p>Excellent! We can't see the contents right now, but at least we know it's there.</p>
+<h2 id="hello-world">Hello, world!</h2>
+<p>Our next step is going to be to figure out how to get a binary onto the server. If we can get that working, we'll be able to use it to add a copy of something like <code>curl</code>, and use that to download everything else we need.</p>
+<p>We'll start with a simple &quot;hello world&quot; program to test our methodology, because we can probably make it pretty small (and as we'll see in the future this will turn out to be important):</p>
+<pre style="background-color:#2b303b;">
+<code class="language-c" data-lang="c"><span style="color:#b48ead;">#include </span><span style="color:#c0c5ce;">&lt;</span><span style="color:#a3be8c;">stdio.h</span><span style="color:#c0c5ce;">&gt;
+
+</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+  </span><span style="color:#96b5b4;">printf</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Hello, world!</span><span style="color:#96b5b4;">\n</span><span style="color:#c0c5ce;">&quot;);
+}
+</span></code></pre>
+<p>For simplicity, let's assume for now that the system we're building this on is the same architecture as the server we're trying to rescue, meaning we don't have to worry about cross-compilation.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">&gt; gcc hello.c -o hello
+&gt; ./hello
+Hello, world!
+</span></code></pre>
+<p>How can we get this file onto our server? Well, we have access to <code>echo</code> and we can redirect its output, so let's try that. We'll copy our binary onto our clipboard, and try to paste it in our terminal session. Moving raw binary around sounds tricky, so we'll encode it as text first. A common trick is to use <code>base64</code>, but we'd have trouble decoding it on the other end since we don't have a copy of <code>base64</code> on the server to turn our encoded text back into binary.</p>
+<p>Fortunately, <code>echo</code> has a <code>-e</code> flag which can help us. With <code>-e</code>, echo will turn several classes of escaped characters back into their proper formats. If we encode our file with one of the methods <code>echo</code> recognizes, we'll have no problem. </p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo -e &quot;Hello\nWorld!&quot;
+Hello
+World!
+$ echo -e &quot;In ASCII, \x0a is a newline.&quot;
+In ASCII, 
+ is a newline.
+</span></code></pre>
+<p>Echo supports some shorthands like <code>\n</code> for newline, but more importantly to us with <code>\x</code> we can specify any binary byte. Let's glue some tools together to print our actual hello world in that format:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">&gt; xxd -p -c 1 hello | xargs printf &quot;\\\\x%s&quot; &gt; hello.hex
+</span></code></pre>
+<p>This will encode every byte of our file. There's one minor problem with this as written though, which is that the shell we're working with (in our simulator, at least) seems to have a limit on the size of line you can paste in. Even our small &quot;hello world&quot; binary is large enough that it won't fit if we put it all on one line.</p>
+<p>We can try wrapping it in <code>fold</code> to solve this:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">&gt; xxd -p -c 1 hello | xargs printf &quot;\\\\x%s&quot; | fold &gt; hello.hex
+</span></code></pre>
+<p>Back in the simulator:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo -e &#39;pasted contents of hello.hex here&#39; &gt; /tmp/hello
+</span></code></pre><h2 id="running-a-binary">Running a Binary</h2>
+<p>We still have a hurdle to overcome in our world-saluting adventure. With no <code>chmod</code>, how can we run our fancy new program?</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ /tmp/hello
+-sh: /tmp/hello: Permission denied
+</span></code></pre>
+<p>Let's have a closer look at what all is available to us, maybe something still on the filesystem can help.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo *
+dev etc home lib media mnt proc root run sys tmp var
+</span></code></pre>
+<p>In another stroke of luck, we didn't blow away quite everything (that will be in a future blog post). We still have <code>/lib</code>. Let's see what's in there:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ echo /lib/*
+/lib/apk /lib/firmware /lib/ld-musl-x86_64.so.1 /lib/libapk.so.3.12.0 /lib/libc.musl-x86_64.so.1 /lib/libcrypto.so.1.1 /lib/libssl.so.1.1 /lib/libz.so.1 /lib/libz.so.1.2.11 /lib/mdev /lib/modules-load.d /lib/sysctl.d
+</span></code></pre>
+<p>We still have a linker shared object! Can we call it?</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ /lib/ld-musl-x86_64.so.1
+musl libc (x86_64)
+Version 1.2.2
+Dynamic Program Loader
+Usage: /lib/ld-musl-x86_64.so.1 [options] [--] pathname [args]
+</span></code></pre>
+<p>Jackpot! If we check out the <a href="https://www.man7.org/linux/man-pages/man8/ld.so.8.html">documentation</a>, we'll see that by providing the following arguments, we can get it to execute our binary:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ /lib/ld-musl-x86_64.so.1 /tmp/hello
+/lib/ld-musl-x86_64.so.1: /tmp/test2: Not a valid dynamic program
+</span></code></pre>
+<p>Not quite! But at least we're still making progress. Let's figure out what went wrong.</p>
+<h2 id="debugging">Debugging</h2>
+<p>Let's try our solution out back on our working computer where we have access to some more tools. First let's see if we even have the same file after it's gone through our process of encoding and decoding.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">&gt; echo -e &#39;pasted contents of hello.hex&#39; &gt; hello_pasted
+&gt; diff hello hello_pasted
+Binary files hello and hello_pasted differ
+</span></code></pre>
+<p>Well that's not good. Maybe we can see what's going on in closer detail by running them both through xxd again to see where the difference is.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">&gt; xxd hello &gt; hello.hex
+&gt; xxd hello_pasted &gt; hello_pasted.hex
+&gt; diff -y hello.hex hello_pasted.hex | head
+00000000: 7f45 4c46 0201 0100 0000 0000 0000 0000  .ELF......	00000000: 7f45 4c46 0201 0100 0000 0000 0000 0000  .ELF......
+00000010: 0300 3e00 0100 0000 6010 0000 0000 0000  ..&gt;.....`. |	00000010: 0300 3e00 0a01 0000 0060 1000 0000 0000  ..&gt;......`
+00000020: 4000 0000 0000 0000 f840 0000 0000 0000  @........@ |	00000020: 0040 0000 0000 0000 000a f840 0000 0000  .@........
+00000030: 0000 0000 4000 3800 0a00 4000 2100 2000  ....@.8... |	00000030: 0000 0000 0000 4000 3800 0a00 4000 0a21  ......@.8.
+00000040: 0600 0000 0400 0000 4000 0000 0000 0000  ........@. |	00000040: 0020 0006 0000 0004 0000 0040 0000 0000  . ........
+00000050: 4000 0000 0000 0000 4000 0000 0000 0000  @.......@. |	00000050: 0000 000a 4000 0000 0000 0000 4000 0000  ....@.....
+00000060: 3002 0000 0000 0000 3002 0000 0000 0000  0.......0. |	00000060: 0000 0000 3002 0000 0a00 0000 0030 0200  ....0.....
+00000070: 0800 0000 0000 0000 0300 0000 0400 0000  .......... |	00000070: 0000 0000 0008 0000 0000 0000 000a 0300  ..........
+00000080: 7002 0000 0000 0000 7002 0000 0000 0000  p.......p. |	00000080: 0000 0400 0000 7002 0000 0000 0000 7002  ......p...
+00000090: 7002 0000 0000 0000 1900 0000 0000 0000  p......... |	00000090: 0000 0a00 0000 0070 0200 0000 0000 0019  .......p..
+</span></code></pre>
+<p>They look pretty similar, but there seems to be some extra stuff in the pasted version of the file. If we look carefully, we can see that every so often there's an extra <code>0a</code>. Remember from earlier, that's ASCII for a newline! When we used <code>fold</code> to break up our binary into multiple lines, <code>echo</code> dutifully copied those newlines to the output, and broke our binary in the process.</p>
+<p>Fortunately this is easy enough to fix, we'll just give each line its own <code>echo</code> command instead of doing it all at once. Normally <code>echo</code> outputs a newline at the end by itself (it just makes things cleaner for most uses), but we can suppress that with the <code>-n</code> flag. We also change our file redirection from <code>&gt;</code>, which would overwrite the file each time, to <code>&gt;&gt;</code>, which appends.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">&gt; xxd -p -c 1 hello.c.out | xargs printf &quot;\\\\\\\\x%s&quot; | fold | xargs printf &quot;echo -e -n &#39;%s&#39; &gt;&gt; /tmp/hello\n&quot; &gt; commands.sh
+</span></code></pre>
+<p>Now we can copy the contents of <code>commands.sh</code> and paste it into our simulator:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">... (a lot of similar lines) ...
+$ echo -e -n &#39;\x00\x00\x00\x00\x00\x00\x00\x00\x11\x00\x00\x00\x03\x00\x00\x00&#39; &gt;&gt; /tmp/hello
+$ echo -e -n &#39;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&#39; &gt;&gt; /tmp/hello
+$ echo -e -n &#39;\xda\x3f\x00\x00\x00\x00\x00\x00\x1d\x01\x00\x00\x00\x00\x00\x00&#39; &gt;&gt; /tmp/hello
+$ echo -e -n &#39;\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00&#39; &gt;&gt; /tmp/hello
+$ echo -e -n &#39;\x00\x00\x00\x00\x00\x00\x00\x00&#39; &gt;&gt; /tmp/hello
+</span></code></pre>
+<p>Time for the moment of truth!</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">$ /lib/ld-musl-x86_64.so.1 /tmp/hello
+Hello, world!
+</span></code></pre>
+<p>Victory! If you're following along in the <a href="https://github.com/ian-fox/ohnomybinaries">simulator</a> then I've added some tools to streamline the process under the <code>solution-1</code> branch.</p>
+<p>In the next instalments we'll use this to actually get a working system again, and then kick things up a notch by removing <code>/lib</code>.</p>
+
+          </div>
+        </article>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+           
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;oh-no-my-binaries&#x2F;">
+              Oh no, my binaries!<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+            
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/galleria.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1.1.13/dist/chart.xkcd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mapbox-gl@2.1.1/dist/mapbox-gl.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/galleria/1.6.1/themes/folio/galleria.folio.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+  <script src="https:&#x2F;&#x2F;whatthefox.dev&#x2F;search_index.en.js"></script>
+  <script src="https:&#x2F;&#x2F;whatthefox.dev&#x2F;js&#x2F;site.js"></script>
+
+  
+
+
+
+
+</body>
+
+</html>

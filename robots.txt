@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://whatthefox.dev/sitemap.xml
