@@ -1,0 +1,186 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2013 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% modern themes
+\moderncvstyle{banking}                            % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{orange}                                % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+\renewcommand{\familydefault}{\sfdefault}         % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[utf8]{inputenc}
+\usepackage{fontawesome}
+% \usepackage{fontspec}
+\usepackage{tabularx}
+% \usepackage{ragged2e}
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+\usepackage{multicol}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvtitlenamewidth}{10cm}           % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+
+% \usepackage{import}
+
+% personal data
+\name{Ian}{Fox}
+% \title{Curriculum Vitae}                               % optional, remove / comment the line if not wanted
+%\address{500 College Ave, Swarthmore, PA 19081 }{}{}% optional, remove / comment the line if not wanted; the "postcode city" and and "country" arguments can be omitted or provided empty
+% \phone[mobile]{909-839-3097}                   % optional, remove / comment the line if not wanted
+% \phone[fixed]{01234 123456}                    % optional, remove / comment the line if not wanted
+%\phone[fax]{+3~(456)~789~012}                      % optional, remove / comment the line if not wanted
+% \email{xpan1@swarthmore.edu}                               % optional, remove / comment the line if not wanted
+% \homepage{shawnpan.me}                         % optional, remove / comment the line if not wanted
+
+ 
+\newcommand*{\customcventry}[7][.25em]{
+  \begin{tabular}{@{}l} 
+    {\bfseries #4}
+  \end{tabular}
+  \hfill% move it to the right
+  \vspace{0.25mm}
+  \begin{tabular}{l@{}}
+     {\bfseries #5}
+  \end{tabular} \\
+  \begin{tabular}{@{}l} 
+    {\itshape #3}
+  \end{tabular}
+  \hfill% move it to the right
+  \begin{tabular}{l@{}}
+     {\itshape #2}
+  \end{tabular}
+  \ifx&#7&%
+  \else{\\%
+    \begin{minipage}{\maincolumnwidth}%
+      \small#7%
+    \end{minipage}}\fi%
+  \par\addvspace{#1}}
+
+\newcommand*{\customcvproject}[4][.25em]{
+%   \vfill\noindent
+  \begin{tabular}{@{}l} 
+    {\bfseries #2}
+  \end{tabular}
+  \hfill% move it to the right
+  \begin{tabular}{l@{}}
+     {\itshape #3}
+  \end{tabular}
+  \ifx&#4&%
+  \else{\\%
+    \begin{minipage}{\maincolumnwidth}%
+      \small#4%
+    \end{minipage}}\fi%
+  \par\addvspace{#1}}
+
+\setlength{\tabcolsep}{12pt}
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%-----       resume       ---------------------------------------------------------
+\vspace*{-14mm}
+\makecvtitle
+\vspace*{-14mm}
+
+\begin{center}
+\begin{tabular}{ c c c c }
+ \faGlobe\enspace whatthefox.dev & \faEnvelopeO\enspace ian@whatthefox.dev & \faGithub\enspace ian-fox & \faLinkedinSquare\enspace iansfox \\  
+\end{tabular}
+\end{center}
+
+\section{EDUCATION}
+{\customcventry{June 2020}{Bachelor of Honours Computer Science}{University of Waterloo}{Waterloo, ON}{}{}}
+
+\section{SKILLS}
+{\begin{itemize}
+  \item Programming Languages: Golang, Python, Rust
+  \item Technologies: Docker, Kubernetes, Linux
+\end{itemize}
+}
+
+\section{EXPERIENCE}
+
+\customcventry{July 2020 - Present}{Cloud Security Engineer}{Splunk Inc.}{Remote}{}{
+  \begin{itemize}
+    \item Developed and maintained automation for various security processes such as vulnerability scanning.
+    \item Worked with stakeholders to plan and deliver enhancements to the vulnerability reporting process.
+    \item Delivered \href{https://info.signalsciences.com/scale-devsecops-complex-environments-hashicorp-terraform}{webinar} on using terraform to manage firewall rules with Signal Sciences.
+  \end{itemize}
+}
+
+\customcventry{Sep 2019 - Dec 2019}{Software Development Co-op}{Cognite AS.}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Implemented new authentication mechanism using Hashicorp's Vault.
+    \item Fixed security vulnerabilities related to authorization.
+  \end{itemize}
+}
+
+\customcventry{Jan 2019 - Apr 2019}{Software Engineering Co-op}{Splunk Inc.}{San Jose, CA}{}
+  {\begin{itemize}
+    \item Designed and developed integrations between GitLab CI and static code analysis tools, streamlining developer workflow.
+    \item Built systems to automate tool deployments for the Product Security team.
+    \item Created and delivered training on CI best practices.
+  \end{itemize}
+}
+
+\customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath Inc.}{Sunnyvale, CA}{}
+  {\begin{itemize}
+    \item Designed, implemented, and open sourced the yFuzz fuzzing orchestration tool.
+    \item Developed a slack bot with Flask for a security engagement initiative encouraging employees to lock their \newline computers.
+    \item Conducted physical penetration tests and reconnaissance for Oath’s red team.
+  \end{itemize}
+}
+
+\customcventry{May 2017 – Aug 2017}{Technical Intern}{Yahoo Inc.}{Sunnyvale, CA}{} % TODO: Oath?
+  {\begin{itemize}
+    \item Added a new authentication mechanism for the Screwdriver CD tool with Ember.js and Hapi.js.
+    \item Developed a plugin to queue Screwdriver jobs with Redis, enabling more complex pipeline structure.
+  \end{itemize}
+}
+
+\customcventry{Feb 2015 – Jun 2015}{High School Intern}{OpenText Corporation}{Waterloo, ON}{}
+  {\begin{itemize}
+    \item Created integration allowing OpenText Core files to be opened in Google Docs for online editing with OAuth2.
+  \end{itemize}
+}
+
+% \section{PROJECTS}
+
+% \customcvproject{Vault JWT Backend}{Oct 2019}
+%   {\begin{itemize}
+%     \item JWT-signing plugin for Hashicorp's Vault tool, allowing JWTs to be signed without the private key ever leaving Vault.
+%   \end{itemize}
+% }
+
+% \customcvproject{yFuzz}{Mar 2018}
+%   {\begin{itemize}
+%     \item Tool to allow orchestration of parallel of fuzzing jobs with Docker and Kubernetes.
+%     \item Server and CLI written in Go, offering authentication through mutual TLS and RBAC through Yahoo's Athenz.
+%   \end{itemize}
+% }
+
+
+% \section{ADDITIONAL}
+% \begin{minipage}{\maincolumnwidth}%
+% 	\small{
+%     	\begin{itemize}
+%           %\item Relevant Coursework: Data Structures, Algorithms, Operating Systems, Concurrency, Networks, Security
+%           \item Interests: Automation, Security, Linux, Reverse Engineering, Distributed Systems
+% 		\end{itemize}}%
+% \end{minipage}%
+
+
+%-----       letter       ---------------------------------------------------------
+
+\end{document}
+
+
+%% end of file `template.tex'.
