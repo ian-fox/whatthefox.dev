@@ -3,7 +3,7 @@ title = "Oh no, my binaries!"
 date =  2021-06-22T22:17:45-04:00
 
 [taxonomies]
-tags = ["computers", "linux"]
+tags = ["computers", "linux", "oh no, my binaries!"]
 categories = ["blog"]
 +++
 
@@ -21,5 +21,5 @@ The answer will turn out to be very interesting, and we'll learn some fun things
 
 If you want to follow along through this, I've created a container-based lab environment which we can use to test our techniques [here](https://github.com/ian-fox/ohnomybinaries).
 
-Check back soon and we'll start walking through a solution!
+When you're ready, check out the next part [here](@/posts/executing-a-binary/index.md)!
 
