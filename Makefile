@@ -1,7 +1,8 @@
 .PHONY: serve build diff publish
 .SILENT: serve build diff publish
 
-DATE=$(shell date +"%Y-%m-%dT%H:%M:%S%:z")
+# DATE=$(shell date +"%Y-%m-%dT%H:%M:%S%:z")
+DATE=$(shell date -Iseconds)
 
 serve:
 	zola serve
