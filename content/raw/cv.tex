@@ -16,10 +16,10 @@
 
 % character encoding
 \usepackage[utf8]{inputenc}
-\usepackage{fontawesome}
-% \usepackage{fontspec}
+\usepackage{fontawesome5}
+\usepackage{fontspec}
 \usepackage{tabularx}
-% \usepackage{ragged2e}
+\usepackage{ragged2e}
 
 % adjust the page margins
 \usepackage[scale=0.8]{geometry}
@@ -27,7 +27,7 @@
 %\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
 %\setlength{\makecvtitlenamewidth}{10cm}           % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
 
-% \usepackage{import}
+\usepackage{import}
 
 % personal data
 \name{Ian}{Fox}
@@ -92,27 +92,35 @@
 
 \begin{center}
 \begin{tabular}{ c c c c }
- \faGlobe\enspace whatthefox.dev & \faEnvelopeO\enspace ian@whatthefox.dev & \faGithub\enspace ian-fox & \faLinkedinSquare\enspace iansfox \\  
+ \faGlobe\enspace whatthefox.dev & \faEnvelope\enspace iansfox@pm.me & \faGithub\enspace ian-fox & \faLinkedin\enspace iansfox \\  
 \end{tabular}
 \end{center}
 
-\section{EDUCATION}
-{\customcventry{June 2020}{Bachelor of Honours Computer Science}{University of Waterloo}{Waterloo, ON}{}{}}
-
 \section{SKILLS}
 {\begin{itemize}
-  \item Programming Languages: Golang, Python, Rust
-  \item Technologies: Docker, Kubernetes, Linux
+  \item Programming Languages: Python, Golang, Rust, C
+  \item Technologies: Various Large Languate Models and Large Multimodal Models, Kubernetes, Docker, Linux
 \end{itemize}
 }
 
 \section{EXPERIENCE}
 
-\customcventry{July 2020 - Present}{Cloud Security Engineer}{Splunk Inc.}{Remote}{}{
-  \begin{itemize}
+\customcventry{Oct 2021 - Current}{Security Researcher}{Omny Security}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Developed document parsing tools using OpenCV, GPT4V.
+    \item Assessed and remedied vulnerabilities with Omny's LLM-based chat agent.
+    \item Created demonstrations of simulated ICS environments and attacks against them.
+    \item Wrote and delivered talks at DEFCON ICS Village, BSides Oslo, S4x2023.
+    % todo: something about bukkesprang?
+    % todo: something about CI and tooling?
+  \end{itemize}
+}
+
+\customcventry{Jul 2020 - Sept 2021}{Cloud Security Engineer}{Splunk}{Waterloo, CA}{}
+  {\begin{itemize}
     \item Developed and maintained automation for various security processes such as vulnerability scanning.
     \item Worked with stakeholders to plan and deliver enhancements to the vulnerability reporting process.
-    \item Delivered \href{https://info.signalsciences.com/scale-devsecops-complex-environments-hashicorp-terraform}{webinar} on using terraform to manage firewall rules with Signal Sciences.
+    \item Delivered webinar on using terraform to manage firewall rules with Signal Sciences
   \end{itemize}
 }
 
@@ -123,7 +131,7 @@
   \end{itemize}
 }
 
-\customcventry{Jan 2019 - Apr 2019}{Software Engineering Co-op}{Splunk Inc.}{San Jose, CA}{}
+\customcventry{Jan 2019 - Apr 2019}{Software Engineering Co-op}{Splunk Inc.}{San Jose, US}{}
   {\begin{itemize}
     \item Designed and developed integrations between GitLab CI and static code analysis tools, streamlining developer workflow.
     \item Built systems to automate tool deployments for the Product Security team.
@@ -131,7 +139,7 @@
   \end{itemize}
 }
 
-\customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath Inc.}{Sunnyvale, CA}{}
+\customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath Inc.}{Sunnyvale, US}{}
   {\begin{itemize}
     \item Designed, implemented, and open sourced the yFuzz fuzzing orchestration tool.
     \item Developed a slack bot with Flask for a security engagement initiative encouraging employees to lock their \newline computers.
@@ -139,43 +147,46 @@
   \end{itemize}
 }
 
-\customcventry{May 2017 – Aug 2017}{Technical Intern}{Yahoo Inc.}{Sunnyvale, CA}{} % TODO: Oath?
+\customcventry{May 2017 – Aug 2017}{Technical Intern}{Yahoo Inc.}{Sunnyvale, US}{}
   {\begin{itemize}
     \item Added a new authentication mechanism for the Screwdriver CD tool with Ember.js and Hapi.js.
     \item Developed a plugin to queue Screwdriver jobs with Redis, enabling more complex pipeline structure.
   \end{itemize}
 }
 
-\customcventry{Feb 2015 – Jun 2015}{High School Intern}{OpenText Corporation}{Waterloo, ON}{}
+\customcventry{Feb 2015 – Jun 2015}{High School Intern}{OpenText Corporation}{Waterloo, CA}{}
   {\begin{itemize}
-    \item Created integration allowing OpenText Core files to be opened in Google Docs for online editing with OAuth2.
+    \item Created integration allowing OpenText Core files to be opened in Google Docs for online editing.
   \end{itemize}
 }
 
-% \section{PROJECTS}
+\section{EDUCATION}
+{\customcventry{June 2020}{Bachelor of Honours Computer Science GPA: 3.4/4.0}{University of Waterloo}{Waterloo, ON}{}{}}
 
-% \customcvproject{Vault JWT Backend}{Oct 2019}
-%   {\begin{itemize}
-%     \item JWT-signing plugin for Hashicorp's Vault tool, allowing JWTs to be signed without the private key ever leaving Vault.
-%   \end{itemize}
-% }
+\section{PROJECTS}
 
-% \customcvproject{yFuzz}{Mar 2018}
-%   {\begin{itemize}
-%     \item Tool to allow orchestration of parallel of fuzzing jobs with Docker and Kubernetes.
-%     \item Server and CLI written in Go, offering authentication through mutual TLS and RBAC through Yahoo's Athenz.
-%   \end{itemize}
-% }
+\customcvproject{Vault JWT Backend}{Oct 2019}
+  {\begin{itemize}
+    \item JWT-signing plugin for Hashicorp's Vault tool, allowing JWTs to be signed without the private key ever leaving Vault.
+  \end{itemize}
+}
+
+\customcvproject{yFuzz}{Mar 2018}
+  {\begin{itemize}
+    \item Tool to allow orchestration of parallel of fuzzing jobs with Docker and Kubernetes.
+    \item Server and CLI written in Go, offering authentication through mutual TLS and RBAC through Yahoo's Athenz.
+  \end{itemize}
+}
 
 
-% \section{ADDITIONAL}
-% \begin{minipage}{\maincolumnwidth}%
-% 	\small{
-%     	\begin{itemize}
-%           %\item Relevant Coursework: Data Structures, Algorithms, Operating Systems, Concurrency, Networks, Security
-%           \item Interests: Automation, Security, Linux, Reverse Engineering, Distributed Systems
-% 		\end{itemize}}%
-% \end{minipage}%
+\section{ADDITIONAL}
+\begin{minipage}{\maincolumnwidth}%
+	\small{
+    	\begin{itemize}
+          %\item Relevant Coursework: Data Structures, Algorithms, Operating Systems, Concurrency, Networks, Security
+          \item Interests: Linux, ICS, Reverse Engineering, Supply Chain, Embedded, Anything where I can learn something new
+		\end{itemize}}%
+\end{minipage}%
 
 
 %-----       letter       ---------------------------------------------------------
