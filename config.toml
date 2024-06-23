@@ -10,6 +10,9 @@ insert_anchor_links = "left"
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
+# All footnotes at the bottom, with links back to where they came from
+bottom_footnotes = true
+
 # Theme
 theme = "DeepThought"
 
