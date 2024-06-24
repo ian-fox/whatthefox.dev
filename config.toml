@@ -4,19 +4,13 @@ base_url = "https://whatthefox.dev"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
-# Insert anchor links for linking to part of a page
-insert_anchor_links = "left"
-
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
-
-# All footnotes at the bottom, with links back to where they came from
-bottom_footnotes = true
 
 # Theme
 theme = "DeepThought"
 
-lang = "en"
+default_language = "en"
 
 title = "What the Fox?"
 
@@ -62,3 +56,6 @@ twitter = "iansfox"
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
+
+# All footnotes at the bottom, with links back to where they came from
+bottom_footnotes = true
