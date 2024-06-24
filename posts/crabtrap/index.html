@@ -144,7 +144,7 @@ What the Fox? | Crabtrap
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>3662 words</span>
+  <span>3675 words</span>
 </span>
 
             </div>
@@ -209,8 +209,8 @@ What the Fox? | Crabtrap
             <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, it doesn't need to be able to make network calls<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">[1]</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
 <p>If you just want to see the code, it's on <a href="https://github.com/ian-fox/crabtrap">github</a>!</p>
 <span id="continue-reading"></span><h2 id="what-are-we-building"><a class="zola-anchor" href="#what-are-we-building" aria-label="Anchor link for: what-are-we-building">🔗</a>What are we building?</h2>
-<p>The core idea is a pretty simple one: <a href="https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html">seccomp-bpf</a> is a system which allows you to restrict which syscalls an application can make. It operates at the process level. At the same time, <a href="https://strace.io/">strace</a> has a <code>--stack-trace</code> flag which will, when it intercepts a syscall, show you what the stack trace leading to that syscall looks like.</p>
-<p>We're going to combine these ideas to make a more fine-grained version of a <code>seccomp-bpf</code>-like system that operates at an intra-process level, which will allow us to filter different sets of syscalls based on which code units within the process are making them. It's entirely possible that this has been done already, but because a quick search didn't turn anything up and the primary goal of this is to learn I'm too concerned with reimplementing things.</p>
+<p>The core idea is a pretty simple one: <a href="https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html">seccomp-bpf</a> is a system which allows you to restrict which syscalls an application can make. It operates at the process level. We can get some more fine-grained information on where syscalls are coming from with tools like <a href="https://strace.io/">strace</a> though; it has a <code>--stack-trace</code> flag which will, when it intercepts a syscall, trace the syscall all the way back up the stack.</p>
+<p>We're going to combine these ideas to make a more fine-grained version of a <code>seccomp-bpf</code>-like system. The goal is to make something that will allow us to filter different sets of syscalls based on which code units within the process are making them. It's entirely possible that this has been done already, but because a quick search didn't turn anything up and the primary goal of this is to learn I'm not too concerned with reimplementing things.</p>
 <p>The basic goal for our first proof of concept is simple: given a configuration profile and a binary, run the binary and filter syscalls based on what shared object they originate from.</p>
 <h2 id="nongoals"><a class="zola-anchor" href="#nongoals" aria-label="Anchor link for: nongoals">🔗</a>Nongoals</h2>
 <p>For this first step, there are a whole <em>bunch</em> of things we're not going to worry about:</p>
