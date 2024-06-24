@@ -13,6 +13,10 @@
         <loc>https://whatthefox.dev/posts/</loc>
     </url>
     <url>
+        <loc>https://whatthefox.dev/posts/crabtrap/</loc>
+        <lastmod>2024-06-24T20:38:45+02:00</lastmod>
+    </url>
+    <url>
         <loc>https://whatthefox.dev/posts/executing-a-binary/</loc>
         <lastmod>2021-07-10T02:19:01-04:00</lastmod>
     </url>
@@ -42,6 +46,9 @@
     </url>
     <url>
         <loc>https://whatthefox.dev/tags/computers/</loc>
+    </url>
+    <url>
+        <loc>https://whatthefox.dev/tags/crabtrap/</loc>
     </url>
     <url>
         <loc>https://whatthefox.dev/tags/javascript/</loc>
