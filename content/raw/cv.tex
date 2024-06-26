@@ -100,7 +100,7 @@
 \section{SKILLS}
 {\begin{itemize}
   \item Programming Languages: Python, Golang, Rust, C
-  \item Technologies: Various Large Languate Models and Large Multimodal Models, Kubernetes, Docker, Linux
+  \item Technologies: Various LLMs and Large Multimodal Models, Kubernetes, Linux
 \end{itemize}
 }
 
@@ -113,7 +113,7 @@
     \item Created demonstrations of simulated ICS environments and attacks against them.
     \item Wrote and delivered talks at DEFCON ICS Village, BSides Oslo, S4x2023.
     % todo: something about bukkesprang?
-    \item Automated tooling and infrastructure around CI/CD.
+    \item Automated CI/CD tooling and infrastructure.
   \end{itemize}
 }
 
@@ -165,6 +165,14 @@
 {\customcventry{June 2020}{Bachelor of Honours Computer Science GPA: 3.4/4.0}{University of Waterloo}{Waterloo, ON}{}{}}
 
 \section{PROJECTS}
+
+\customcvproject{Crabtrap}{Jun 2024}
+  {\begin{itemize}
+    \item Proof of concept for syscall blocking similar to seccomp-bpf at the shared object level instead of process level.
+    \item Runs a child process under ptrace and uses the proc filesystem to map stack traces for syscalls to shared objects, then allows or denies them based on policy.
+    \item Blog post explaining the design at whatthefox.dev/posts/crabtrap
+  \end{itemize}
+}
 
 \customcvproject{Vault JWT Backend}{Oct 2019}
   {\begin{itemize}

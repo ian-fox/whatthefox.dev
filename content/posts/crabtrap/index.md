@@ -7,7 +7,7 @@ tags = ["computers", "linux", "crabtrap"]
 categories = ["blog"]
 +++
 
-I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, it doesn't need to be able to make network calls[^xz]. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.
+I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network[^xz]. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.
 
 If you just want to see the code, it's on [github](https://github.com/ian-fox/crabtrap)!
 
@@ -15,11 +15,11 @@ If you just want to see the code, it's on [github](https://github.com/ian-fox/cr
 
 ## What are we building?
 
-The core idea is a pretty simple one: [seccomp-bpf](https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html) is a system which allows you to restrict which syscalls an application can make. It operates at the process level. We can get some more fine-grained information on where syscalls are coming from with tools like [strace](https://strace.io/) though; it has a `--stack-trace` flag which will, when it intercepts a syscall, trace the syscall all the way back up the stack.
+The core idea is a pretty simple one: [seccomp-bpf](https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html) is a system which allows you to restrict which syscalls[^syscalls] an application can make. It operates at the process level. We can get some more fine-grained information on where syscalls are coming from with tools like [strace](https://strace.io/) though; it has a `--stack-trace` flag which will, when it intercepts a syscall, trace the syscall all the way back up the stack.
 
 We're going to combine these ideas to make a more fine-grained version of a `seccomp-bpf`-like system. The goal is to make something that will allow us to filter different sets of syscalls based on which code units within the process are making them. It's entirely possible that this has been done already, but because a quick search didn't turn anything up and the primary goal of this is to learn I'm not too concerned with reimplementing things.
 
-The basic goal for our first proof of concept is simple: given a configuration profile and a binary, run the binary and filter syscalls based on what shared object they originate from.
+The basic goal for our first proof of concept is simple: given a configuration profile and a binary, run the binary and filter syscalls based on what shared[^shared-object] object they originate from.
 
 ## Nongoals
 
@@ -220,9 +220,21 @@ fn test_blocked() {
 
 Running `cargo test` gives us the output we expect: a panic at the `todo!()`.
 
+## `ptrace`
+
+For the proof of concept we're going use a tool called [`ptrace`](https://man7.org/linux/man-pages/man2/ptrace.2.html). `ptrace` is a piece of Linux which is used by debuggers to allow them to monitor (and change) the execution of another process. A very high-level overview of how it works (or at least how we'll be using it) is this:
+
+* In the child, we tell `ptrace` that we are expecting somebody to watch ("trace") us. The child will pause after doing this.
+* In the parent, we give `ptrace` some configuration to tell it how we want it to work.
+* In the parent, we tell `ptrace` to continue the execution of the child until the next time the child tries to make a syscall.
+* When the child makes a syscall, the OS will pause it and wake our parent up to see what the parent wants to do about it.
+* In the parent, we can look at information about what state the child is in and what syscall it's trying to make, and then either tell `ptrace` to continue until the next syscall again, or kill the child.
+
+By continuing this loop the child will keep executing, but every time it tries to do something the OS will pause and check with our parent process first. Eventually the child might call exit, and we can see that in the parent process as well and stop the loop.
+
 ## Running the child process
 
-Before we even start worrying about syscalls, let's make sure we can execute a child process under `ptrace`. We'll start by forking[^forking]:
+Before we even start worrying about allowing or blocking syscalls, let's make sure we can execute a child process under `ptrace`. We'll start by forking[^forking]:
 
 ```rust
 pub fn execute(path: &CStr, args: &[&CStr], env: &[&CStr], config: &Config) -> ChildExit {
@@ -247,7 +259,7 @@ fn child(path: &CStr, args: &[&CStr], env: &[&CStr]) -> ! {
 }
 ```
 
-Meanwhile in the parent we wait for the child, set up our ptrace options, and then enter a loop where we tell the child to continue until the next syscall until we see it exit:
+Meanwhile in the parent we wait for the child, set up our ptrace options, and then enter the loop where we tell the child to continue until the next syscall or until we see it exit:
 
 ```rust
 fn parent(child: Pid, _config: &Config) -> ChildExit {
@@ -282,9 +294,9 @@ And that's it! After running `cargo test` again we get the results we expected o
 
 ## Getting a stack trace
 
-Now we're starting to get into the fun stuff! Our `waitpid` call will return with a `WaitStatus::PtraceSyscall(pid)` whenever our child enters or exits a syscall[^enter-exit]. This is one of those things that if we were making a real system we would care about, but for a proof of concept we'll just take the perf hit of checking every syscall twice.
+Now we're starting to get into the fun stuff! Our `waitpid` call will return with a `WaitStatus::PtraceSyscall(pid)` whenever our child enters or exits a syscall[^enter-exit]. This is one of those things that if we were making a real system we would care about only checking on the enter side, but for a proof of concept we'll just take the performance hit of checking every syscall twice.
 
-We'll move the syscall handling itself out into a function. The first thing we'll want to do is grab the registers so that we can tell what syscall is happening and where execution is
+We'll move the syscall handling itself out into a function. The first thing we'll want to do is grab the registers so that we can tell what syscall is happening and where the child is in its execution:
 
 ```rust
 fn handle_syscall(pid: Pid, _config: &Config) {
@@ -294,7 +306,7 @@ fn handle_syscall(pid: Pid, _config: &Config) {
     println!("Syscall: {syscall}");
 ```
 
-Now we can start walking up the stack. If we look at the [ARM calling convention docs](https://github.com/ARM-software/abi-aa/blob/2a70c42d62e9c3eb5887fa50b71257f20daca6f9/aapcs64/aapcs64.rst#646the-frame-pointer) we can see that the previous PC is held in the link register (`r30`) and the pointer to the first stack frame is in `r29`[^verify-previous-pc]. The ABI also tells us that at each stack frame we'll have a frame pointer which points to the previous stack frame (or 0 if we're at the base).
+Now we can start walking up the stack. If we look at the [ARM docs](https://github.com/ARM-software/abi-aa/blob/2a70c42d62e9c3eb5887fa50b71257f20daca6f9/aapcs64/aapcs64.rst#646the-frame-pointer) we can see that the previous pc[^pc] is held in the link register (`r30`) and the pointer to the first stack frame is in `r29`[^verify-previous-pc]. The docs also tells us that at each stack frame we'll have a frame pointer which points to the previous stack frame (or 0 if we're at the base).
 
 ```rust
     let mut frame_pointer: u64 = regs.regs[29];
@@ -305,7 +317,7 @@ Now we can start walking up the stack. If we look at the [ARM calling convention
     );
 ```
 
-Finally, the ABI tells us that just above the frame pointer is the saved value of the previous link register. Now we can print that and then walk our way up by following the frame pointers until we hit 0:
+Finally, the docs tells us that just above the frame pointer is the saved value of the previous link register. Now we can print that and then walk our way up by following the frame pointers until we hit the base of the stack:
 
 ```rust
     let mut saved_lr;
@@ -327,11 +339,11 @@ Finally, the ABI tells us that just above the frame pointer is the saved value o
 }
 ```
 
-Running this we do get lots of nice stack traces! Now we just need to map the pc locations to code units and we'll be almost there. This code is at the tag [`walkthrough-2`](https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-2).
+Running this we do get lots of nice stack traces! Next up we need to map the pc locations to code units. This code is at the tag [`walkthrough-2`](https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-2).
 
 ## Mapping to shared objects
 
-Our goal is in sight! The last thing we need to do is map our series of program counters back to the files they come from. We can get this information by looking in the [proc filesystem](https://www.man7.org/linux/man-pages/man5/proc_pid_maps.5.html). For instance, when I run `cat /proc/self/maps` I get the following:
+Our goal is in sight! The last thing we need to do is map our series of program counters back to the files they come from, and then use that to make a decision about whether to allow the syscall or not. We can get this information by looking in the [proc filesystem](https://www.man7.org/linux/man-pages/man5/proc_pid_maps.5.html). For instance, when I run `cat /proc/self/maps` I get the following:
 
 ```plain
 aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
@@ -388,7 +400,7 @@ pub fn execute(...) {
     }
 ```
 
-We're passing it in as mutable because if we see a syscall that might modify the process memory we'll want to rebuild the map. Let's handle that part first:
+We're passing it in as mutable because if we see a syscall that might modify the process memory we'll want to rebuild the map[^rebuild]. Let's handle that part first:
 
 ```rust
 fn handle_syscall(pid: Pid, config: &Config, map: &mut MemoryMap) {
@@ -561,6 +573,8 @@ I'm not sure which I'll tackle first, if you have any thoughts (or have just fou
 ---
 
 [^xz]: I looked a bit into how the xz backdoor worked and I'm not 100% sure that something as simple as this would have stopped it. Later on once I have a working sandbox I'll see if I can test that!
+[^syscalls]: Whenever any program running on your computer wants to do something like read a file, open a network connection, it has to ask the operating system for permission. It does this by telling the OS what it wants to do, and then giving control to the OS. The OS will (after checking things like that the program is allowed to do what it's trying to do) carry out the request, and then return control to the program.
+[^shared-object]: One method of calling third party code is to use shared objects. We tell our code that we expect there to be a function with a certain name living in a certain shared object file, and then that file will be loaded into our process memory so that we can call the function. This can (very roughly) tell us where a piece of code came from.
 [^arm]: This is both because I'm on an ARM laptop, and because I've dealt with x86 assembly and calling conventions before but never ARM. This seemed as good a time as any to jump in!
 [^redirects]: Originally I was using `process::Command`, which would have given me this for free. Unfortunately it seems like somewhere inside `process::Command` is an extra call to `clone` that I couldn't quite track, so we're going to roll our own for now. In a real application we'd maybe try to do some more debugging on that to get the nicer interface.
 [^signals]: The main one is signal handling. It seems like signals can be tricky with `ptrace`, and while I'm sure it's possible to handle nicely (debuggers must have some way of dealing with it) it's not particularly relevant to the concept we want to prove here.
@@ -568,5 +582,7 @@ I'm not sure which I'll tackle first, if you have any thoughts (or have just fou
 [^forking]: Clone is probably better practice, but this is a toy example for now and I like the word fork.
 [^first-try]: Not even close, but I've spared you all the silly mistakes.
 [^enter-exit]: From the [`ptrace` man page](https://man7.org/linux/man-pages/man2/ptrace.2.html): "Syscall-enter-stop and syscall-exit-stop are indistinguishable from each other by the tracer. The tracer needs to keep track of the sequence of ptrace-stops in order to not misinterpret syscall-enter-stop as syscall-exit-stop or vice versa. In general, a syscall-enter-stop is always followed by syscall-exit-stop, PTRACE_EVENT stop, or the tracee's death; no other kinds of ptrace-stop can occur in between. However, note that seccomp stops (see below) can cause syscall-exit-stops, without preceding syscall-entry-stops. If seccomp is in use, care needs to be taken not to misinterpret such stops as syscall-entry-stops."
+[^pc]: "program counter" - this is like a bookmark telling the child process what step of its instructions it's currently executing. It's how we'll be able to tell which piece of code is trying to make the syscall.
 [^verify-previous-pc]: Just to verify, we can also check that the previous pc from `r30` is the same as the link register when we go down one frame on the stack.
 [^path-ambiguity]: As the doc points out, the pathname is potentially ambiguous when newlines are present or the underlying file has been deleted. I'm sure we could disambiguate this by looking at the inode instead, but that's beyond the scope of this proof of concept.
+[^rebuild] Unfortunately, because the "files" in the `/proc/` filesystem aren't actually files, we can't just subscribe to get notified and rebuild the map any time it changes.
