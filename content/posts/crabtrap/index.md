@@ -294,7 +294,7 @@ And that's it! After running `cargo test` again we get the results we expected o
 
 ## Getting a stack trace
 
-Now we're starting to get into the fun stuff! Our `waitpid` call will return with a `WaitStatus::PtraceSyscall(pid)` whenever our child enters or exits a syscall[^enter-exit]. This is one of those things that if we were making a real system we would care about only checking on the enter side, but for a proof of concept we'll just take the performance hit of checking every syscall twice.
+Now we're starting to get into the fun stuff! Our `waitpid` call will return with a `WaitStatus::PtraceSyscall(pid)` whenever our child enters or exits a syscall[^enter-exit]. This is one of those things that if we were making a real system we would care about only checking on the enter side (in most cases), but for a proof of concept we'll just take the performance hit of checking every syscall twice.
 
 We'll move the syscall handling itself out into a function. The first thing we'll want to do is grab the registers so that we can tell what syscall is happening and where the child is in its execution:
 
@@ -585,4 +585,4 @@ I'm not sure which I'll tackle first, if you have any thoughts (or have just fou
 [^pc]: "program counter" - this is like a bookmark telling the child process what step of its instructions it's currently executing. It's how we'll be able to tell which piece of code is trying to make the syscall.
 [^verify-previous-pc]: Just to verify, we can also check that the previous pc from `r30` is the same as the link register when we go down one frame on the stack.
 [^path-ambiguity]: As the doc points out, the pathname is potentially ambiguous when newlines are present or the underlying file has been deleted. I'm sure we could disambiguate this by looking at the inode instead, but that's beyond the scope of this proof of concept.
-[^rebuild] Unfortunately, because the "files" in the `/proc/` filesystem aren't actually files, we can't just subscribe to get notified and rebuild the map any time it changes.
+[^rebuild] Unfortunately, because the "files" in the `/proc/` filesystem aren't actually files, we can't just subscribe to get notified and rebuild the map any time it changes. This is a case where we actually would want to do the work at the syscall return, since the map wouldn't be updated until that point.
