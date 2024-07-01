@@ -144,7 +144,7 @@ What the Fox? | Crabtrap
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>4160 words</span>
+  <span>4189 words</span>
 </span>
 
             </div>
@@ -434,7 +434,7 @@ What the Fox? | Crabtrap
 </span></code></pre>
 <p>And that's it! After running <code>cargo test</code> again we get the results we expected on the first try<sup class="footnote-reference" id="fr-first-try-1"><a href="#fn-first-try">[9]</a></sup>! <code>test_ok</code> passes, and <code>test_blocked</code> fails because we haven't implemented that part yet. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-1"><code>walkthrough-1</code></a> in the git repo.</p>
 <h2 id="getting-a-stack-trace"><a class="zola-anchor" href="#getting-a-stack-trace" aria-label="Anchor link for: getting-a-stack-trace">🔗</a>Getting a stack trace</h2>
-<p>Now we're starting to get into the fun stuff! Our <code>waitpid</code> call will return with a <code>WaitStatus::PtraceSyscall(pid)</code> whenever our child enters or exits a syscall<sup class="footnote-reference" id="fr-enter-exit-1"><a href="#fn-enter-exit">[10]</a></sup>. This is one of those things that if we were making a real system we would care about only checking on the enter side, but for a proof of concept we'll just take the performance hit of checking every syscall twice.</p>
+<p>Now we're starting to get into the fun stuff! Our <code>waitpid</code> call will return with a <code>WaitStatus::PtraceSyscall(pid)</code> whenever our child enters or exits a syscall<sup class="footnote-reference" id="fr-enter-exit-1"><a href="#fn-enter-exit">[10]</a></sup>. This is one of those things that if we were making a real system we would care about only checking on the enter side (in most cases), but for a proof of concept we'll just take the performance hit of checking every syscall twice.</p>
 <p>We'll move the syscall handling itself out into a function. The first thing we'll want to do is grab the registers so that we can tell what syscall is happening and where the child is in its execution:</p>
 <pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">handle_syscall</span><span>(</span><span style="color:#bf616a;">pid</span><span>: Pid, </span><span style="color:#bf616a;">_config</span><span>: &amp;Config) {
 </span><span>    </span><span style="color:#b48ead;">let</span><span> regs = </span><span style="color:#96b5b4;">getregs</span><span>(pid).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">Could not get registers</span><span>&quot;);
@@ -710,7 +710,7 @@ What the Fox? | Crabtrap
 </li>
 <li id="fn-path-ambiguity">
 <p>As the doc points out, the pathname is potentially ambiguous when newlines are present or the underlying file has been deleted. I'm sure we could disambiguate this by looking at the inode instead, but that's beyond the scope of this proof of concept.
-[^rebuild] Unfortunately, because the "files" in the <code>/proc/</code> filesystem aren't actually files, we can't just subscribe to get notified and rebuild the map any time it changes. <a href="#fr-path-ambiguity-1">↩</a></p>
+[^rebuild] Unfortunately, because the "files" in the <code>/proc/</code> filesystem aren't actually files, we can't just subscribe to get notified and rebuild the map any time it changes. This is a case where we actually would want to do the work at the syscall return, since the map wouldn't be updated until that point. <a href="#fr-path-ambiguity-1">↩</a></p>
 </li>
 </ol>
 
