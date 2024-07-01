@@ -34,8 +34,8 @@
 
   <title>
     
-    What the Fox?
-    
+What the Fox? | CraBPF-trap
+
   </title>
 
   
@@ -112,80 +112,111 @@
   
 <section class="section">
   <div class="container">
-    <div class="has-text-centered">
-      <h1 class="title is-2">
-        <span class="icon">
-          <i class="fas fa-tags"></i>
-        </span>
-        Tags
-      </h1>
-      <p class='subtitle is-4'>9 tags in total</p>
-      <p>
-        
-        <a href="https://whatthefox.dev/tags/adhd/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>adhd <sup>1</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/browser/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>browser <sup>1</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/computers/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>computers <sup>4</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/crabtrap/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>crabtrap <sup>2</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/javascript/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>javascript <sup>1</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/linux/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>linux <sup>4</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/math/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>math <sup>1</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/oh-no-my-binaries/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>oh no, my binaries! <sup>2</sup></span>
-        </a>
-        
-        <a href="https://whatthefox.dev/tags/proof/" class="mr-4">
-          <span class="icon">
-            <i class="fas fa-tag"></i>
-          </span>
-          <span>proof <sup>1</sup></span>
-        </a>
-        
-      </p>
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            CraBPF-trap
+          </h1>
+          <p class="subtitle"></p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>Ian Fox published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2024-06-24T20:38:45+02:00">June 24, 2024</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>1 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>82 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/categories/blog/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>blog</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/computers/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>computers</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/linux/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>linux</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/crabtrap/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>crabtrap</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of running a process in linux with some monitoring around syscalls to allow or deny them based on what shared object they originated from. This time, let's have a look at the feasibility of using eBPF instead of <code>ptrace</code>.</p>
+<span id="continue-reading"></span>
+<p>If we were going to use eBPF</p>
+<p>https://docs.rs/libbpf-rs/0.23.3/libbpf_rs/
+https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
+https://www.kernel.org/doc/html/latest/bpf/index.html</p>
+
+          </div>
+        </article>
+      </div>
+      
     </div>
   </div>
 </section>
@@ -215,11 +246,33 @@
 
 
   
-  
-  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabtrap&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Crabtrap
+            </a>
+          </div>
+           
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
   
-  
+
+
 
   
   <footer class="footer py-4">
@@ -261,7 +314,10 @@
   <script src="https://whatthefox.dev/search_index.en.js"></script><script src="https://whatthefox.dev/js/site.js"></script>
 
   
-  
+
+
+
+
 
   
   

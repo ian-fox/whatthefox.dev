@@ -144,7 +144,7 @@ What the Fox? | Crabtrap
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>4189 words</span>
+  <span>4154 words</span>
 </span>
 
             </div>
@@ -389,9 +389,9 @@ What the Fox? | Crabtrap
 <pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">execute</span><span>(</span><span style="color:#bf616a;">path</span><span>: &amp;CStr, </span><span style="color:#bf616a;">args</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">env</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
 </span><span>    </span><span style="color:#b48ead;">match unsafe </span><span>{ </span><span style="color:#96b5b4;">fork</span><span>() } {
 </span><span>        Ok(ForkResult::Child) =&gt; </span><span style="color:#96b5b4;">child</span><span>(path, args, env),
-</span><span>        Ok(ForkResult::Parent { child, .. }) =&gt; </span><span style="color:#b48ead;">return </span><span style="color:#96b5b4;">parent</span><span>(child, config),
+</span><span>        Ok(ForkResult::Parent { child, .. }) =&gt; </span><span style="color:#96b5b4;">parent</span><span>(child, config),
 </span><span>        Err(errno) =&gt; panic!(&quot;</span><span style="color:#a3be8c;">failed to fork: {}</span><span>&quot;, errno),
-</span><span>    };
+</span><span>    }
 </span><span>}
 </span></code></pre>
 <p>In the child we'll call <code>traceme</code> to wait for the parent, and then <code>execve</code> into our new life:</p>
@@ -650,7 +650,7 @@ What the Fox? | Crabtrap
 </span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, frame_pointer as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read frame pointer</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
 </span><span>    }
 </span><span>
-</span><span>    </span><span style="color:#b48ead;">return </span><span>None;
+</span><span>    None
 </span><span>}
 </span></code></pre>
 <p>And if we run the tests we can see that with no restrictions both messages get printed and the child exits 0, but when we restrict the <code>write</code> syscall coming from <code>libprintf_wrapper.so</code> we only see the "Hello from printf!" before the child process gets terminated! Fantastic!</p>
@@ -664,10 +664,9 @@ What the Fox? | Crabtrap
 <h2 id="next-steps"><a class="zola-anchor" href="#next-steps" aria-label="Anchor link for: next-steps">🔗</a>Next steps</h2>
 <p>We've shown that the concept works. I think there are a few possible directions to go next, all of them exciting:</p>
 <ul>
-<li>Properly implement the signals, grandchildren, a proper command line interface, all the edge cases, etc. and then find a real example for some benchmarking to see exactly how bad the slowdown is with the naive implementation (probably worth doing a bit more research to see if somebody has actually done this before first...)</li>
+<li>Properly implement the signals, grandchildren, a proper command line interface, all the edge cases, etc. and then find a real example for some benchmarking to see exactly how bad the slowdown is with the naive implementation</li>
 <li>Start diving into one of the other implementations (investigate if some userland bookkeeping along with eBPF for the actual enforcement is possible, or a full-on kernel module)</li>
 <li>Start trying to map code units smaller than shared objects for dependencies that are statically compiled into a program</li>
-<li>Try implementing it as part of the python interpreter, with capabilities at the python package level</li>
 </ul>
 <p>I'm not sure which I'll tackle first, if you have any thoughts (or have just found this interesting) feel free to drop me an <a href="mailto:ian@whatthefox.dev">email</a> any time!</p>
 <hr />
@@ -763,6 +762,14 @@ What the Fox? | Crabtrap
             </a>
           </div>
            
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabpf-trap&#x2F;">
+              CraBPF-trap<span class="icon ml-2">
+                <i class="fas fa-arrow-circle-right"></i>
+              </span>
+            </a>
+          </div>
+          
         </nav>
       </div>
     </div>
