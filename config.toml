@@ -12,7 +12,7 @@ theme = "DeepThought"
 
 default_language = "en"
 
-title = "What the Fox?"
+title = "What the 🦊?"
 
 taxonomies = [{ name = "categories" }, { name = "tags" }]
 
