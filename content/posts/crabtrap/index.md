@@ -240,9 +240,9 @@ Before we even start worrying about allowing or blocking syscalls, let's make su
 pub fn execute(path: &CStr, args: &[&CStr], env: &[&CStr], config: &Config) -> ChildExit {
     match unsafe { fork() } {
         Ok(ForkResult::Child) => child(path, args, env),
-        Ok(ForkResult::Parent { child, .. }) => return parent(child, config),
+        Ok(ForkResult::Parent { child, .. }) => parent(child, config),
         Err(errno) => panic!("failed to fork: {}", errno),
-    };
+    }
 }
 ```
 
@@ -543,7 +543,7 @@ fn handle_syscall(pid: Pid, config: &Config, map: &mut MemoryMap) -> Option<Chil
             read(pid, frame_pointer as AddressType).expect("failed to read frame pointer") as u64;
     }
 
-    return None;
+    None
 }
 ```
 
@@ -563,10 +563,9 @@ This code is at [`walkthrough-3`](https://github.com/ian-fox/crabtrap/releases/t
 
 We've shown that the concept works. I think there are a few possible directions to go next, all of them exciting:
 
-* Properly implement the signals, grandchildren, a proper command line interface, all the edge cases, etc. and then find a real example for some benchmarking to see exactly how bad the slowdown is with the naive implementation (probably worth doing a bit more research to see if somebody has actually done this before first...)
+* Properly implement the signals, grandchildren, a proper command line interface, all the edge cases, etc. and then find a real example for some benchmarking to see exactly how bad the slowdown is with the naive implementation
 * Start diving into one of the other implementations (investigate if some userland bookkeeping along with eBPF for the actual enforcement is possible, or a full-on kernel module)
 * Start trying to map code units smaller than shared objects for dependencies that are statically compiled into a program
-* Try implementing it as part of the python interpreter, with capabilities at the python package level
 
 I'm not sure which I'll tackle first, if you have any thoughts (or have just found this interesting) feel free to drop me an [email](mailto:ian@whatthefox.dev) any time!
 
