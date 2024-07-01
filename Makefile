@@ -18,7 +18,6 @@ diff:
 	cd .git_deploy && git diff
 
 publish:
-	echo -n "Do these changes look good? [y/N] " && read ans && [ $${ans:-N} = y ]
 	cd .git_deploy && git add .
 	cd .git_deploy && git commit -m "Deploy $(DATE)"
 	cd .git_deploy && git push origin master
