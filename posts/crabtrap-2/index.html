@@ -144,7 +144,7 @@ What the 🦊? | Crabtrap Part 2: Electric Boogaloo
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>2053 words</span>
+  <span>2047 words</span>
 </span>
 
             </div>
@@ -206,7 +206,7 @@ What the 🦊? | Crabtrap Part 2: Electric Boogaloo
             </div>
           </div>
           <div class="content mt-2">
-            <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of a tool which could run a process in linux with guardrails around syscalls based on what shared object they originated from. This time we'll fill in some of the missing functionality and then start looking into eBPF to see if it's at all feasible.</p>
+            <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of a tool which could run a process in linux with guardrails around syscalls based on what shared object they originated from. This time we'll fill in some of the missing functionality to be able to run more programs.</p>
 <span id="continue-reading"></span><h2 id="signals-and-grandchildren"><a class="zola-anchor" href="#signals-and-grandchildren" aria-label="Anchor link for: signals-and-grandchildren">🔗</a>Signals and grandchildren</h2>
 <p>One of the corners we cut last time was assuming that our child process would never get any signals, and that it would never fork or clone itself so we only had one child to worry about. It turns out both of these were actually pretty easy to fix! As before we'll start with a really simple toy example that does some waiting and some fork/execing:</p>
 <p><code>child.c</code></p>
