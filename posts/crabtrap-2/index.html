@@ -140,11 +140,11 @@ What the 🦊? | Crabtrap Part 2: Electric Boogaloo
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  <span>11 min,</span>
+  <span>10 min,</span>
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>2047 words</span>
+  <span>1986 words</span>
 </span>
 
             </div>
@@ -496,11 +496,9 @@ should restart the tracee with the call</p>
 </span><span style="color:#bf616a;">IllegalSyscall</span><span>(write, &quot;</span><span style="color:#a3be8c;">/usr/local/lib/libprintf_wrapper.so</span><span>&quot;)
 </span></code></pre>
 <p>There are still lots of details we've just sort of brushed over for the proof of concept, but it should be enough to try swapping the filtering layer out for eBPF. Tune in next time when we'll try that!</p>
-<hr />
 <p>[^fork] Or <code>clone</code>, or <code>vfork</code>.
 [^sysgood] This one we actually need to set for the rust <code>ptrace</code> library to work properly, otherwise it will always return <code>SIGTRAP</code> events instead of the nice <code>PtraceSyscall</code> events.
 [^trace-exec] Useful because otherwise when <code>execve</code> is called the tracee would receive a <code>SIGTRAP</code>, and we want to distinguish an <code>exec</code> from an actual <code>SIGTRAP</code> that we need to inject into the child.
-[^gdb] I at first tried with GDB, but for some reason the tracing didn't seem to work under it. My first thought was that since it was using ptrace itself that would interfere, but <code>strace</code> uses ptrace as well and it seems to work fine. In an effort to not get sidetracked we'll leave that as a mystery for another day.
 [^edge-cases] As always, ignoring some edge cases around things like proper error handling.
 [^sharing] Just like with many things in this proof of concept, there is probably lots of opportunity here for performance improvements by e.g. using some kind of copy-on-write data structure that would let us reuse the same map for all of the threads that are in the same child process.</p>
 
