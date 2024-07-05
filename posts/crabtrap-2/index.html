@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://whatthefox.dev/deep-thought.css" rel="stylesheet" />
+  <link href="https://whatthefox.dev/css/whatthefox.css" rel="stylesheet" />
+
+  <title>
+    
+What the 🦊? | Crabtrap Part 2: Electric Boogaloo
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;whatthefox.dev">What the 🦊?</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;tags">
+            Tags
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;categories">
+            Categories
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;cv.pdf">
+            CV
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Crabtrap Part 2: Electric Boogaloo
+          </h1>
+          <p class="subtitle"></p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>Ian Fox published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2024-07-05T18:57:45+02:00">July 05, 2024</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>11 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>2053 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/categories/blog/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>blog</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/computers/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>computers</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/linux/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>linux</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/crabtrap/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>crabtrap</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of a tool which could run a process in linux with guardrails around syscalls based on what shared object they originated from. This time we'll fill in some of the missing functionality and then start looking into eBPF to see if it's at all feasible.</p>
+<span id="continue-reading"></span><h2 id="signals-and-grandchildren"><a class="zola-anchor" href="#signals-and-grandchildren" aria-label="Anchor link for: signals-and-grandchildren">🔗</a>Signals and grandchildren</h2>
+<p>One of the corners we cut last time was assuming that our child process would never get any signals, and that it would never fork or clone itself so we only had one child to worry about. It turns out both of these were actually pretty easy to fix! As before we'll start with a really simple toy example that does some waiting and some fork/execing:</p>
+<p><code>child.c</code></p>
+<pre data-lang="c" style="background-color:#2b303b;color:#c0c5ce;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">stdio.h</span><span>&gt;
+</span><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">unistd.h</span><span>&gt;
+</span><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">sys/types.h</span><span>&gt;
+</span><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">sys/wait.h</span><span>&gt;
+</span><span>
+</span><span style="color:#b48ead;">void </span><span style="color:#8fa1b3;">make_child</span><span>(</span><span style="color:#b48ead;">int </span><span style="color:#bf616a;">i</span><span>) {
+</span><span>    </span><span style="color:#b48ead;">if </span><span>(i == </span><span style="color:#d08770;">0</span><span>) {
+</span><span>        </span><span style="color:#b48ead;">return</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    pid_t p = </span><span style="color:#bf616a;">fork</span><span>();
+</span><span>    </span><span style="color:#b48ead;">if </span><span>(p &lt; </span><span style="color:#d08770;">0</span><span>) {
+</span><span>        </span><span style="color:#96b5b4;">perror</span><span>(&quot;</span><span style="color:#a3be8c;">fork failed</span><span>&quot;);
+</span><span>        </span><span style="color:#96b5b4;">exit</span><span>(</span><span style="color:#d08770;">1</span><span>);
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">if </span><span>(p == </span><span style="color:#d08770;">0</span><span>) {
+</span><span>        </span><span style="color:#bf616a;">make_child</span><span>(i - </span><span style="color:#d08770;">1</span><span>);
+</span><span>        </span><span style="color:#bf616a;">sleep</span><span>(i);
+</span><span>        </span><span style="color:#b48ead;">switch </span><span>(i) {
+</span><span>            </span><span style="color:#b48ead;">case </span><span style="color:#d08770;">3</span><span>: </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">Child </span><span style="color:#d08770;">%d</span><span style="color:#a3be8c;"> calling static...</span><span style="color:#96b5b4;">\n</span><span>&quot;, i);
+</span><span>                </span><span style="color:#b48ead;">if </span><span>(</span><span style="color:#bf616a;">execv</span><span>(&quot;</span><span style="color:#a3be8c;">/usr/local/bin/static</span><span>&quot;, </span><span style="color:#d08770;">NULL</span><span>) == -</span><span style="color:#d08770;">1</span><span>) {
+</span><span>                    </span><span style="color:#96b5b4;">perror</span><span>(&quot;</span><span style="color:#a3be8c;">execv failed</span><span>&quot;);
+</span><span>                    </span><span style="color:#96b5b4;">exit</span><span>(</span><span style="color:#d08770;">1</span><span>);
+</span><span>                }
+</span><span>            </span><span style="color:#b48ead;">case </span><span style="color:#d08770;">2</span><span>: </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">Child </span><span style="color:#d08770;">%d</span><span style="color:#a3be8c;"> calling dynamic...</span><span style="color:#96b5b4;">\n</span><span>&quot;, i);
+</span><span>                </span><span style="color:#b48ead;">if </span><span>(</span><span style="color:#bf616a;">execv</span><span>(&quot;</span><span style="color:#a3be8c;">/usr/local/bin/dynamic</span><span>&quot;, </span><span style="color:#d08770;">NULL</span><span>) == -</span><span style="color:#d08770;">1</span><span>) {
+</span><span>                    </span><span style="color:#96b5b4;">perror</span><span>(&quot;</span><span style="color:#a3be8c;">execv failed</span><span>&quot;);
+</span><span>                    </span><span style="color:#96b5b4;">exit</span><span>(</span><span style="color:#d08770;">1</span><span>);
+</span><span>                }
+</span><span>            </span><span style="color:#b48ead;">case </span><span style="color:#d08770;">1</span><span>: </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">Child </span><span style="color:#d08770;">%d</span><span style="color:#a3be8c;"> calling all-in-one...</span><span style="color:#96b5b4;">\n</span><span>&quot;, i);
+</span><span>                </span><span style="color:#b48ead;">if </span><span>(</span><span style="color:#bf616a;">execv</span><span>(&quot;</span><span style="color:#a3be8c;">/usr/local/bin/all-in-one</span><span>&quot;, </span><span style="color:#d08770;">NULL</span><span>) == -</span><span style="color:#d08770;">1</span><span>) {
+</span><span>                    </span><span style="color:#96b5b4;">perror</span><span>(&quot;</span><span style="color:#a3be8c;">execv failed</span><span>&quot;);
+</span><span>                    </span><span style="color:#96b5b4;">exit</span><span>(</span><span style="color:#d08770;">1</span><span>);
+</span><span>                }
+</span><span>        }
+</span><span>    } </span><span style="color:#b48ead;">else </span><span>{
+</span><span>        </span><span style="color:#bf616a;">waitpid</span><span>(p, </span><span style="color:#d08770;">NULL</span><span>, </span><span style="color:#d08770;">0</span><span>);
+</span><span>        </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">Goodbye from parent </span><span style="color:#d08770;">%d</span><span style="color:#a3be8c;">!</span><span style="color:#96b5b4;">\n</span><span>&quot;, i);
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span>() {
+</span><span>    </span><span style="color:#bf616a;">make_child</span><span>(</span><span style="color:#d08770;">3</span><span>);
+</span><span>}
+</span></code></pre>
+<p>This program will give us the following output, and will use some signals and forking while doing it:</p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> /usr/local/bin/child
+</span><span style="color:#bf616a;">Child</span><span> 1 calling all-in-one...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 1!
+</span><span style="color:#bf616a;">Child</span><span> 2 calling dynamic...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 2!
+</span><span style="color:#bf616a;">Child</span><span> 3 calling static...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 3!
+</span></code></pre>
+<p>Excellent! Let's see what happens if we try to run it from <code>crabtrap</code>:</p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> cargo run /usr/local/bin/child
+</span><span style="color:#bf616a;">Continuing</span><span> execution in parent process, new child has pid: 217
+</span><span style="color:#bf616a;">Starting</span><span> to watch child...
+</span><span style="color:#bf616a;">Child</span><span> 1 calling all-in-one...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 1!
+</span><span style="color:#bf616a;">Child</span><span> 2 calling dynamic...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 2!
+</span><span style="color:#bf616a;">Child</span><span> 3 calling static...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">thread </span><span>&#39;</span><span style="color:#a3be8c;">main</span><span>&#39; panicked at src/lib.rs:117:23:
+</span><span style="color:#bf616a;">unexpected</span><span> child process status Stopped(Pid(217)</span><span style="color:#bf616a;">,</span><span> SIGCHLD)
+</span></code></pre>
+<p>That's actually a lot farther than I thought it'd get! In the previous post we assumed that no signals or forks would happen in the child, but we didn't actually validate that. Let that be a lesson to us.</p>
+<p>Let's start by handling that unexpected child process. We'll move the <code>syscall</code> function that restarts the child to only come after an actual <code>PtraceSyscall</code> event, and add an arm for stopped children that tells us something is happening, but doesn't restart them:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
+</span><span>    ...
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Starting to watch child...</span><span>&quot;);
+</span><span>    </span><span style="color:#96b5b4;">syscall</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to start child</span><span>&quot;);
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
+</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#96b5b4;">waitpid</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to get status from waitpid</span><span>&quot;) {
+</span><span>            WaitStatus::Exited(_, code) =&gt; {
+</span><span>                </span><span style="color:#b48ead;">return </span><span>ChildExit::Exited(code);
+</span><span>            }
+</span><span>            WaitStatus::PtraceSyscall(pid) =&gt; {
+</span><span>                </span><span style="color:#b48ead;">if let </span><span>Some(exit) = </span><span style="color:#96b5b4;">handle_syscall</span><span>(pid, config, &amp;</span><span style="color:#b48ead;">mut</span><span> memory_map) {
+</span><span>                    </span><span style="color:#96b5b4;">kill</span><span>(pid).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to kill child</span><span>&quot;);
+</span><span>                    </span><span style="color:#b48ead;">return</span><span> exit;
+</span><span>                }
+</span><span>                </span><span style="color:#96b5b4;">syscall</span><span>(pid, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to restart child</span><span>&quot;);
+</span><span>            }
+</span><span>            WaitStatus::Stopped(pid, signal) =&gt; {
+</span><span>                println!(&quot;</span><span style="color:#a3be8c;">Child </span><span style="color:#d08770;">{pid}</span><span style="color:#a3be8c;"> stopped: </span><span style="color:#d08770;">{signal}</span><span>&quot;);
+</span><span>            }
+</span><span>            status =&gt; panic!(&quot;</span><span style="color:#a3be8c;">unexpected child process status {status:?}</span><span>&quot;),
+</span><span>        }
+</span><span>    }
+</span></code></pre>
+<p>At this point the process doesn't panic any more, but it does hang on that <code>SIGCHLD</code>. This is because the child didn't actually receive the signal! If we go back to our handy <a href="https://man7.org/linux/man-pages/man2/ptrace.2.html">manual</a>, we'll read the following:</p>
+<blockquote>
+<p>When a (possibly multithreaded) process receives any signal
+except SIGKILL, the kernel selects an arbitrary thread which
+handles the signal.
+...
+If the selected thread is traced, it enters signal-delivery-stop.
+At this point, the signal is not yet delivered to the process,
+and can be suppressed by the tracer.  If the tracer doesn't
+suppress the signal, it passes the signal to the tracee in the
+next ptrace restart operation.  This second step of signal
+delivery is called signal injection...</p>
+</blockquote>
+<p>...</p>
+<blockquote>
+<p>After signal-delivery-stop is observed by the tracer, the tracer
+should restart the tracee with the call</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>   ptrace(PTRACE_restart, pid, 0, sig)
+</span></code></pre>
+</blockquote>
+<p>There are a few notes on making sure you're catching the right signal, but it seems like the rust <code>ptrace</code> library is handling that for us. The result is that when we observe this stopped state, we actually need to pass the signal through to the child like so:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
+</span><span>    ...
+</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
+</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#96b5b4;">waitpid</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to get status from waitpid</span><span>&quot;) {
+</span><span>            ...
+</span><span>            WaitStatus::Stopped(pid, signal) =&gt; {
+</span><span>                </span><span style="color:#96b5b4;">syscall</span><span>(pid, signal)
+</span><span>                    .</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| panic!(&quot;</span><span style="color:#a3be8c;">failed to restart child after event {pid}: {e}</span><span>&quot;));
+</span><span>            }
+</span></code></pre>
+<p>At this point the child program does actually run! If we try to run it with our config to block <code>libprintf_wrapper</code> though, we find that it fails to block the banned syscalls. This is because while we've dealt with the signal delivery, we're actually missing a large portion of the picture: we're still only tracing our immediate child!</p>
+<h2 id="tracing-multiple-children"><a class="zola-anchor" href="#tracing-multiple-children" aria-label="Anchor link for: tracing-multiple-children">🔗</a>Tracing multiple children</h2>
+<p>Right now we're tracing our immediate child, but as soon as that child does a <code>fork</code>[^fork] the grandchildren are just running free. We need to start by telling <code>ptrace</code> that we want it to start tracing any new processes or threads our child creates. We can do this by changing what options we set on <code>ptrace</code> way back before we even start our child:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
+</span><span>    ...
+</span><span>    </span><span style="color:#96b5b4;">setoptions</span><span>(
+</span><span>        child,
+</span><span>        Options::</span><span style="color:#d08770;">PTRACE_O_EXITKILL
+</span><span>            .</span><span style="color:#96b5b4;">union</span><span>(Options::</span><span style="color:#d08770;">PTRACE_O_TRACESYSGOOD</span><span>)
+</span><span>            .</span><span style="color:#96b5b4;">union</span><span>(Options::</span><span style="color:#d08770;">PTRACE_O_TRACEFORK</span><span>)
+</span><span>            .</span><span style="color:#96b5b4;">union</span><span>(Options::</span><span style="color:#d08770;">PTRACE_O_TRACECLONE</span><span>)
+</span><span>            .</span><span style="color:#96b5b4;">union</span><span>(Options::</span><span style="color:#d08770;">PTRACE_O_TRACEVFORK</span><span>)
+</span><span>            .</span><span style="color:#96b5b4;">union</span><span>(Options::</span><span style="color:#d08770;">PTRACE_O_TRACEEXEC</span><span>),
+</span><span>    )
+</span><span>    .</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to set ptrace options</span><span>&quot;);
+</span></code></pre>
+<p>Before we had set <code>EXITKILL</code>, which would kill our descendants if we exited, and <code>TRACESYSGOOD</code>, which is used to distinguish signal delivery stops from syscall stops[^sysgood]. The new ones we've added tell ptrace that any time a tracee calls <code>execve</code> we want it to deliver us an event[^trace-exec], and that if a tracee <code>fork</code>, <code>clone</code>, or <code>vfork</code> we want it to start tracing the newly created process as well. This also means we have some new events to handle in our loop.</p>
+<p>Part of these settings is that ptrace will send a <code>SIGSTOP</code> to the newly created process, so if we see a <code>fork</code>, <code>clone</code>, or <code>vfork</code> happen we'll want to retrieve the new child's pid with <code>getevent</code> and make a note that next time we would inject a <code>SIGSTOP</code> to it, we should ignore it:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
+</span><span>    ...
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> ignore_next_stop: BTreeSet&lt;Pid&gt; = BTreeSet::new();
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Starting to watch child...</span><span>&quot;);
+</span><span>    </span><span style="color:#96b5b4;">syscall</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to start child</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
+</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#96b5b4;">waitpid</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to get status from waitpid</span><span>&quot;) {
+</span><span>            ...
+</span><span>            WaitStatus::Stopped(pid, signal) =&gt; {
+</span><span>                </span><span style="color:#b48ead;">if</span><span> signal == Signal::</span><span style="color:#d08770;">SIGSTOP </span><span>&amp;&amp; ignore_next_stop.</span><span style="color:#96b5b4;">contains</span><span>(&amp;pid) {
+</span><span>                    ignore_next_stop.</span><span style="color:#96b5b4;">remove</span><span>(&amp;pid);
+</span><span>                    </span><span style="color:#96b5b4;">syscall</span><span>(pid, None).</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| {
+</span><span>                        panic!(
+</span><span>                            &quot;</span><span style="color:#a3be8c;">failed to restart child {pid} after suppressing SIGSTOP: {e}</span><span>&quot;
+</span><span>                        )
+</span><span>                    });
+</span><span>                    </span><span style="color:#b48ead;">continue</span><span>;
+</span><span>                }
+</span><span>
+</span><span>                </span><span style="color:#96b5b4;">syscall</span><span>(pid, signal).</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| {
+</span><span>                    panic!(&quot;</span><span style="color:#a3be8c;">failed to restart child {pid} after signal {signal}: {e}</span><span>&quot;)
+</span><span>                });
+</span><span>            }
+</span><span>            WaitStatus::PtraceEvent(pid, _, event)
+</span><span>                </span><span style="color:#b48ead;">if</span><span> event == Event::</span><span style="color:#d08770;">PTRACE_EVENT_EXEC </span><span>as </span><span style="color:#b48ead;">c_int </span><span>=&gt;
+</span><span>            {
+</span><span>                </span><span style="color:#96b5b4;">syscall</span><span>(pid, None).</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| {
+</span><span>                    panic!(
+</span><span>                        &quot;</span><span style="color:#a3be8c;">failed to restart child {pid} after EVENT_EXEC: {e}</span><span>&quot;,
+</span><span>                        </span><span style="color:#96b5b4;">event_from_int</span><span>(event)
+</span><span>                    );
+</span><span>                });
+</span><span>            }
+</span><span>            WaitStatus::PtraceEvent(pid, _, event)
+</span><span>                </span><span style="color:#b48ead;">if</span><span> event == Event::</span><span style="color:#d08770;">PTRACE_EVENT_FORK </span><span>as </span><span style="color:#b48ead;">c_int
+</span><span>                    || event == Event::</span><span style="color:#d08770;">PTRACE_EVENT_VFORK </span><span>as </span><span style="color:#b48ead;">c_int
+</span><span>                    || event == Event::</span><span style="color:#d08770;">PTRACE_EVENT_CLONE </span><span>as </span><span style="color:#b48ead;">c_int </span><span>=&gt;
+</span><span>            {
+</span><span>                </span><span style="color:#b48ead;">let</span><span> new_child_pid = Pid::from_raw(
+</span><span>                    </span><span style="color:#96b5b4;">getevent</span><span>(pid)
+</span><span>                        .</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| panic!(&quot;</span><span style="color:#a3be8c;">failed to get new child of {pid}: {e}</span><span>&quot;))
+</span><span>                        .</span><span style="color:#96b5b4;">try_into</span><span>()
+</span><span>                        .</span><span style="color:#96b5b4;">unwrap</span><span>(),
+</span><span>                );
+</span><span>                </span><span style="color:#b48ead;">if </span><span>!ignore_next_stop.</span><span style="color:#96b5b4;">insert</span><span>(new_child_pid) {
+</span><span>                    panic!(&quot;</span><span style="color:#a3be8c;">new child {new_child_pid} already in list to ignore next SIGSTOP</span><span>&quot;);
+</span><span>                }
+</span><span>                </span><span style="color:#96b5b4;">syscall</span><span>(pid, None).</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| panic!(&quot;</span><span style="color:#a3be8c;">failed to restart child {pid} after event {event}: {e}</span><span>&quot;));
+</span><span>            }
+</span></code></pre>
+<p>We also need to modify two other things. Our call to <code>waitpid</code> will change to waiting on <code>None</code>, which will get us events from all of our descendants instead of only our immediate child. And naturally, if we're getting events from our descendants, not every <code>WaitStatus::Exited</code> will mean we actually want to return! If a grandchild process exits we want to keep going.</p>
+<p>A simple solution to this is that <code>waitpid</code> will fail with <code>ECHILD</code> if we have no descendants, so we can modify our exit condition to look for that:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
+</span><span>    ...
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> child_exit = None;
+</span><span>
+</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Starting to watch child...</span><span>&quot;);
+</span><span>    </span><span style="color:#96b5b4;">syscall</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to start child</span><span>&quot;);
+</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
+</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#96b5b4;">waitpid</span><span>(None, None) {
+</span><span>            Err(Errno::</span><span style="color:#d08770;">ECHILD</span><span>) =&gt; { =&gt; {
+</span><span>                </span><span style="color:#b48ead;">return </span><span>ChildExit::Exited(
+</span><span>                    child_exit.</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|| panic!(&quot;</span><span style="color:#a3be8c;">unknown exit status for child {child}</span><span>&quot;)),
+</span><span>                )
+</span><span>            }
+</span><span>            Ok(WaitStatus::Exited(pid, code)) =&gt; {
+</span><span>                </span><span style="color:#b48ead;">if</span><span> pid == child {
+</span><span>                    child_exit = Some(code);
+</span><span>                }
+</span><span>            }
+</span><span>            ...
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>That was a lot! We can run child programs that use <code>fork</code>, <code>vfork</code>, and <code>clone</code> now[^edge-cases]!</p>
+<h2 id="juggling-memory-maps"><a class="zola-anchor" href="#juggling-memory-maps" aria-label="Anchor link for: juggling-memory-maps">🔗</a>Juggling memory maps</h2>
+<p>The final piece of the puzzle (for today at least) is that with multiple tracees we'll need multiple memory maps to keep track of them. Right now if we try to run our example program with the config forbidding <code>libprintf_wrapper</code> it <em>probably</em> won't block because we're only keeping track of the memory of one process. Depending on which child was last used to build the memory map, we may block or we may not! We can fix this by having a separate memory map per child[^sharing]:</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
+</span><span>    ...
+</span><span>    </span><span style="color:#b48ead;">let mut</span><span> children: BTreeMap&lt;Pid, Box&lt;MemoryMap&gt;&gt; =
+</span><span>        BTreeMap::from([(child, Box::new(MemoryMap::from_pid(child).</span><span style="color:#96b5b4;">unwrap</span><span>()))]);
+</span><span>    ...
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
+</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#96b5b4;">waitpid</span><span>(None, None) {
+</span><span>            ...
+</span><span>            Ok(WaitStatus::PtraceSyscall(pid)) =&gt; {
+</span><span>                </span><span style="color:#b48ead;">let</span><span> child_mem: &amp;</span><span style="color:#b48ead;">mut</span><span> MemoryMap = children
+</span><span>                    .</span><span style="color:#96b5b4;">entry</span><span>(pid)
+</span><span>                    .</span><span style="color:#96b5b4;">or_insert</span><span>(Box::new(MemoryMap::from_pid(pid).</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| {
+</span><span>                        panic!(&quot;</span><span style="color:#a3be8c;">Couldn&#39;t build map for {}: {}</span><span>&quot;, pid, e)
+</span><span>                    })));
+</span><span>
+</span><span>                </span><span style="color:#b48ead;">if let </span><span>Some(exit) = </span><span style="color:#96b5b4;">handle_syscall</span><span>(pid, config, child_mem) {
+</span><span>                    </span><span style="color:#96b5b4;">kill</span><span>(pid).</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| panic!(&quot;</span><span style="color:#a3be8c;">failed to kill child {pid}: {e}</span><span>&quot;));
+</span><span>                    </span><span style="color:#b48ead;">return</span><span> exit;
+</span><span>                }
+</span><span>                </span><span style="color:#96b5b4;">syscall</span><span>(pid, None)
+</span><span>                    .</span><span style="color:#96b5b4;">unwrap_or_else</span><span>(|</span><span style="color:#bf616a;">e</span><span>| panic!(&quot;</span><span style="color:#a3be8c;">failed to restart child {pid} after syscall: {e}</span><span>&quot;));
+</span><span>            }
+</span></code></pre>
+<p>At long last we can see the fruits of our effort! Note that the <code>printf_wrapper</code> call from <code>all-in-one</code> doesn't get caught, because that was the version where the function was statically compiled into the binary and thus it doesn't load the <code>libprintf_wrapper.so</code>. However as soon as we hit one of the other cases...</p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> cargo run -- --config config.yaml /usr/local/bin/child
+</span><span style="color:#bf616a;">Continuing</span><span> execution in parent process, new child has pid: 8512
+</span><span style="color:#bf616a;">Starting</span><span> to watch child...
+</span><span style="color:#bf616a;">Child</span><span> 1 calling all-in-one...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 1!
+</span><span style="color:#bf616a;">Child</span><span> 2 calling dynamic...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">IllegalSyscall</span><span>(write, &quot;</span><span style="color:#a3be8c;">/usr/local/lib/libprintf_wrapper.so</span><span>&quot;)
+</span></code></pre>
+<p>Bingo! We can even run things interactively, because we're not doing any input or output redirection:</p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> cargo run -- --config config.yaml /usr/bin/sh
+</span><span style="color:#bf616a;">Continuing</span><span> execution in parent process, new child has pid: 8518
+</span><span style="color:#bf616a;">Starting</span><span> to watch child...
+</span><span style="color:#65737e;"># all-in-one
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#65737e;"># child
+</span><span style="color:#bf616a;">Child</span><span> 1 calling all-in-one...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#bf616a;">Goodbye</span><span> from parent 1!
+</span><span style="color:#bf616a;">Child</span><span> 2 calling dynamic...
+</span><span style="color:#bf616a;">Hello</span><span> from printf!
+</span><span style="color:#bf616a;">IllegalSyscall</span><span>(write, &quot;</span><span style="color:#a3be8c;">/usr/local/lib/libprintf_wrapper.so</span><span>&quot;)
+</span></code></pre>
+<p>There are still lots of details we've just sort of brushed over for the proof of concept, but it should be enough to try swapping the filtering layer out for eBPF. Tune in next time when we'll try that!</p>
+<hr />
+<p>[^fork] Or <code>clone</code>, or <code>vfork</code>.
+[^sysgood] This one we actually need to set for the rust <code>ptrace</code> library to work properly, otherwise it will always return <code>SIGTRAP</code> events instead of the nice <code>PtraceSyscall</code> events.
+[^trace-exec] Useful because otherwise when <code>execve</code> is called the tracee would receive a <code>SIGTRAP</code>, and we want to distinguish an <code>exec</code> from an actual <code>SIGTRAP</code> that we need to inject into the child.
+[^gdb] I at first tried with GDB, but for some reason the tracing didn't seem to work under it. My first thought was that since it was using ptrace itself that would interfere, but <code>strace</code> uses ptrace as well and it seems to work fine. In an effort to not get sidetracked we'll leave that as a mystery for another day.
+[^edge-cases] As always, ignoring some edge cases around things like proper error handling.
+[^sharing] Just like with many things in this proof of concept, there is probably lots of opportunity here for performance improvements by e.g. using some kind of copy-on-write data structure that would let us reuse the same map for all of the threads that are in the same child process.</p>
+
+          </div>
+        </article>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabtrap&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Crabtrap
+            </a>
+          </div>
+           
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  
+  
+  
+  <script src="https://whatthefox.dev/elasticlunr.min.js"></script>
+  <script src="https://whatthefox.dev/search_index.en.js"></script><script src="https://whatthefox.dev/js/site.js"></script>
+
+  
+
+
+
+
+
+  
+  
+</body>
+
+</html>
