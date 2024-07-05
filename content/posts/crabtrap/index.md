@@ -569,8 +569,6 @@ We've shown that the concept works. I think there are a few possible directions 
 
 I'm not sure which I'll tackle first, if you have any thoughts (or have just found this interesting) feel free to drop me an [email](mailto:ian@whatthefox.dev) any time!
 
----
-
 [^xz]: I looked a bit into how the xz backdoor worked and I'm not 100% sure that something as simple as this would have stopped it. Later on once I have a working sandbox I'll see if I can test that!
 [^syscalls]: Whenever any program running on your computer wants to do something like read a file, open a network connection, it has to ask the operating system for permission. It does this by telling the OS what it wants to do, and then giving control to the OS. The OS will (after checking things like that the program is allowed to do what it's trying to do) carry out the request, and then return control to the program.
 [^shared-object]: One method of calling third party code is to use shared objects. We tell our code that we expect there to be a function with a certain name living in a certain shared object file, and then that file will be loaded into our process memory so that we can call the function. This can (very roughly) tell us where a piece of code came from.

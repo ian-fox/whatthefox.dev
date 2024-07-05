@@ -3,6 +3,8 @@
 
 # DATE=$(shell date +"%Y-%m-%dT%H:%M:%S%:z")
 DATE=$(shell date -Iseconds)
+date:
+	@echo $(DATE)
 
 serve:
 	zola serve
