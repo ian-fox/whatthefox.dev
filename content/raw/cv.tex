@@ -6,6 +6,9 @@
 % available at http://www.latex-project.org/lppl/.
 
 % on mac: lualatex cv.tex
+%
+% todo:
+% * https://resumeworded.com/resume-bullet-points
 
 \documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
 
@@ -100,7 +103,7 @@
 \section{SKILLS}
 {\begin{itemize}
   \item Programming Languages: Rust, Python, Golang
-  \item Technologies: LLMs and Large Multimodal Models, Kubernetes, Linux internals
+  \item Technologies: Kubernetes, Terraform, Linux internals, LLMs
 \end{itemize}
 }
 
@@ -109,10 +112,8 @@
 \customcventry{Oct 2021 - Aug 2024}{Security Researcher}{Omny Security}{Oslo, NO}{}
   {\begin{itemize}
     \item Created document parsing tools using OpenCV and GPT4-V.
-    % \item Assessed and remedied vulnerabilities with Omny's LLM-based chat agent.
     \item Created demonstrations of simulated ICS environments and attacks against them.
     \item Wrote and presented talks at DEFCON ICS Village, BSides Oslo, S4x2023.
-    % todo: something about bukkesprang?
     \item Developed and debugged CI/CD tooling and infrastructure.
   \end{itemize}
 }
@@ -125,14 +126,14 @@
   \end{itemize}
 }
 
-\customcventry{Sep 2019 - Dec 2019}{Software Development Intern}{Cognite AS.}{Oslo, NO}{}
+\customcventry{Sep 2019 - Dec 2019}{Software Development Intern}{Cognite}{Oslo, NO}{}
   {\begin{itemize}
     \item Implemented new authentication mechanism using Hashicorp's Vault.
     \item Fixed security vulnerabilities related to authorization.
   \end{itemize}
 }
 
-\customcventry{Jan 2019 - Apr 2019}{Software Engineering Intern}{Splunk Inc.}{San Jose, US}{}
+\customcventry{Jan 2019 - Apr 2019}{Software Engineering Intern}{Splunk}{San Jose, US}{}
   {\begin{itemize}
     \item Designed and developed integrations between GitLab CI and static code analysis tools, streamlining developer workflow.
     \item Built systems to automate tool deployments for the Product Security team.
@@ -140,7 +141,7 @@
   \end{itemize}
 }
 
-\customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath Inc.}{Sunnyvale, US}{}
+\customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath}{Sunnyvale, US}{}
   {\begin{itemize}
     \item Designed, implemented, and open sourced the yFuzz fuzzing orchestration tool.
     \item Developed a slack bot with Flask for a security engagement initiative encouraging employees to lock their \newline computers.
@@ -148,7 +149,7 @@
   \end{itemize}
 }
 
-\customcventry{May 2017 – Aug 2017}{Technical Intern}{Yahoo Inc.}{Sunnyvale, US}{}
+\customcventry{May 2017 – Aug 2017}{Technical Intern}{Yahoo}{Sunnyvale, US}{}
   {\begin{itemize}
     \item Added a new authentication mechanism for the Screwdriver CD tool with Ember.js and Hapi.js.
     \item Developed a plugin to queue Screwdriver jobs with Redis, enabling more complex pipeline structure.
@@ -195,13 +196,16 @@
 }
 
 
-% \section{ADDITIONAL}
-% \begin{minipage}{\maincolumnwidth}%
-% 	\small{
-%     	\begin{itemize}
-%           \item Interests: Linux, ICS, Reverse Engineering, Supply Chain, Embedded, Anything where I can learn something new
-% 		\end{itemize}}%
-% \end{minipage}%
+\section{ADDITIONAL EXPERIENCE}
+
+\customcvproject{BSidesLV Volunteer - Sponsor Ops}{Aug 2024}
+{}
+
+\customcvproject{Øvelse Bukkesprang (Large simulated incident response exercise)}{Nov 2023}
+  {\begin{itemize}
+    \item Wrote a ransomware decrypting tool based on a threat intelligence report, enabling attribution of an attack. 
+  \end{itemize}
+}
 
 
 %-----       letter       ---------------------------------------------------------
