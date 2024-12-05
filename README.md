@@ -20,6 +20,8 @@ This will fetch the contents of the required submodules.
 
 ## To Do
 
+* Footnotes like that guy on hackernews' blog
+* Better highlighting on shell snippets
 * Remove google fonts
 * figure out why tags, categories aren't working
 * update CV
