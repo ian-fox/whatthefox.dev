@@ -23,3 +23,5 @@ publish:
 	cd .git_deploy && git add .
 	cd .git_deploy && git commit -m "Deploy $(DATE)"
 	cd .git_deploy && git push origin master
+
+deploy: publish

@@ -3,7 +3,7 @@ title = "Small Learnings: udev and tweaking keyboard inputs on Linux"
 date = "2024-12-05T20:22:45+02:00" 
 
 [taxonomies]
-tags = ["computers", "linux"]
+tags = ["computers", "linux", "small learnings"]
 categories = ["blog"]
 +++
 
