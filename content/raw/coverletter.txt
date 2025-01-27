@@ -1,0 +1,14 @@
+I saw the posting for the security engineer position this morning and went to write a cover letter for it, but now it seems it's been removed, I guess the position may have been filled already. I already wrote the cover letter though, so I figure there's probably no harm in sending it in anyway in case you decide you could use more people in that role. Below is the original cover letter.
+
+Hi Tailscale!
+
+I've used your product before and enjoyed it, so I was intrigued when I saw the posting for this position come up. After reading the details, I think it sounds amazing.
+
+I first became interested in security while doing an internship on the Yahoo internal tools team when we got to do a 2-day security training about common issues like SQL injection, XSS, etc. and found it fascinating. I returned for another internship, this time on the security team, and discovered that while I really liked the security field, pentesting wasn't exactly what I found the most interesting. It didn't give me quite the same satisfaction as writing code, so I resolved to look for positions where I would be working with something security-related but still in a development context.
+
+During that internship and subsequent ones I explored different security-and-development-related positions and realized that the security/development intersection is really where I'm happiest, so seeing the note about writing software being a major component of the job (especially in conjunction with the bullet about operating system internals, which has always been an area of interest to me) made me very excited about this position.
+
+For the past few years I've been working at a startup in Norway focused on the security of industrial systems (which was where I originally encountered Tailscale, while setting up a simulated water treatment plant) and really enjoyed that startup environment, but I've been thinking for a while about making the move back to Canada and this seems like a great opportunity to do that.
+
+Looking forward to hearing from you,
+Ian
