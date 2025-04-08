@@ -174,7 +174,6 @@
           </div>
           <div class="content mt-2">
             <p>I got a new computer at work, which has the Norwegian keyboard. This messed up my muscle memory because the position I'm used to having as the shift key is actually split into two separate keys, but luckily there are ways to fix that!</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;norwegian-keyboard&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -281,7 +280,6 @@
           </div>
           <div class="content mt-2">
             <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of a tool which could run a process in linux with guardrails around syscalls based on what shared object they originated from. This time we'll fill in some of the missing functionality to be able to run more programs.</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabtrap-2&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -387,9 +385,8 @@
             </div>
           </div>
           <div class="content mt-2">
-            <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">[1]</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
+            <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">1</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
 <p>If you just want to see the code, it's on <a href="https://github.com/ian-fox/crabtrap">github</a>!</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabtrap&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -498,7 +495,6 @@
             <p>Maybe you're like me and you have ADHD, and are allergic to watching videos at normal speed. Maybe you're looking to fast-forward through videos for some other reason. YouTube has options for 0.25x to 2x in increments of 0.25. But sometimes you want to go faster than that, or maybe you're watching on a different site that doesn't have those controls exposed.</p>
 <p>There are probably browser extensions that do this, but it's pretty simple to implement ourselves. As a bonus it means you don't have to trust a random browser extension, in case you're paranoid like I am!</p>
 <p>If you don't care about how this works or how you can explore stuff like this and just want to know what code to copy/paste to get these bookmarklets, <a href="https://whatthefox.dev/posts/fast-forwarding-videos/#final-result-tl-dr">skip to the end here</a>.</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;fast-forwarding-videos&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -608,7 +604,6 @@
 <p>Things are looking grim. We do not have much to work with. But there is still hope!</p>
 <p>One thing you may have noticed if you're following along in the <a href="https://github.com/ian-fox/ohnomybinaries">simulator</a> is that once everything gets blown away, you still have your ssh connection, and you can still <em>try</em> to run commands. Most of them will reply with a <code>command not found</code> message, but at least something is still alive to print that!</p>
 <p>How does that happen if we deleted everything?</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;executing-a-binary&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -717,7 +712,6 @@
             <p>My beautiful binaries! <em>(With apologies to Eric Rosen)</em></p>
 <p>Yesterday a friend came to me with a problem. While managing some backups, he accidentally deleted <code>/bin</code>, <code>/boot</code>, <code>/dev</code>, <code>/tmp</code>, <code>/srv</code>, <code>/usr</code>, and <code>/opt</code> from the filesystem itself instead of the backups.</p>
 <p>This left an interesting problem: without the binaries from <code>/bin</code> and <code>/usr</code>, it was impossible to do almost everything you normally do. Picture the situation. You do not have a <code>head</code> or a <code>tail</code>, let alone an entire <code>cat</code>! No <code>chmod</code>, <em>certainly</em> nothing fancy like <code>curl</code> or <code>sshd</code>. If you listen closely though, you might hear an <code>echo</code>...</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;oh-no-my-binaries&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -826,7 +820,6 @@
             <p>In 1777, Georges-Louis Leclerc, Comte de Buffon posed the following question:</p>
 <p>Suppose we have a floor made of parallel wooden boards, each the same width, and we drop a needle onto the floor. What is the probability that the needle will lie across a line between two boards?</p>
 <p>He solved it with some fancy calculus, which is a fine way of doing it, but not particularly satisfying to me. However in 1860 a man named Joseph-Émile Barbier came up with this super slick proof, which is without a doubt the coolest proof I've ever seen.</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;favourite-proof&#x2F;'>
               Read More
               <span class="icon is-small">

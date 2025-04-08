@@ -348,7 +348,7 @@ should restart the tracee with the call</p>
 </span></code></pre>
 <p>At this point the child program does actually run! If we try to run it with our config to block <code>libprintf_wrapper</code> though, we find that it fails to block the banned syscalls. This is because while we've dealt with the signal delivery, we're actually missing a large portion of the picture: we're still only tracing our immediate child!</p>
 <h2 id="tracing-multiple-children"><a class="zola-anchor" href="#tracing-multiple-children" aria-label="Anchor link for: tracing-multiple-children">🔗</a>Tracing multiple children</h2>
-<p>Right now we're tracing our immediate child, but as soon as that child does a <code>fork</code><sup class="footnote-reference" id="fr-fork-1"><a href="#fn-fork">[1]</a></sup> the grandchildren are just running free. We need to start by telling <code>ptrace</code> that we want it to start tracing any new processes or threads our child creates. We can do this by changing what options we set on <code>ptrace</code> way back before we even start our child:</p>
+<p>Right now we're tracing our immediate child, but as soon as that child does a <code>fork</code><sup class="footnote-reference" id="fr-fork-1"><a href="#fn-fork">1</a></sup> the grandchildren are just running free. We need to start by telling <code>ptrace</code> that we want it to start tracing any new processes or threads our child creates. We can do this by changing what options we set on <code>ptrace</code> way back before we even start our child:</p>
 <pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
 </span><span>    ...
 </span><span>    </span><span style="color:#96b5b4;">setoptions</span><span>(
@@ -362,7 +362,7 @@ should restart the tracee with the call</p>
 </span><span>    )
 </span><span>    .</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to set ptrace options</span><span>&quot;);
 </span></code></pre>
-<p>Before we had set <code>EXITKILL</code>, which would kill our descendants if we exited, and <code>TRACESYSGOOD</code>, which is used to distinguish signal delivery stops from syscall stops<sup class="footnote-reference" id="fr-sysgood-1"><a href="#fn-sysgood">[2]</a></sup>. The new ones we've added tell ptrace that any time a tracee calls <code>execve</code> we want it to deliver us an event<sup class="footnote-reference" id="fr-trace-exec-1"><a href="#fn-trace-exec">[3]</a></sup>, and that if a tracee <code>fork</code>, <code>clone</code>, or <code>vfork</code> we want it to start tracing the newly created process as well. This also means we have some new events to handle in our loop.</p>
+<p>Before we had set <code>EXITKILL</code>, which would kill our descendants if we exited, and <code>TRACESYSGOOD</code>, which is used to distinguish signal delivery stops from syscall stops<sup class="footnote-reference" id="fr-sysgood-1"><a href="#fn-sysgood">2</a></sup>. The new ones we've added tell ptrace that any time a tracee calls <code>execve</code> we want it to deliver us an event<sup class="footnote-reference" id="fr-trace-exec-1"><a href="#fn-trace-exec">3</a></sup>, and that if a tracee <code>fork</code>, <code>clone</code>, or <code>vfork</code> we want it to start tracing the newly created process as well. This also means we have some new events to handle in our loop.</p>
 <p>Part of these settings is that ptrace will send a <code>SIGSTOP</code> to the newly created process, so if we see a <code>fork</code>, <code>clone</code>, or <code>vfork</code> happen we'll want to retrieve the new child's pid with <code>getevent</code> and make a note that next time we would inject a <code>SIGSTOP</code> to it, we should ignore it:</p>
 <pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
 </span><span>    ...
@@ -440,9 +440,9 @@ should restart the tracee with the call</p>
 </span><span>    }
 </span><span>}
 </span></code></pre>
-<p>That was a lot! We can run child programs that use <code>fork</code>, <code>vfork</code>, and <code>clone</code> now<sup class="footnote-reference" id="fr-edge-cases-1"><a href="#fn-edge-cases">[4]</a></sup>!</p>
+<p>That was a lot! We can run child programs that use <code>fork</code>, <code>vfork</code>, and <code>clone</code> now<sup class="footnote-reference" id="fr-edge-cases-1"><a href="#fn-edge-cases">4</a></sup>!</p>
 <h2 id="juggling-memory-maps"><a class="zola-anchor" href="#juggling-memory-maps" aria-label="Anchor link for: juggling-memory-maps">🔗</a>Juggling memory maps</h2>
-<p>The final piece of the puzzle (for today at least) is that with multiple tracees we'll need multiple memory maps to keep track of them. Right now if we try to run our example program with the config forbidding <code>libprintf_wrapper</code> it <em>probably</em> won't block because we're only keeping track of the memory of one process. Depending on which child was last used to build the memory map, we may block or we may not! We can fix this by having a separate memory map per child<sup class="footnote-reference" id="fr-sharing-1"><a href="#fn-sharing">[5]</a></sup>:</p>
+<p>The final piece of the puzzle (for today at least) is that with multiple tracees we'll need multiple memory maps to keep track of them. Right now if we try to run our example program with the config forbidding <code>libprintf_wrapper</code> it <em>probably</em> won't block because we're only keeping track of the memory of one process. Depending on which child was last used to build the memory map, we may block or we may not! We can fix this by having a separate memory map per child<sup class="footnote-reference" id="fr-sharing-1"><a href="#fn-sharing">5</a></sup>:</p>
 <pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
 </span><span>    ...
 </span><span>    </span><span style="color:#b48ead;">let mut</span><span> children: BTreeMap&lt;Pid, Box&lt;MemoryMap&gt;&gt; =
@@ -496,7 +496,8 @@ should restart the tracee with the call</p>
 </span><span style="color:#bf616a;">IllegalSyscall</span><span>(write, &quot;</span><span style="color:#a3be8c;">/usr/local/lib/libprintf_wrapper.so</span><span>&quot;)
 </span></code></pre>
 <p>There are still lots of details we've just sort of brushed over for the proof of concept, but it should be enough to try swapping the filtering layer out for eBPF. Tune in next time when we'll try that!</p>
-<hr><ol class="footnotes-list">
+<footer class="footnotes">
+<ol class="footnotes-list">
 <li id="fn-fork">
 <p>Or <code>clone</code>, or <code>vfork</code>. <a href="#fr-fork-1">↩</a></p>
 </li>
@@ -513,6 +514,7 @@ should restart the tracee with the call</p>
 <p>Just like with many things in this proof of concept, there is probably lots of opportunity here for performance improvements by e.g. using some kind of copy-on-write data structure that would let us reuse the same map for all of the threads that are in the same child process. <a href="#fr-sharing-1">↩</a></p>
 </li>
 </ol>
+</footer>
 
           </div>
         </article>

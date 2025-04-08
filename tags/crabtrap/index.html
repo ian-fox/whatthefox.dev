@@ -174,7 +174,6 @@
           </div>
           <div class="content mt-2">
             <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of a tool which could run a process in linux with guardrails around syscalls based on what shared object they originated from. This time we'll fill in some of the missing functionality to be able to run more programs.</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabtrap-2&#x2F;'>
               Read More
               <span class="icon is-small">
@@ -280,9 +279,8 @@
             </div>
           </div>
           <div class="content mt-2">
-            <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">[1]</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
+            <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">1</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
 <p>If you just want to see the code, it's on <a href="https://github.com/ian-fox/crabtrap">github</a>!</p>
-
             <a href='https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;crabtrap&#x2F;'>
               Read More
               <span class="icon is-small">
