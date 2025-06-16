@@ -33,6 +33,10 @@
         <lastmod>2020-01-05T14:39:45-05:00</lastmod>
     </url>
     <url>
+        <loc>https://whatthefox.dev/posts/git-vim/</loc>
+        <lastmod>2025-06-16T15:14:47+02:00</lastmod>
+    </url>
+    <url>
         <loc>https://whatthefox.dev/posts/norwegian-keyboard/</loc>
         <lastmod>2024-12-05T20:22:45+02:00</lastmod>
     </url>
@@ -62,6 +66,9 @@
         <loc>https://whatthefox.dev/tags/crabtrap/</loc>
     </url>
     <url>
+        <loc>https://whatthefox.dev/tags/git/</loc>
+    </url>
+    <url>
         <loc>https://whatthefox.dev/tags/javascript/</loc>
     </url>
     <url>
@@ -78,5 +85,8 @@
     </url>
     <url>
         <loc>https://whatthefox.dev/tags/small-learnings/</loc>
+    </url>
+    <url>
+        <loc>https://whatthefox.dev/tags/text-editing/</loc>
     </url>
 </urlset>

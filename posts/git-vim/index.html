@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="#ffffff" name="theme-color" />
+  <meta content="#da532c" name="msapplication-TileColor" />
+
+  
+  <link href='&#x2F;icons&#x2F;site.webmanifest' rel="manifest" />
+  
+  
+  <link color="#5bbad5" href='&#x2F;icons&#x2F;safari-pinned-tab.svg' rel="mask-icon" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-16x16.png' rel="icon" sizes="16x16" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;favicon-32x32.png' rel="icon" sizes="32x32" type="image/png" />
+  
+  
+  <link href='&#x2F;icons&#x2F;apple-touch-icon.png' rel="apple-touch-icon" sizes="180x180" />
+  
+
+  
+
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.1/css/academicons.min.css" integrity="sha384-FIue+PI4SsI9XfHCz8dBLg33b0c1fMJgNU3X//L26FYbGnlSEfWmNT7zgWc2N9b6" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+  <link href="https://whatthefox.dev/deep-thought.css" rel="stylesheet" />
+  <link href="https://whatthefox.dev/css/whatthefox.css" rel="stylesheet" />
+
+  <title>
+    
+What the 🦊? | Small Learnings: git-specific vim configuration
+
+  </title>
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js" integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx" crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/mathtex-script-type.min.js" integrity="sha384-jiBVvJ8NGGj5n7kJaiWwWp9AjC+Yh8rhZY3GtAX8yU28azcLgoRo4oukO87g7zDT" crossorigin="anonymous"></script>
+  
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+  
+  
+</head>
+
+<body class="has-background-white">
+  <nav aria-label="section navigation" class="navbar is-light" role="navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item is-size-5 has-text-weight-bold" href="https:&#x2F;&#x2F;whatthefox.dev">What the 🦊?</a>
+        <a aria-expanded="false" aria-label="menu" class="navbar-burger burger" data-target="navMenu" role="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navMenu">
+        <div class="navbar-end has-text-centered">
+          
+          
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;">
+            Home
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts">
+            Posts
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;tags">
+            Tags
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;categories">
+            Categories
+          </a>
+          
+          <a class="navbar-item has-text-weight-semibold" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;cv.pdf">
+            CV
+          </a>
+          
+          
+          
+          <a class="navbar-item" id="nav-search" title="Search" data-target="#search-modal">
+            <span class="icon">
+              <i class="fas fa-search"></i>
+            </span>
+          </a>
+          <a class="navbar-item" id="dark-mode" title="Switch to dark theme">
+            <span class="icon">
+              <i class="fas fa-adjust"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  
+  
+
+  
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <article class="box">
+          <h1 class="title">
+            Small Learnings: git-specific vim configuration
+          </h1>
+          <p class="subtitle"></p>
+          <div class="columns is-multiline is-gapless">
+            <div class="column is-8">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="fas fa-user"></i>
+  </span>
+  <span>Ian Fox published on</span>
+  <span class="icon">
+    <i class="far fa-calendar-alt"></i>
+  </span>
+  <span><time datetime="2025-06-16T15:14:47+02:00">June 16, 2025</time></span>
+</span>
+
+            </div>
+            <div class="column is-4 has-text-right-desktop">
+              
+<span class="icon-text has-text-grey">
+  <span class="icon">
+    <i class="far fa-clock"></i>
+  </span>
+  <span>5 min,</span>
+  <span class="icon">
+    <i class="fas fa-pencil-alt"></i>
+  </span>
+  <span>950 words</span>
+</span>
+
+            </div>
+            <div class="column">
+              
+              
+<p>
+  Categories:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/categories/blog/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-cube"></i>
+      </span>
+      <span>blog</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+            <div class="column has-text-right-desktop">
+              
+              
+<p>
+  Tags:
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/computers/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>computers</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/git/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>git</span>
+    </span>
+  </a>
+  
+  <a class="has-text-info-dark has-text-weight-semibold" href="https://whatthefox.dev/tags/text-editing/">
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-tag"></i>
+      </span>
+      <span>text editing</span>
+    </span>
+  </a>
+  
+</p>
+
+              
+            </div>
+          </div>
+          <div class="content mt-2">
+            <p>One of the recommendations for using git is to limit the summary line to 50 characters, and the rest of the lines to 72. I wanted to see if I could make this easier by having vim tell me when I went over that limit.</p>
+<span id="continue-reading"></span><h2 id="the-problem"><a class="zola-anchor" href="#the-problem" aria-label="Anchor link for: the-problem">🔗</a>The Problem</h2>
+<p>General git best practices will tell you that your git commit message should start with a line of at most 50 characters, followed by a blank line, followed by more lines if you need more detail which should themselves be no longer than 72 characters.</p>
+<p>After one too many times of accidentally writing way too long a first line and having it get cut off in GitHub, I decided it was time to see if I could get vim to help me remember to do that.</p>
+<p>If you don't care about the explanation, jump to the <a href="https://whatthefox.dev/posts/git-vim/#summary">summary</a> to see the final state.</p>
+<h2 id="vim"><a class="zola-anchor" href="#vim" aria-label="Anchor link for: vim">🔗</a>Vim</h2>
+<p>Usually when I'm writing commit messages I don't need a big fancy editor, so I've been using the built-in default of vim. Vim has some handy functionality which can help us out here, such as the following:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>setlocal textwidth=72
+</span></code></pre>
+<p>This setting will automatically break lines at 72 characters. If I were to write a longer sentence, as soon as the word I was typing crossed the 72 character mark it would move that word down to a new line.</p>
+<h2 id="first-line"><a class="zola-anchor" href="#first-line" aria-label="Anchor link for: first-line">🔗</a>First Line</h2>
+<p>For the first line of the message the guideline is 50 characters, but I don't know of a way to have multiple textwidths in vim. Instead we can at least get vim to yell at us <sup class="footnote-reference" id="fr-yell-1"><a href="#fn-yell">1</a></sup> when we pass that length.</p>
+<p>Vim has a built-in "yell at you" styling called <code>ErrorMsg</code>, and with the <code>match</code> command we can tell it to apply this style when something matches a given <a href="https://vimdoc.sourceforge.net/htmldoc/pattern.html">pattern</a>. Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (<code>\%&gt;50v</code>), but only on the first line (<code>\%&lt;2l</code>):</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>match ErrorMsg &#39;\%&gt;50v\%&lt;2l.\+&#39;
+</span></code></pre>
+<p>Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters<sup class="footnote-reference" id="fr-comments-1"><a href="#fn-comments">2</a></sup> on line 2:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>match ErrorMsg &#39;\%&lt;3l\%&gt;1l^[^#].*&#39;
+</span></code></pre>
+<p>Finally, if we want to follow guidelines like "the summary line should start with a capital letter and should not end with a period" we can do that too:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>match ErrorMsg &#39;\%&lt;2l^[^A-Z]&#39;
+</span><span>match ErrorMsg &#39;\%&lt;2l[\.]\s*$&#39;
+</span></code></pre>
+<h2 id="persisting-the-configuration"><a class="zola-anchor" href="#persisting-the-configuration" aria-label="Anchor link for: persisting-the-configuration">🔗</a>Persisting the Configuration</h2>
+<p>Obviously we don't want to have to type all that every time we open up vim to type a commit message.</p>
+<p>If we add these commands to our <code>.vimrc</code> file it will execute them for us every time we open vim, but while the setup we've got is handy for commit messages I don't necessarily want all of those things if I'm not writing a commit message! If only there were a way to get vim to tell if we were working on a commit message so it could apply those settings only when necessary...</p>
+<h2 id="gitconfig"><a class="zola-anchor" href="#gitconfig" aria-label="Anchor link for: gitconfig">🔗</a>Gitconfig</h2>
+<p>As you may have inferred from that <em>excellent</em> foreshadowing, there is in fact a way to do this!<sup class="footnote-reference" id="fr-two-1"><a href="#fn-two">3</a></sup> Git lets you configure a lot<sup class="footnote-reference" id="fr-config-1"><a href="#fn-config">4</a></sup>, including the editor you use for your commit messages. We can set the editor as follows:</p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> git config core.editor &quot;</span><span style="color:#a3be8c;">path/to/my/editor</span><span>&quot;
+</span></code></pre>
+<p>And as it turns out, we can even add arguments! In particular, vim has a <code>-S</code> argument which will source a given script when it's opened. So if we save our script from above in e.g. <code>~/.vim/git.vim</code> we can set our git editor as <code>vim -S ~/.vim/git.vim</code> and now that file will only be executed when called from git!<sup class="footnote-reference" id="fr-debugging-1"><a href="#fn-debugging">5</a></sup></p>
+<h2 id="rebasing"><a class="zola-anchor" href="#rebasing" aria-label="Anchor link for: rebasing">🔗</a>Rebasing</h2>
+<p>Sometimes even git will throw us into an editor when we aren't dealing directly with a single commit message at the top of the file, for instance when running a rebase. To avoid having these formatting rules apply in that scenario we can wrap our settings in a function that looks for the line asking for a commit message:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>if search(&quot;# Please enter the commit message for your changes&quot;, &quot;n&quot;) &gt; 0
+</span><span>    ...formatting from earlier
+</span><span>endif
+</span></code></pre>
+<p>This will <a href="https://vimdoc.sourceforge.net/htmldoc/eval.html#search()">search</a> for the provided string, and if found we assume we're being asked for a commit message and can apply our error formatting.</p>
+<p>There are still a few things it won't do, like highlighting correctly when you're squashing several commits together and editing the messages from them, but it's good enough for me for now.</p>
+<h2 id="summary"><a class="zola-anchor" href="#summary" aria-label="Anchor link for: summary">🔗</a>Summary</h2>
+<p>By creating the following script (e.g. at <code>~/.vim/git.vim</code>) and setting <code>git config core.editor &lt;path to the script&gt;</code> we can have vim helpfully nudge us towards writing commit messages that follow style guidelines. It's not bulletproof, but it does most of what I want it to and making it do the last 10% would have been more effort than was really necessary. Maybe in the future it'll bother me enough that I go and fix that part too.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>&quot; Vim formatting when called from git
+</span><span>
+</span><span>setlocal textwidth=72
+</span><span>let called_from_git = &quot;true&quot;
+</span><span>
+</span><span>&quot; Search for a string to see if we&#39;re being asked for a commit message
+</span><span>&quot; And apply highlighting based on guidelines for the status line if so.
+</span><span>if search(&quot;# Please enter the commit message for your changes&quot;, &quot;n&quot;) &gt; 0
+</span><span>	match ErrorMsg &#39;\%&gt;50v\%&lt;2l.\+&#39;
+</span><span>	match ErrorMsg &#39;\%&lt;3l\%&gt;1l^[^#].*&#39;
+</span><span>	match ErrorMsg &#39;\%&lt;2l^[^A-Z]&#39;
+</span><span>	match ErrorMsg &#39;\%&lt;2l[\.]\s*$&#39;
+</span><span>endif
+</span></code></pre>
+<footer class="footnotes">
+<ol class="footnotes-list">
+<li id="fn-yell">
+<p>Highlight in red <a href="#fr-yell-1">↩</a></p>
+</li>
+<li id="fn-comments">
+<p>There's an exception here for comments starting with <code>#</code>, because by default if you type <code>git commit</code> it will give you an empty line followed by a comment. In theory you could put in a comment and then a non-blank line to get around this, but we're just trying to give a reminder here, not trying to make things bulletproof. <a href="#fr-comments-1">↩</a></p>
+</li>
+<li id="fn-two">
+<p>In fact there are at least two, I think we could also accomplish this with <a href="https://vimdoc.sourceforge.net/htmldoc/filetype.html">filetype plugins</a>. <a href="#fr-two-1">↩</a></p>
+</li>
+<li id="fn-config">
+<p>See also <a href="https://blog.gitbutler.com/how-git-core-devs-configure-git/">this excellent post</a> about some of the other config options you can set. <a href="#fr-config-1">↩</a></p>
+</li>
+<li id="fn-debugging">
+<p>While figuring this part out I also found it handy to declare a variable <code>let called_from_git = "true"</code> to easily check if the script was actually being sourced or not. <a href="#fr-debugging-1">↩</a></p>
+</li>
+</ol>
+</footer>
+
+          </div>
+        </article>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+  
+  <section class="modal" id="search-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Search</p>
+      </header>
+      <section class="modal-card-body">
+        <div class="field mb-2">
+          <div class="control">
+            <input class="input" id="search" placeholder="Search this website." type="search" />
+          </div>
+        </div>
+        <div class="search-results">
+          <div class="search-results__items"></div>
+        </div>
+      </section>
+    </div>
+    <button aria-label="close" class="modal-close is-large"></button>
+  </section>
+  
+
+
+  
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <nav class="level">
+              
+          <div class="level-item has-text-centered">
+            <a class="button is-black is-outlined" href="https:&#x2F;&#x2F;whatthefox.dev&#x2F;posts&#x2F;norwegian-keyboard&#x2F;">
+              <span class="icon mr-2">
+                <i class="fas fa-arrow-circle-left"></i>
+              </span>
+              Small Learnings: udev and tweaking keyboard inputs on Linux
+            </a>
+          </div>
+           
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+
+
+
+  
+  <footer class="footer py-4">
+    <div class="content has-text-centered">
+      <p>
+        Built with
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-code"></i>
+          </span>
+          <span>code</span>
+        </span>
+        and
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-heart"></i>
+          </span>
+          <span>love</span>
+        </span>
+      </p>
+      <p>
+        Powered by
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-power-off"></i>
+          </span>
+          <span>zola</span>
+        </span>
+      </p>
+    </div>
+  </footer>
+  
+
+  
+  
+  
+  
+  <script src="https://whatthefox.dev/elasticlunr.min.js"></script>
+  <script src="https://whatthefox.dev/search_index.en.js"></script><script src="https://whatthefox.dev/js/site.js"></script>
+
+  
+
+
+
+
+
+  
+  
+</body>
+
+</html>
