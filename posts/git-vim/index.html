@@ -144,7 +144,7 @@ What the 🦊? | Small Learnings: git-specific vim configuration
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>950 words</span>
+  <span>962 words</span>
 </span>
 
             </div>
@@ -245,7 +245,8 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 <p>This will <a href="https://vimdoc.sourceforge.net/htmldoc/eval.html#search()">search</a> for the provided string, and if found we assume we're being asked for a commit message and can apply our error formatting.</p>
 <p>There are still a few things it won't do, like highlighting correctly when you're squashing several commits together and editing the messages from them, but it's good enough for me for now.</p>
 <h2 id="summary"><a class="zola-anchor" href="#summary" aria-label="Anchor link for: summary">🔗</a>Summary</h2>
-<p>By creating the following script (e.g. at <code>~/.vim/git.vim</code>) and setting <code>git config core.editor &lt;path to the script&gt;</code> we can have vim helpfully nudge us towards writing commit messages that follow style guidelines. It's not bulletproof, but it does most of what I want it to and making it do the last 10% would have been more effort than was really necessary. Maybe in the future it'll bother me enough that I go and fix that part too.</p>
+<p>By creating the following script (e.g. at <code>~/.vim/git.vim</code>) and setting <code>git config core.editor &lt;path to the script&gt;</code> we can have vim helpfully nudge us towards writing commit messages that follow style guidelines.</p>
+<p>It's not bulletproof, but it does most of what I want it to and making it do the last 10% would have been more effort than was really necessary. Maybe in the future it'll bother me enough that I go and fix that part too, or add more specific functionality like <a href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commits</a>.</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>&quot; Vim formatting when called from git
 </span><span>
 </span><span>setlocal textwidth=72
