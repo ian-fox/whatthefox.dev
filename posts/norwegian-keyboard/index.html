@@ -113,7 +113,8 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
 <section class="section">
   <div class="container">
     <div class="columns">
-      <div class="column is-8 is-offset-2">
+      
+      <div class="column is-8  is-offset-1-desktop">
         <article class="box">
           <h1 class="title">
             Small Learnings: udev and tweaking keyboard inputs on Linux
@@ -144,7 +145,7 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>669 words</span>
+  <span>667 words</span>
 </span>
 
             </div>
@@ -228,7 +229,21 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
 <pre data-lang="plain" style="background-color:#2b303b;color:#c0c5ce;" class="language-plain "><code class="language-plain" data-lang="plain"><span>Event: time 1732611073.702170, type 4 (EV_MSC), code 4 (MSC_SCAN), value 56
 </span><span>Event: time 1732611073.702170, type 1 (EV_KEY), code 86 (KEY_102ND), value 1
 </span></code></pre>
-<p>From this we can see that the scancode we want to remap is 0x56<sup class="footnote-reference" id="fr-hex-1"><a href="#fn-hex">1</a></sup>.</p>
+<p>From this we can see that the scancode we want to remap is 0x56.<span class="sidenote">
+<label
+        id="sidenote-label-1"
+        for="sidenote-body-1"
+        class="sidenote-label"
+    >
+<a><sup>1</sup></a>
+</label>
+<small
+        id="sidenote-body-1"
+        class="sidenote-body"
+    >
+<label for="sidenote-label-1"><sup>1</sup></label> The scancode is printed in hex even though it doesn't have the leading 0x for some reason.
+</small>
+</span></p>
 <h2 id="finding-the-keyboard"><a class="zola-anchor" href="#finding-the-keyboard" aria-label="Anchor link for: finding-the-keyboard">🔗</a>Finding the keyboard</h2>
 <p>We need one other piece of information before setting up our mapping: I don't want to mess with external keyboards that I plug in, so we need to find the identifier of the laptop's built-in keyboard to constrain our remapping to only that device. The arch wiki also tells us how to do this, and it's as simple as printing out the contents of a file!</p>
 <pre data-lang="plain" style="background-color:#2b303b;color:#c0c5ce;" class="language-plain "><code class="language-plain" data-lang="plain"><span>$ cat /sys/class/input/event3/device/modalias
@@ -240,7 +255,21 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>evdev:input:b0011v0001p0001eAB83*
 </span><span> KEYBOARD_KEY_56=leftshift
 </span></code></pre>
-<p>First we tell udev that we only want this to apply to the laptop keyboard. Then we tell it that we want the scancode 0x56 to map to the <code>leftshift</code> keycode. If we wanted to make other changes, we could put them there too<sup class="footnote-reference" id="fr-other-changes-1"><a href="#fn-other-changes">2</a></sup>.</p>
+<p>First we tell udev that we only want this to apply to the laptop keyboard. Then we tell it that we want the scancode 0x56 to map to the <code>leftshift</code> keycode. If we wanted to make other changes, we could put them there too.<span class="sidenote">
+<label
+        id="sidenote-label-2"
+        for="sidenote-body-2"
+        class="sidenote-label"
+    >
+<a><sup>2</sup></a>
+</label>
+<small
+        id="sidenote-body-2"
+        class="sidenote-body"
+    >
+<label for="sidenote-label-2"><sup>2</sup></label> After doing this, for example, I also went in and made one that disabled the middle click of the mouse buttons above the trackpad because it was really easy to accidentally press and paste things.
+</small>
+</span></p>
 <p>Finally, we need to run a few commands to tell hwdb and udev that they should refresh because we've made changes:</p>
 <pre data-lang="plain" style="background-color:#2b303b;color:#c0c5ce;" class="language-plain "><code class="language-plain" data-lang="plain"><span>$ sudo systemd-hwdb update
 </span><span>$ sudo udevadm trigger
@@ -252,21 +281,11 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
 </span><span>Event: time 1733426154.755950, type 4 (EV_MSC), code 4 (MSC_SCAN), value 56
 </span><span>Event: time 1733426154.755950, type 1 (EV_KEY), code 42 (KEY_LEFTSHIFT), value 1
 </span></code></pre>
-<footer class="footnotes">
-<ol class="footnotes-list">
-<li id="fn-hex">
-<p>The scancode is printed in hex even though it doesn't have the leading 0x for some reason. <a href="#fr-hex-1">↩</a></p>
-</li>
-<li id="fn-other-changes">
-<p>After doing this, for example, I also went in and made one that disabled the middle click of the mouse buttons above the trackpad because it was really easy to accidentally press and paste things. <a href="#fr-other-changes-1">↩</a></p>
-</li>
-</ol>
-</footer>
 
           </div>
+          
         </article>
       </div>
-      
     </div>
   </div>
 </section>
