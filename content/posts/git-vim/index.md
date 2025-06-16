@@ -13,7 +13,11 @@ One of the recommendations for using git is to limit the summary line to 50 char
 
 ## The Problem
 
-General git best practices will tell you that your git commit message should start with a line of at most 50 characters, followed by a blank line, followed by more lines if you need more detail which should themselves be no longer than 72 characters.
+I've been thinking about commit messages lately.{% sidenote() %}
+On that topic [this](https://dhwthompson.com/2019/my-favourite-git-commit) is also worth a read.
+{% end %}
+
+General git best practices will tell you that your git commit message should start with a line of at most 50 characters, followed by a blank line, followed by more lines if you need more details. I've seen it recommended that you keep these followup lines to 72 characters or less.
 
 After one too many times of accidentally writing way too long a first line and having it get cut off in GitHub, I decided it was time to see if I could get vim to help me remember to do that.
 
@@ -31,15 +35,16 @@ This setting will automatically break lines at 72 characters. If I were to write
 
 ## First Line
 
-For the first line of the message the guideline is 50 characters, but I don't know of a way to have multiple textwidths in vim. Instead we can at least get vim to yell at us [^yell] when we pass that length.
+For the first line of the message the guideline is 50 characters, but I don't know of a way to have multiple textwidths in vim. Instead we can at least get vim to remind us when we pass that length.
 
-Vim has a built-in "yell at you" styling called `ErrorMsg`, and with the `match` command we can tell it to apply this style when something matches a given [pattern](https://vimdoc.sourceforge.net/htmldoc/pattern.html). Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (`\%>50v`), but only on the first line (`\%<2l`):
+Vim has a built-in styling we can use for this called `ErrorMsg`, and with the `match` command we can tell it to apply the style when something matches a given [pattern](https://vimdoc.sourceforge.net/htmldoc/pattern.html). Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (`\%>50v`), but only on the first line (`\%<2l`):
 
 ```
 match ErrorMsg '\%>50v\%<2l.\+'
 ```
 
-Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters[^comments] on line 2:
+Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters on line 2:{% sidenote() %}There's an exception here for comments starting with `#`, because by default if you type `git commit` it will give you an empty line followed by a comment. In theory you could put in a comment and then a non-blank line to get around this, but we're just trying to give a reminder here, not trying to make things bulletproof.
+{% end %}
 
 ```
 match ErrorMsg '\%<3l\%>1l^[^#].*'
@@ -60,13 +65,13 @@ If we add these commands to our `.vimrc` file it will execute them for us every 
 
 ## Gitconfig
 
-As you may have inferred from that _excellent_ foreshadowing, there is in fact a way to do this![^two] Git lets you configure a lot[^config], including the editor you use for your commit messages. We can set the editor as follows:
+As you may have inferred from that _excellent_ foreshadowing, there is in fact a way to do this!{% sidenote() %}In fact there are at least two, I think we could also accomplish this with [filetype plugins](https://vimdoc.sourceforge.net/htmldoc/filetype.html).{% end %} Git lets you configure a lot, including the editor you use for your commit messages. We can set the editor as follows:{% sidenote() %}See also [this excellent post](https://blog.gitbutler.com/how-git-core-devs-configure-git/) about some of the other config options you can set.{% end %}
 
 ```sh
 $ git config core.editor "path/to/my/editor"
 ```
 
-And as it turns out, we can even add arguments! In particular, vim has a `-S` argument which will source a given script when it's opened. So if we save our script from above in e.g. `~/.vim/git.vim` we can set our git editor as `vim -S ~/.vim/git.vim` and now that file will only be executed when called from git![^debugging]
+And as it turns out, we can even add arguments! In particular, vim has a `-S` argument which will source a given script when it's opened. So if we save our script from above in e.g. `~/.vim/git.vim` we can set our git editor as `vim -S ~/.vim/git.vim` and now that file will only be executed when called from git!{% sidenote() %}While figuring this part out I also found it handy to declare a variable `let called_from_git = "true"` to easily check if the script was actually being sourced or not.{% end %}
 
 ## Rebasing
 
@@ -103,9 +108,3 @@ if search("# Please enter the commit message for your changes", "n") > 0
 	match ErrorMsg '\%<2l[\.]\s*$'
 endif
 ```
-
-[^yell]: Highlight in red
-[^comments]: There's an exception here for comments starting with `#`, because by default if you type `git commit` it will give you an empty line followed by a comment. In theory you could put in a comment and then a non-blank line to get around this, but we're just trying to give a reminder here, not trying to make things bulletproof.
-[^two]: In fact there are at least two, I think we could also accomplish this with [filetype plugins](https://vimdoc.sourceforge.net/htmldoc/filetype.html).
-[^config]: See also [this excellent post](https://blog.gitbutler.com/how-git-core-devs-configure-git/) about some of the other config options you can set.
-[^debugging]: While figuring this part out I also found it handy to declare a variable `let called_from_git = "true"` to easily check if the script was actually being sourced or not.

@@ -20,11 +20,11 @@ This will fetch the contents of the required submodules.
 
 ## To Do
 
-* Footnotes like that guy on hackernews' blog
+* if enabling TOC, make sure it works with mobile, don't include anchor symbols, and calculate entries without javascript
 * Better highlighting on shell snippets
 * Remove google fonts
 * figure out why tags, categories aren't working
-* update CV
 * better 404 page image?
 * add content
   * Notes on r2, x86
+  * Orgmode with ox?

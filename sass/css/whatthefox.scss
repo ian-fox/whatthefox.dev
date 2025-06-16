@@ -1,16 +1,66 @@
+@import "../../themes/DeepThought/sass/utilities/all";
+
 .zola-anchor {
-    margin-left: -4rem;
-    margin-right: 2rem;
-    text-decoration: none;
-    border-bottom-color: transparent;
-    cursor: pointer;
-    opacity: 0;
+  margin-left: -4rem;
+  margin-right: 2rem;
+  text-decoration: none;
+  border-bottom-color: transparent;
+  cursor: pointer;
+  opacity: 0;
 }
 
 .zola-anchor:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 *:hover > .zola-anchor {
-    opacity: 1;
+  opacity: 1;
+}
+
+.sidenote-label:hover + .sidenote-body {
+  background-color: yellow;
+}
+
+.sidenote-label:has(+ .sidenote-body:hover) {
+  background-color: yellow;
+}
+
+// Sidenotes for tablet and up
+.sidenote-body {
+  @include from($tablet) {
+    vertical-align: baseline;
+    position: relative;
+    float: right;
+    clear: right;
+    margin-top: 1rem;
+  }
+
+  @include tablet {
+    width: 50%;
+    margin-right: -60%;
+  }
+
+  @include desktop {
+    width: 45%;
+    margin-right: -50%;
+  }
+
+  @include widescreen {
+    width: 35%;
+    margin-right: -40%;
+  }
+}
+
+// Inline notes for mobile
+@include mobile {
+  .sidenote-body {
+    margin: 1em 0;
+    padding-left: 1em;
+    display: block;
+    border-left: 1px solid gray;
+  }
+
+  .sidenote label {
+    display: none;
+  }
 }
