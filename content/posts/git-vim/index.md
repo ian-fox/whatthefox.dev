@@ -5,6 +5,9 @@ date = "2025-06-16T15:14:47+02:00"
 [taxonomies]
 tags = ["computers", "git", "text editing", "small learnings"]
 categories = ["blog"]
+
+[extra]
+sidenotes = true
 +++
 
 One of the recommendations for using git is to limit the summary line to 50 characters, and the rest of the lines to 72. I wanted to see if I could make this easier by having vim tell me when I went over that limit.

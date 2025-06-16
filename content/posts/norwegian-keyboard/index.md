@@ -5,6 +5,9 @@ date = "2024-12-05T20:22:45+02:00"
 [taxonomies]
 tags = ["computers", "linux", "small learnings"]
 categories = ["blog"]
+
+[extra]
+sidenotes = true
 +++
 
 I got a new computer at work, which has the Norwegian keyboard. This messed up my muscle memory because the position I'm used to having as the shift key is actually split into two separate keys, but luckily there are ways to fix that!
@@ -47,7 +50,9 @@ Event: time 1732611073.702170, type 4 (EV_MSC), code 4 (MSC_SCAN), value 56
 Event: time 1732611073.702170, type 1 (EV_KEY), code 86 (KEY_102ND), value 1
 ```
 
-From this we can see that the scancode we want to remap is 0x56[^hex].
+From this we can see that the scancode we want to remap is 0x56.{% sidenote() %}
+The scancode is printed in hex even though it doesn't have the leading 0x for some reason.
+{% end %}
 
 ## Finding the keyboard
 
@@ -69,7 +74,7 @@ evdev:input:b0011v0001p0001eAB83*
  KEYBOARD_KEY_56=leftshift
 ```
 
-First we tell udev that we only want this to apply to the laptop keyboard. Then we tell it that we want the scancode 0x56 to map to the `leftshift` keycode. If we wanted to make other changes, we could put them there too[^other-changes].
+First we tell udev that we only want this to apply to the laptop keyboard. Then we tell it that we want the scancode 0x56 to map to the `leftshift` keycode. If we wanted to make other changes, we could put them there too.{% sidenote() %}After doing this, for example, I also went in and made one that disabled the middle click of the mouse buttons above the trackpad because it was really easy to accidentally press and paste things.{% end %}
 
 Finally, we need to run a few commands to tell hwdb and udev that they should refresh because we've made changes:
 
@@ -87,6 +92,3 @@ Event: time 1733426151.996356, type 1 (EV_KEY), code 42 (KEY_LEFTSHIFT), value 1
 Event: time 1733426154.755950, type 4 (EV_MSC), code 4 (MSC_SCAN), value 56
 Event: time 1733426154.755950, type 1 (EV_KEY), code 42 (KEY_LEFTSHIFT), value 1
 ```
-
-[^hex]: The scancode is printed in hex even though it doesn't have the leading 0x for some reason.
-[^other-changes]: After doing this, for example, I also went in and made one that disabled the middle click of the mouse buttons above the trackpad because it was really easy to accidentally press and paste things.

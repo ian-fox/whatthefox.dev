@@ -36,7 +36,7 @@
         </aside>
       </div>
       {% endif %}
-      <div class="column is-8 {% if not page.extra.toc %}is-offset-1-desktop{% endif %}">
+      <div class="column is-8 {% if not page.extra.sidenotes %}is-offset-2-desktop{% else %} is-offset-1-desktop{% endif %}">
         <article class="box">
           <h1 class="title">
             {{ page.title }}
