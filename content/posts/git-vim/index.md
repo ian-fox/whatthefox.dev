@@ -92,12 +92,12 @@ There are still a few things it won't do, like highlighting correctly when you'r
 
 ## Summary
 
-By creating the following script (e.g. at `~/.vim/git.vim`) and setting `git config core.editor "vim -S <path to the script>"` we can have vim helpfully nudge us towards writing commit messages that follow style guidelines. 
+By creating the following script (e.g. at `~/.vim/git.vim`) and setting `git config core.editor "vim -S path/to/the/script"` we can have vim helpfully nudge us towards writing commit messages that follow style guidelines. 
 
 It's not bulletproof, but it does most of what I want it to and making it do the last 10% would have been more effort than was really necessary. Maybe in the future it'll bother me enough that I go and fix that part too, or add more specific functionality like [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
 ```
-" Vim formatting when called from git
+" Git commit message formatting
 
 setlocal textwidth=72
 let called_from_git = "true"
