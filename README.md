@@ -20,6 +20,7 @@ This will fetch the contents of the required submodules.
 
 ## To Do
 
+* Make nested sidenotes work
 * if enabling TOC, make sure it works with mobile, don't include anchor symbols, and calculate entries without javascript
 * Better highlighting on shell snippets
 * Remove google fonts
