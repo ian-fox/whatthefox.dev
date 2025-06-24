@@ -141,11 +141,11 @@ What the 🦊? | Small Learnings: git-specific vim configuration
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  <span>5 min,</span>
+  <span>6 min,</span>
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>991 words</span>
+  <span>1058 words</span>
 </span>
 
             </div>
@@ -217,7 +217,12 @@ What the 🦊? | Small Learnings: git-specific vim configuration
           </div>
           <div class="content mt-2">
             <p>One of the recommendations for using git is to limit the summary line to 50 characters, and the rest of the lines to 72. I wanted to see if I could make this easier by having vim tell me when I went over that limit.</p>
-<span id="continue-reading"></span><h2 id="the-problem"><a class="zola-anchor" href="#the-problem" aria-label="Anchor link for: the-problem">🔗</a>The Problem</h2>
+<span id="continue-reading"></span><article class="message is-info">
+  <div class="message-body">
+    <p><em>Update 2025-06-24: changed <code>match</code> to <code>syntax match</code> after realizing only the last <code>match</code> applied.</em></p>
+  </div>
+</article>
+<h2 id="the-problem"><a class="zola-anchor" href="#the-problem" aria-label="Anchor link for: the-problem">🔗</a>The Problem</h2>
 <p>I've been thinking about commit messages lately.<span class="sidenote">
 <label
         id="sidenote-label-1"
@@ -243,10 +248,7 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 <p>This setting will automatically break lines at 72 characters. If I were to write a longer sentence, as soon as the word I was typing crossed the 72 character mark it would move that word down to a new line.</p>
 <h2 id="first-line"><a class="zola-anchor" href="#first-line" aria-label="Anchor link for: first-line">🔗</a>First Line</h2>
 <p>For the first line of the message the guideline is 50 characters, but I don't know of a way to have multiple textwidths in vim. Instead we can at least get vim to remind us when we pass that length.</p>
-<p>Vim has a built-in styling we can use for this called <code>ErrorMsg</code>, and with the <code>match</code> command we can tell it to apply the style when something matches a given <a href="https://vimdoc.sourceforge.net/htmldoc/pattern.html">pattern</a>. Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (<code>\%&gt;50v</code>), but only on the first line (<code>\%&lt;2l</code>):</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>match ErrorMsg &#39;\%&gt;50v\%&lt;2l.\+&#39;
-</span></code></pre>
-<p>Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters on line 2:<span class="sidenote">
+<p>Vim has a built-in styling we can use for this called <code>ErrorMsg</code>, and with the <code>syntax match</code> command we can tell it to apply the style when something matches a given <a href="https://vimdoc.sourceforge.net/htmldoc/pattern.html">pattern</a>.<span class="sidenote">
 <label
         id="sidenote-label-2"
         for="sidenote-body-2"
@@ -258,20 +260,12 @@ What the 🦊? | Small Learnings: git-specific vim configuration
         id="sidenote-body-2"
         class="sidenote-body"
     >
-<label for="sidenote-label-2"><sup>2</sup></label> There's an exception here for comments starting with <code>#</code>, because by default if you type <code>git commit</code> it will give you an empty line followed by a comment. In theory you could put in a comment and then a non-blank line to get around this, but we're just trying to give a reminder here, not trying to make things bulletproof.
+<label for="sidenote-label-2"><sup>2</sup></label> Originally this was just <code>match</code>, but then having multiple patterns would only use the last one. In some versions of vim you can get up to 3 groups by using <code>2match</code> and <code>3match</code>, but <code>syntax match</code> seems like a more appropritae solution.
 </small>
-</span></p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>match ErrorMsg &#39;\%&lt;3l\%&gt;1l^[^#].*&#39;
+</span> Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (<code>\%&gt;50v</code>), but only on the first line (<code>\%&lt;2l</code>):</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>syntax match ErrorMsg &#39;\%&gt;50v\%&lt;2l.\+&#39;
 </span></code></pre>
-<p>Finally, if we want to follow guidelines like "the summary line should start with a capital letter and should not end with a period" we can do that too:</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>match ErrorMsg &#39;\%&lt;2l^[^A-Z]&#39;
-</span><span>match ErrorMsg &#39;\%&lt;2l[\.]\s*$&#39;
-</span></code></pre>
-<h2 id="persisting-the-configuration"><a class="zola-anchor" href="#persisting-the-configuration" aria-label="Anchor link for: persisting-the-configuration">🔗</a>Persisting the Configuration</h2>
-<p>Obviously we don't want to have to type all that every time we open up vim to type a commit message.</p>
-<p>If we add these commands to our <code>.vimrc</code> file it will execute them for us every time we open vim, but while the setup we've got is handy for commit messages I don't necessarily want all of those things if I'm not writing a commit message! If only there were a way to get vim to tell if we were working on a commit message so it could apply those settings only when necessary...</p>
-<h2 id="gitconfig"><a class="zola-anchor" href="#gitconfig" aria-label="Anchor link for: gitconfig">🔗</a>Gitconfig</h2>
-<p>As you may have inferred from that <em>excellent</em> foreshadowing, there is in fact a way to do this!<span class="sidenote">
+<p>Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters on line 2:<span class="sidenote">
 <label
         id="sidenote-label-3"
         for="sidenote-body-3"
@@ -283,9 +277,20 @@ What the 🦊? | Small Learnings: git-specific vim configuration
         id="sidenote-body-3"
         class="sidenote-body"
     >
-<label for="sidenote-label-3"><sup>3</sup></label> In fact there are at least two, I think we could also accomplish this with <a href="https://vimdoc.sourceforge.net/htmldoc/filetype.html">filetype plugins</a>.
+<label for="sidenote-label-3"><sup>3</sup></label> There's an exception here for comments starting with <code>#</code>, because by default if you type <code>git commit</code> it will give you an empty line followed by a comment. In theory you could put in a comment and then a non-blank line to get around this, but we're just trying to give a reminder here, not trying to make things bulletproof.
 </small>
-</span> Git lets you configure a lot, including the editor you use for your commit messages. We can set the editor as follows:<span class="sidenote">
+</span></p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>syntax match ErrorMsg &#39;\%&lt;3l\%&gt;1l^[^#].*&#39;
+</span></code></pre>
+<p>Finally, if we want to follow guidelines like "the summary line should start with a capital letter and should not end with a period" we can do that too:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>syntax match ErrorMsg &#39;\%&lt;2l^[^A-Z]&#39;
+</span><span>syntax match ErrorMsg &#39;\%&lt;2l[\.]\s*$&#39;
+</span></code></pre>
+<h2 id="persisting-the-configuration"><a class="zola-anchor" href="#persisting-the-configuration" aria-label="Anchor link for: persisting-the-configuration">🔗</a>Persisting the Configuration</h2>
+<p>Obviously we don't want to have to type all that every time we open up vim to type a commit message.</p>
+<p>If we add these commands to our <code>.vimrc</code> file it will execute them for us every time we open vim, but while the setup we've got is handy for commit messages I don't necessarily want all of those things if I'm not writing a commit message! If only there were a way to get vim to tell if we were working on a commit message so it could apply those settings only when necessary...</p>
+<h2 id="gitconfig"><a class="zola-anchor" href="#gitconfig" aria-label="Anchor link for: gitconfig">🔗</a>Gitconfig</h2>
+<p>As you may have inferred from that <em>excellent</em> foreshadowing, there is in fact a way to do this!<span class="sidenote">
 <label
         id="sidenote-label-4"
         for="sidenote-body-4"
@@ -297,12 +302,9 @@ What the 🦊? | Small Learnings: git-specific vim configuration
         id="sidenote-body-4"
         class="sidenote-body"
     >
-<label for="sidenote-label-4"><sup>4</sup></label> See also <a href="https://blog.gitbutler.com/how-git-core-devs-configure-git/">this excellent post</a> about some of the other config options you can set.
+<label for="sidenote-label-4"><sup>4</sup></label> In fact there are at least two, I think we could also accomplish this with <a href="https://vimdoc.sourceforge.net/htmldoc/filetype.html">filetype plugins</a>.
 </small>
-</span></p>
-<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> git config core.editor &quot;</span><span style="color:#a3be8c;">path/to/my/editor</span><span>&quot;
-</span></code></pre>
-<p>And as it turns out, we can even add arguments! In particular, vim has a <code>-S</code> argument which will source a given script when it's opened. So if we save our script from above in e.g. <code>~/.vim/git.vim</code> we can set our git editor as <code>vim -S ~/.vim/git.vim</code> and now that file will only be executed when called from git!<span class="sidenote">
+</span> Git lets you configure a lot, including the editor you use for your commit messages. We can set the editor as follows:<span class="sidenote">
 <label
         id="sidenote-label-5"
         for="sidenote-body-5"
@@ -314,7 +316,24 @@ What the 🦊? | Small Learnings: git-specific vim configuration
         id="sidenote-body-5"
         class="sidenote-body"
     >
-<label for="sidenote-label-5"><sup>5</sup></label> While figuring this part out I also found it handy to declare a variable <code>let called_from_git = "true"</code> to easily check if the script was actually being sourced or not.
+<label for="sidenote-label-5"><sup>5</sup></label> See also <a href="https://blog.gitbutler.com/how-git-core-devs-configure-git/">this excellent post</a> about some of the other config options you can set.
+</small>
+</span></p>
+<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> git config core.editor &quot;</span><span style="color:#a3be8c;">path/to/my/editor</span><span>&quot;
+</span></code></pre>
+<p>And as it turns out, we can even add arguments! In particular, vim has a <code>-S</code> argument which will source a given script when it's opened. So if we save our script from above in e.g. <code>~/.vim/git.vim</code> we can set our git editor as <code>vim -S ~/.vim/git.vim</code> and now that file will only be executed when called from git!<span class="sidenote">
+<label
+        id="sidenote-label-6"
+        for="sidenote-body-6"
+        class="sidenote-label"
+    >
+<a><sup>6</sup></a>
+</label>
+<small
+        id="sidenote-body-6"
+        class="sidenote-body"
+    >
+<label for="sidenote-label-6"><sup>6</sup></label> While figuring this part out I also found it handy to declare a variable <code>let called_from_git = "true"</code> to easily check if the script was actually being sourced or not.
 </small>
 </span></p>
 <h2 id="rebasing"><a class="zola-anchor" href="#rebasing" aria-label="Anchor link for: rebasing">🔗</a>Rebasing</h2>
@@ -336,10 +355,10 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 </span><span>&quot; Search for a string to see if we&#39;re being asked for a commit message
 </span><span>&quot; And apply highlighting based on guidelines for the status line if so.
 </span><span>if search(&quot;# Please enter the commit message for your changes&quot;, &quot;n&quot;) &gt; 0
-</span><span>	match ErrorMsg &#39;\%&gt;50v\%&lt;2l.\+&#39;
-</span><span>	match ErrorMsg &#39;\%&lt;3l\%&gt;1l^[^#].*&#39;
-</span><span>	match ErrorMsg &#39;\%&lt;2l^[^A-Z]&#39;
-</span><span>	match ErrorMsg &#39;\%&lt;2l[\.]\s*$&#39;
+</span><span>	syntax match ErrorMsg &#39;\%&gt;50v\%&lt;2l.\+&#39;
+</span><span>	syntax match ErrorMsg &#39;\%&lt;3l\%&gt;1l^[^#].*&#39;
+</span><span>	syntax match ErrorMsg &#39;\%&lt;2l^[^A-Z]&#39;
+</span><span>	syntax match ErrorMsg &#39;\%&lt;2l[\.]\s*$&#39;
 </span><span>endif
 </span></code></pre>
 
