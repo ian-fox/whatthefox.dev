@@ -14,6 +14,8 @@ One of the recommendations for using git is to limit the summary line to 50 char
 
 <!-- more -->
 
+{% message(title="" class="is-info") %}_Update 2025-06-24: changed `match` to `syntax match` after realizing only the last `match` applied._{% end %}
+
 ## The Problem
 
 I've been thinking about commit messages lately.{% sidenote() %}
@@ -40,24 +42,24 @@ This setting will automatically break lines at 72 characters. If I were to write
 
 For the first line of the message the guideline is 50 characters, but I don't know of a way to have multiple textwidths in vim. Instead we can at least get vim to remind us when we pass that length.
 
-Vim has a built-in styling we can use for this called `ErrorMsg`, and with the `match` command we can tell it to apply the style when something matches a given [pattern](https://vimdoc.sourceforge.net/htmldoc/pattern.html). Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (`\%>50v`), but only on the first line (`\%<2l`):
+Vim has a built-in styling we can use for this called `ErrorMsg`, and with the `syntax match` command we can tell it to apply the style when something matches a given [pattern](https://vimdoc.sourceforge.net/htmldoc/pattern.html).{% sidenote() %}Originally this was just `match`, but then having multiple patterns would only use the last one. In some versions of vim you can get up to 3 groups by using `2match` and `3match`, but `syntax match` seems like a more appropritae solution.{% end %} Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (`\%>50v`), but only on the first line (`\%<2l`):
 
 ```
-match ErrorMsg '\%>50v\%<2l.\+'
+syntax match ErrorMsg '\%>50v\%<2l.\+'
 ```
 
 Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters on line 2:{% sidenote() %}There's an exception here for comments starting with `#`, because by default if you type `git commit` it will give you an empty line followed by a comment. In theory you could put in a comment and then a non-blank line to get around this, but we're just trying to give a reminder here, not trying to make things bulletproof.
 {% end %}
 
 ```
-match ErrorMsg '\%<3l\%>1l^[^#].*'
+syntax match ErrorMsg '\%<3l\%>1l^[^#].*'
 ```
 
 Finally, if we want to follow guidelines like "the summary line should start with a capital letter and should not end with a period" we can do that too:
 
 ```
-match ErrorMsg '\%<2l^[^A-Z]'
-match ErrorMsg '\%<2l[\.]\s*$'
+syntax match ErrorMsg '\%<2l^[^A-Z]'
+syntax match ErrorMsg '\%<2l[\.]\s*$'
 ```
 
 ## Persisting the Configuration
@@ -105,9 +107,9 @@ let called_from_git = "true"
 " Search for a string to see if we're being asked for a commit message
 " And apply highlighting based on guidelines for the status line if so.
 if search("# Please enter the commit message for your changes", "n") > 0
-	match ErrorMsg '\%>50v\%<2l.\+'
-	match ErrorMsg '\%<3l\%>1l^[^#].*'
-	match ErrorMsg '\%<2l^[^A-Z]'
-	match ErrorMsg '\%<2l[\.]\s*$'
+	syntax match ErrorMsg '\%>50v\%<2l.\+'
+	syntax match ErrorMsg '\%<3l\%>1l^[^#].*'
+	syntax match ErrorMsg '\%<2l^[^A-Z]'
+	syntax match ErrorMsg '\%<2l[\.]\s*$'
 endif
 ```

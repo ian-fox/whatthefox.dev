@@ -22,10 +22,16 @@ This will fetch the contents of the required submodules.
 
 * Make nested sidenotes work
 * if enabling TOC, make sure it works with mobile, don't include anchor symbols, and calculate entries without javascript
-* Better highlighting on shell snippets
+* Better code snippets
+  * Bulma components for filename
+  * Shell highlighting?
 * Remove google fonts
 * figure out why tags, categories aren't working
 * better 404 page image?
 * add content
   * Notes on r2, x86
   * Orgmode with ox?
+
+UI changes to maybe post about:
+
+* Sidenotes

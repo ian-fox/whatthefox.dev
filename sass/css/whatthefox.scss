@@ -1,5 +1,6 @@
 @import "../../themes/DeepThought/sass/utilities/all";
 
+// Make the link symbol appear on hover
 .zola-anchor {
   margin-left: -4rem;
   margin-right: 2rem;
@@ -16,6 +17,13 @@
 *:hover > .zola-anchor {
   opacity: 1;
 }
+
+// Tweaking bulma for personal preference
+.message-body {
+  padding: 0.75em 1em;
+}
+
+// Sidenotes
 
 .sidenote-label:hover + .sidenote-body {
   background-color: yellow;
