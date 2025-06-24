@@ -1,7 +1,7 @@
 <article class="message {% if class %}{{class | safe}}{% endif %}">
-  {%if title %}
+  {% if title %}
   <div class="message-header">
-    <p>{{ title | markdown }}</p>
+   {{ title | markdown }}
   </div>
   {% endif %}
   <div class="message-body">

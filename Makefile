@@ -19,7 +19,7 @@ build:
 diff:
 	cd .git_deploy && git diff
 
-publish:
+publish: build
 	cd .git_deploy && git add .
 	cd .git_deploy && git commit -m "Deploy $(DATE)"
 	cd .git_deploy && git push origin master

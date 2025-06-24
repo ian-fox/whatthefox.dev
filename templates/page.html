@@ -63,7 +63,6 @@
           <div class="content mt-2">
             {{ page.content | safe }}
           </div>
-          {# todo: footnotes instead of sidenotes if on mobile? #}
         </article>
       </div>
     </div>
@@ -75,8 +74,8 @@
 {% if page.earlier or page.later or page.lighter or page.heavier or page.higher or page.lower %}
 <section class="section">
   <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
+    <div class="columns">
+      <div class="column is-8 is-offset-1-desktop">
         <nav class="level">
           {% if page.later %}
           <div class="level-item has-text-centered">

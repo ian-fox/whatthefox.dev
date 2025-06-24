@@ -35,3 +35,5 @@ This will fetch the contents of the required submodules.
 UI changes to maybe post about:
 
 * Sidenotes
+* Shell listing
+* Code without selecting columns

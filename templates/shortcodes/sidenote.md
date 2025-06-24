@@ -1,10 +1,8 @@
-<span class="sidenote">
-    <label
+<span class="sidenote"><label
         id="sidenote-label-{{ nth }}"
         for="sidenote-body-{{ nth }}"
         class="sidenote-label"
-    >
-        <a><sup>{{ nth }}</sup></a>
+    ><a><sup>{{ nth }}</sup></a>
     </label>
     <small
         id="sidenote-body-{{ nth }}"
