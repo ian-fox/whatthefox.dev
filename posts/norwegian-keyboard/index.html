@@ -229,13 +229,11 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
 <pre data-lang="plain" style="background-color:#282a36;color:#f8f8f2;" class="language-plain "><code class="language-plain" data-lang="plain"><span>Event: time 1732611073.702170, type 4 (EV_MSC), code 4 (MSC_SCAN), value 56
 </span><span>Event: time 1732611073.702170, type 1 (EV_KEY), code 86 (KEY_102ND), value 1
 </span></code></pre>
-<p>From this we can see that the scancode we want to remap is 0x56.<span class="sidenote">
-<label
+<p>From this we can see that the scancode we want to remap is 0x56.<span class="sidenote"><label
         id="sidenote-label-1"
         for="sidenote-body-1"
         class="sidenote-label"
-    >
-<a><sup>1</sup></a>
+    ><a><sup>1</sup></a>
 </label>
 <small
         id="sidenote-body-1"
@@ -255,13 +253,11 @@ What the 🦊? | Small Learnings: udev and tweaking keyboard inputs on Linux
 <pre style="background-color:#282a36;color:#f8f8f2;"><code><span>evdev:input:b0011v0001p0001eAB83*
 </span><span> KEYBOARD_KEY_56=leftshift
 </span></code></pre>
-<p>First we tell udev that we only want this to apply to the laptop keyboard. Then we tell it that we want the scancode 0x56 to map to the <code>leftshift</code> keycode. If we wanted to make other changes, we could put them there too.<span class="sidenote">
-<label
+<p>First we tell udev that we only want this to apply to the laptop keyboard. Then we tell it that we want the scancode 0x56 to map to the <code>leftshift</code> keycode. If we wanted to make other changes, we could put them there too.<span class="sidenote"><label
         id="sidenote-label-2"
         for="sidenote-body-2"
         class="sidenote-label"
-    >
-<a><sup>2</sup></a>
+    ><a><sup>2</sup></a>
 </label>
 <small
         id="sidenote-body-2"

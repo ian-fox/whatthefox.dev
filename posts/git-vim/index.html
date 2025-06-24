@@ -223,13 +223,11 @@ What the 🦊? | Small Learnings: git-specific vim configuration
   </div>
 </article>
 <h2 id="the-problem"><a class="zola-anchor" href="#the-problem" aria-label="Anchor link for: the-problem">🔗</a>The Problem</h2>
-<p>I've been thinking about commit messages lately.<span class="sidenote">
-<label
+<p>I've been thinking about commit messages lately.<span class="sidenote"><label
         id="sidenote-label-1"
         for="sidenote-body-1"
         class="sidenote-label"
-    >
-<a><sup>1</sup></a>
+    ><a><sup>1</sup></a>
 </label>
 <small
         id="sidenote-body-1"
@@ -248,13 +246,11 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 <p>This setting will automatically break lines at 72 characters. If I were to write a longer sentence, as soon as the word I was typing crossed the 72 character mark it would move that word down to a new line.</p>
 <h2 id="first-line"><a class="zola-anchor" href="#first-line" aria-label="Anchor link for: first-line">🔗</a>First Line</h2>
 <p>For the first line of the message the guideline is 50 characters, but I don't know of a way to have multiple textwidths in vim. Instead we can at least get vim to remind us when we pass that length.</p>
-<p>Vim has a built-in styling we can use for this called <code>ErrorMsg</code>, and with the <code>syntax match</code> command we can tell it to apply the style when something matches a given <a href="https://vimdoc.sourceforge.net/htmldoc/pattern.html">pattern</a>.<span class="sidenote">
-<label
+<p>Vim has a built-in styling we can use for this called <code>ErrorMsg</code>, and with the <code>syntax match</code> command we can tell it to apply the style when something matches a given <a href="https://vimdoc.sourceforge.net/htmldoc/pattern.html">pattern</a>.<span class="sidenote"><label
         id="sidenote-label-2"
         for="sidenote-body-2"
         class="sidenote-label"
-    >
-<a><sup>2</sup></a>
+    ><a><sup>2</sup></a>
 </label>
 <small
         id="sidenote-body-2"
@@ -265,13 +261,11 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 </span> Beyond the standard regex options, vim has a way for us to conditionally match based on where in a file we are. The following tells it to highlight anything past 50 characters (<code>\%&gt;50v</code>), but only on the first line (<code>\%&lt;2l</code>):</p>
 <pre data-lang="vim" style="background-color:#282a36;color:#f8f8f2;" class="language-vim "><code class="language-vim" data-lang="vim"><span>syntax match ErrorMsg </span><span style="color:#f1fa8c;">&#39;\%&gt;50v\%&lt;2l.\+&#39;
 </span></code></pre>
-<p>Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters on line 2:<span class="sidenote">
-<label
+<p>Similarly, we can remind about the blank line between the summary line and the rest of the commit message by checking for any characters on line 2:<span class="sidenote"><label
         id="sidenote-label-3"
         for="sidenote-body-3"
         class="sidenote-label"
-    >
-<a><sup>3</sup></a>
+    ><a><sup>3</sup></a>
 </label>
 <small
         id="sidenote-body-3"
@@ -290,13 +284,11 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 <p>Obviously we don't want to have to type all that every time we open up vim to type a commit message.</p>
 <p>If we add these commands to our <code>.vimrc</code> file it will execute them for us every time we open vim, but while the setup we've got is handy for commit messages I don't necessarily want all of those things if I'm not writing a commit message! If only there were a way to get vim to tell if we were working on a commit message so it could apply those settings only when necessary...</p>
 <h2 id="gitconfig"><a class="zola-anchor" href="#gitconfig" aria-label="Anchor link for: gitconfig">🔗</a>Gitconfig</h2>
-<p>As you may have inferred from that <em>excellent</em> foreshadowing, there is in fact a way to do this!<span class="sidenote">
-<label
+<p>As you may have inferred from that <em>excellent</em> foreshadowing, there is in fact a way to do this!<span class="sidenote"><label
         id="sidenote-label-4"
         for="sidenote-body-4"
         class="sidenote-label"
-    >
-<a><sup>4</sup></a>
+    ><a><sup>4</sup></a>
 </label>
 <small
         id="sidenote-body-4"
@@ -304,13 +296,11 @@ What the 🦊? | Small Learnings: git-specific vim configuration
     >
 <label for="sidenote-label-4"><sup>4</sup></label> In fact there are at least two, I think we could also accomplish this with <a href="https://vimdoc.sourceforge.net/htmldoc/filetype.html">filetype plugins</a>.
 </small>
-</span> Git lets you configure a lot, including the editor you use for your commit messages. We can set the editor as follows:<span class="sidenote">
-<label
+</span> Git lets you configure a lot, including the editor you use for your commit messages. We can set the editor as follows:<span class="sidenote"><label
         id="sidenote-label-5"
         for="sidenote-body-5"
         class="sidenote-label"
-    >
-<a><sup>5</sup></a>
+    ><a><sup>5</sup></a>
 </label>
 <small
         id="sidenote-body-5"
@@ -319,15 +309,13 @@ What the 🦊? | Small Learnings: git-specific vim configuration
 <label for="sidenote-label-5"><sup>5</sup></label> See also <a href="https://blog.gitbutler.com/how-git-core-devs-configure-git/">this excellent post</a> about some of the other config options you can set.
 </small>
 </span></p>
-<pre data-lang="nushell" style="background-color:#282a36;color:#f8f8f2;" class="language-nushell "><code class="language-nushell" data-lang="nushell"><span>git config core.editor </span><span style="color:#f1fa8c;">&quot;path/to/my/editor&quot;
+<pre data-lang="shell-session" style="background-color:#282a36;color:#f8f8f2;" class="language-shell-session "><code class="language-shell-session" data-lang="shell-session"><span>git config core.editor &quot;path/to/my/editor&quot;
 </span></code></pre>
-<p>And as it turns out, we can even add arguments! In particular, vim has a <code>-S</code> argument which will source a given script when it's opened. So if we save our script from above in e.g. <code>~/.vim/git.vim</code> we can set our git editor as <code>vim -S ~/.vim/git.vim</code> and now that file will only be executed when called from git!<span class="sidenote">
-<label
+<p>And as it turns out, we can even add arguments! In particular, vim has a <code>-S</code> argument which will source a given script when it's opened. So if we save our script from above in e.g. <code>~/.vim/git.vim</code> we can set our git editor as <code>vim -S ~/.vim/git.vim</code> and now that file will only be executed when called from git!<span class="sidenote"><label
         id="sidenote-label-6"
         for="sidenote-body-6"
         class="sidenote-label"
-    >
-<a><sup>6</sup></a>
+    ><a><sup>6</sup></a>
 </label>
 <small
         id="sidenote-body-6"
