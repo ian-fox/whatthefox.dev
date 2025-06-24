@@ -34,7 +34,7 @@ Fortunately for us, our friendly Arch wiki has a [tutorial](https://wiki.archlin
 
 To get the scancode, we can use a program called `evtest`:
 
-```plain
+```txt
 $ sudo evtest
 No device specified, trying to scan all of /dev/input/event*
 Available devices:
@@ -45,7 +45,7 @@ Available devices:
 
 Once we select the device for the keyboard (in this case `/dev/input/event3`), evtest starts listening for events and printing them to the screen. By pressing the key we're interested in we can find out what its scancode is:
 
-```plain
+```txt
 Event: time 1732611073.702170, type 4 (EV_MSC), code 4 (MSC_SCAN), value 56
 Event: time 1732611073.702170, type 1 (EV_KEY), code 86 (KEY_102ND), value 1
 ```
@@ -58,7 +58,7 @@ The scancode is printed in hex even though it doesn't have the leading 0x for so
 
 We need one other piece of information before setting up our mapping: I don't want to mess with external keyboards that I plug in, so we need to find the identifier of the laptop's built-in keyboard to constrain our remapping to only that device. The arch wiki also tells us how to do this, and it's as simple as printing out the contents of a file!
 
-```plain
+```txt
 $ cat /sys/class/input/event3/device/modalias
 input:b0011v0001p0001eAB830e0,1,4,11,14,k71...
 ```
@@ -78,14 +78,14 @@ First we tell udev that we only want this to apply to the laptop keyboard. Then 
 
 Finally, we need to run a few commands to tell hwdb and udev that they should refresh because we've made changes:
 
-```plain
+```txt
 $ sudo systemd-hwdb update
 $ sudo udevadm trigger
 ```
 
 And that's it! Running evtest again, we can see that both scancodes get mapped to the same keycode now:
 
-```plain
+```txt
 Event: time 1733426151.996356, type 4 (EV_MSC), code 4 (MSC_SCAN), value 2a
 Event: time 1733426151.996356, type 1 (EV_KEY), code 42 (KEY_LEFTSHIFT), value 1
 ...

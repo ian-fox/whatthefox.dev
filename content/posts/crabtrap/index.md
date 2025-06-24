@@ -345,7 +345,7 @@ Running this we do get lots of nice stack traces! Next up we need to map the pc 
 
 Our goal is in sight! The last thing we need to do is map our series of program counters back to the files they come from, and then use that to make a decision about whether to allow the syscall or not. We can get this information by looking in the [proc filesystem](https://www.man7.org/linux/man-pages/man5/proc_pid_maps.5.html). For instance, when I run `cat /proc/self/maps` I get the following:
 
-```plain
+```txt
 aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
 aaaad82df000-aaaad82e0000 r--p 0000f000 fe:01 188725                     /usr/bin/cat
 aaaad82e0000-aaaad82e1000 rw-p 00010000 fe:01 188725                     /usr/bin/cat

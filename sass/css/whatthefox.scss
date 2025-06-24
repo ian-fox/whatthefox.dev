@@ -31,10 +31,7 @@ nav.level .level-item {
   padding: 0em 0.5em;
 }
 
-// // Better code listing
-// code.language-sh:before {
-//   content: "$ ";
-// }
+// Better code listing
 
 pre {
   border-radius: $radius-large;
@@ -55,6 +52,7 @@ pre {
 
 .content code table td:first-of-type {
   text-align: end;
+  user-select: none;
 }
 
 .content code table td span:first-of-type {
@@ -74,8 +72,24 @@ pre {
   display: block; // Make highlights full-width
 }
 
+// Shell sessions
+code.language-sh:before {
+  content: "$ ";
+  color: #50fa7b;
+}
 
-// Sidenotes
+pre + pre {
+  padding-top: 0 !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+pre:has(+ pre) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
 
 nav.level .level-item {
   padding: 0em 0.5em;

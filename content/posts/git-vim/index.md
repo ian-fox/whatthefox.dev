@@ -72,9 +72,7 @@ If we add these commands to our `.vimrc` file it will execute them for us every 
 
 As you may have inferred from that _excellent_ foreshadowing, there is in fact a way to do this!{% sidenote() %}In fact there are at least two, I think we could also accomplish this with [filetype plugins](https://vimdoc.sourceforge.net/htmldoc/filetype.html).{% end %} Git lets you configure a lot, including the editor you use for your commit messages. We can set the editor as follows:{% sidenote() %}See also [this excellent post](https://blog.gitbutler.com/how-git-core-devs-configure-git/) about some of the other config options you can set.{% end %}
 
-```shell-session
-git config core.editor "path/to/my/editor"
-```
+{{ shell(command='git config core.editor "path/to/my/editor"', shell="sh") }}
 
 And as it turns out, we can even add arguments! In particular, vim has a `-S` argument which will source a given script when it's opened. So if we save our script from above in e.g. `~/.vim/git.vim` we can set our git editor as `vim -S ~/.vim/git.vim` and now that file will only be executed when called from git!{% sidenote() %}While figuring this part out I also found it handy to declare a variable `let called_from_git = "true"` to easily check if the script was actually being sourced or not.{% end %}
 
