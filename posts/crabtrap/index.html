@@ -231,68 +231,68 @@ What the 🦊? | Crabtrap
 <p>With those requirements set, let's get into the coding! The code for this post will live <a href="https://github.com/ian-fox/crabtrap">here</a> if you want to follow along.</p>
 <p>The first thing we'll need is a toy binary. We'll write a simple wrapper:<sup class="footnote-reference" id="fr-c-quality-1"><a href="#fn-c-quality">7</a></sup></p>
 <p><code>printf_wrapper.c</code></p>
-<pre data-lang="c" style="background-color:#2b303b;color:#c0c5ce;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">stdio.h</span><span>&gt;
-</span><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">stdarg.h</span><span>&gt;
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+</span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdarg.h&gt;
 </span><span>
-</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">printf_wrapper</span><span>(</span><span style="color:#b48ead;">const char </span><span>*</span><span style="color:#bf616a;">format</span><span>, ...) {
+</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span style="font-style:italic;color:#ffb86c;">format</span><span>, </span><span style="color:#ff79c6;">...</span><span>) </span><span style="color:#ffffff;">{
 </span><span>    va_list args;
-</span><span>    </span><span style="color:#96b5b4;">va_start</span><span>(args, format);
-</span><span>    </span><span style="color:#b48ead;">int</span><span> result = </span><span style="color:#96b5b4;">vprintf</span><span>(format, args);
-</span><span>    </span><span style="color:#96b5b4;">va_end</span><span>(args);
-</span><span>    </span><span style="color:#b48ead;">return</span><span> result;
-</span><span>}
+</span><span>    </span><span style="color:#8be9fd;">va_start</span><span>(args, format);
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">int</span><span> result </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">vprintf</span><span>(format, args);
+</span><span>    </span><span style="color:#8be9fd;">va_end</span><span>(args);
+</span><span>    </span><span style="color:#ff79c6;">return</span><span> result;
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>And a binary that calls <code>write</code> through both that and just through normal <code>libc</code>:</p>
 <p><code>static.c</code></p>
-<pre data-lang="c" style="background-color:#2b303b;color:#c0c5ce;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">stdio.h</span><span>&gt;
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span>
-</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">printf_wrapper</span><span>(</span><span style="color:#b48ead;">const char </span><span>*</span><span style="color:#bf616a;">format</span><span>, ...);
+</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span style="font-style:italic;color:#ffb86c;">format</span><span>, </span><span style="color:#ff79c6;">...</span><span>);
 </span><span>
-</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span>() {
-</span><span>    </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">Hello from printf!</span><span style="color:#96b5b4;">\n</span><span>&quot;);
-</span><span>    </span><span style="color:#bf616a;">printf_wrapper</span><span>(&quot;</span><span style="color:#a3be8c;">Hello from printf_wrapper!</span><span style="color:#96b5b4;">\n</span><span>&quot;);
-</span><span>    </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">0</span><span>;
-</span><span>}
+</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Hello from printf!</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>);
+</span><span>    </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#f1fa8c;">&quot;Hello from printf_wrapper!</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>);
+</span><span>    </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">0</span><span>;
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>For fun, we can also make one that loads the library dynamically:</p>
 <p><code>dynamic.c</code></p>
-<pre data-lang="c" style="background-color:#2b303b;color:#c0c5ce;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">stdio.h</span><span>&gt;
-</span><span style="color:#b48ead;">#include </span><span>&lt;</span><span style="color:#a3be8c;">dlfcn.h</span><span>&gt;
+<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+</span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;dlfcn.h&gt;
 </span><span>
-</span><span style="color:#b48ead;">int </span><span style="color:#8fa1b3;">main</span><span>() {
-</span><span>    </span><span style="color:#b48ead;">void </span><span>*handle = </span><span style="color:#bf616a;">dlopen</span><span>(&quot;</span><span style="color:#a3be8c;">/usr/local/lib/libprintf_wrapper.so</span><span>&quot;, RTLD_LAZY);
-</span><span>    </span><span style="color:#b48ead;">if </span><span>(!handle) {
-</span><span>        </span><span style="color:#96b5b4;">fprintf</span><span>(stderr, &quot;</span><span style="color:#d08770;">%s</span><span style="color:#96b5b4;">\n</span><span>&quot;, </span><span style="color:#bf616a;">dlerror</span><span>());
-</span><span>        </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">1</span><span>;
-</span><span>    }
+</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#ff79c6;">*</span><span>handle </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">dlopen</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/lib/libprintf_wrapper.so&quot;</span><span>, RTLD_LAZY);
+</span><span>    </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#ff79c6;">!</span><span>handle) </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#8be9fd;">fprintf</span><span>(stderr, </span><span style="color:#f1fa8c;">&quot;</span><span style="color:#bd93f9;">%s</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, </span><span style="color:#50fa7b;">dlerror</span><span>());
+</span><span>        </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">1</span><span>;
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    </span><span style="color:#b48ead;">int </span><span>(*printf_wrapper)(</span><span style="color:#b48ead;">const char </span><span>*, ...);
-</span><span>    *(</span><span style="color:#b48ead;">void </span><span>**) (&amp;printf_wrapper) = </span><span style="color:#bf616a;">dlsym</span><span>(handle, &quot;</span><span style="color:#a3be8c;">printf_wrapper</span><span>&quot;);
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">int </span><span>(</span><span style="color:#ff79c6;">*</span><span>printf_wrapper)(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span>, </span><span style="color:#ff79c6;">...</span><span>);
+</span><span>    </span><span style="color:#ff79c6;">*</span><span>(</span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#ff79c6;">**</span><span>) (</span><span style="color:#ff79c6;">&amp;</span><span>printf_wrapper) </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">dlsym</span><span>(handle, </span><span style="color:#f1fa8c;">&quot;printf_wrapper&quot;</span><span>);
 </span><span>
-</span><span>    </span><span style="color:#b48ead;">char </span><span>*error = </span><span style="color:#bf616a;">dlerror</span><span>();
-</span><span>    </span><span style="color:#b48ead;">if </span><span>(error != </span><span style="color:#d08770;">NULL</span><span>) {
-</span><span>        </span><span style="color:#96b5b4;">fprintf</span><span>(stderr, &quot;</span><span style="color:#d08770;">%s</span><span style="color:#96b5b4;">\n</span><span>&quot;, error);
-</span><span>        </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">1</span><span>;
-</span><span>    }
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span>error </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">dlerror</span><span>();
+</span><span>    </span><span style="color:#ff79c6;">if </span><span>(error </span><span style="color:#ff79c6;">!= </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#8be9fd;">fprintf</span><span>(stderr, </span><span style="color:#f1fa8c;">&quot;</span><span style="color:#bd93f9;">%s</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, error);
+</span><span>        </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">1</span><span>;
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    </span><span style="color:#96b5b4;">printf</span><span>(&quot;</span><span style="color:#a3be8c;">Hello from printf!</span><span style="color:#96b5b4;">\n</span><span>&quot;);
-</span><span>    </span><span style="color:#bf616a;">printf_wrapper</span><span>(&quot;</span><span style="color:#a3be8c;">Hello from printf_wrapper!</span><span style="color:#96b5b4;">\n</span><span>&quot;);
+</span><span>    </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Hello from printf!</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>);
+</span><span>    </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#f1fa8c;">&quot;Hello from printf_wrapper!</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>);
 </span><span>
-</span><span>    </span><span style="color:#bf616a;">dlclose</span><span>(handle);
-</span><span>    </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">0</span><span>;
-</span><span>}
+</span><span>    </span><span style="color:#50fa7b;">dlclose</span><span>(handle);
+</span><span>    </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">0</span><span>;
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>We'll put it in a container to make sure we have a consistent environment:</p>
-<pre data-lang="Dockerfile" style="background-color:#2b303b;color:#c0c5ce;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#65737e;"># Use rust so that it will work with the later environments
-</span><span style="color:#b48ead;">FROM</span><span> rust:1
+<pre data-lang="Dockerfile" style="background-color:#282a36;color:#f8f8f2;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#6272a4;"># Use rust so that it will work with the later environments
+</span><span style="color:#ff79c6;">FROM</span><span> rust:1
 </span><span>
-</span><span style="color:#b48ead;">WORKDIR </span><span>/crabtrap_test
-</span><span style="color:#b48ead;">ENV </span><span>LD_LIBRARY_PATH=/usr/local/lib
-</span><span style="color:#b48ead;">COPY</span><span> sample_program/printf_wrapper.c \
+</span><span style="color:#ff79c6;">WORKDIR </span><span>/crabtrap_test
+</span><span style="color:#ff79c6;">ENV </span><span>LD_LIBRARY_PATH=/usr/local/lib
+</span><span style="color:#ff79c6;">COPY</span><span> sample_program/printf_wrapper.c \
 </span><span>    sample_program/dynamic.c \
 </span><span>    sample_program/static.c \
 </span><span>    ./
-</span><span style="color:#b48ead;">RUN </span><span>gcc -c -o libprintf_wrapper.o printf_wrapper.c \
+</span><span style="color:#ff79c6;">RUN </span><span>gcc -c -o libprintf_wrapper.o printf_wrapper.c \
 </span><span> &amp;&amp; ar rcs libprintf_wrapper.a libprintf_wrapper.o \
 </span><span> &amp;&amp; gcc -shared -fPIC -o /usr/local/lib/libprintf_wrapper.so printf_wrapper.c \
 </span><span> &amp;&amp; gcc -o dynamic dynamic.c -ldl \
@@ -300,79 +300,79 @@ What the 🦊? | Crabtrap
 </span><span> &amp;&amp; gcc -static-pie -o all-in-one static.c -L. -l:libprintf_wrapper.a
 </span></code></pre>
 <p>Now we've built three versions of our binary: two that load the shared object, and one that builds <code>libprintf_wrapper</code> in statically just as a point of comparison. Let's build make sure everything works:</p>
-<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> ./static
-</span><span style="color:#bf616a;">Hello</span><span> from printf!
-</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#bf616a;">$</span><span> ./dynamic
-</span><span style="color:#bf616a;">Hello</span><span> from printf!
-</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#bf616a;">$</span><span> ./all-in-one 
-</span><span style="color:#bf616a;">Hello</span><span> from printf!
-</span><span style="color:#bf616a;">Hello</span><span> from printf_wrapper!
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> ./static
+</span><span style="color:#50fa7b;">Hello</span><span> from printf!
+</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#50fa7b;">$</span><span> ./dynamic
+</span><span style="color:#50fa7b;">Hello</span><span> from printf!
+</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
+</span><span style="color:#50fa7b;">$</span><span> ./all-in-one 
+</span><span style="color:#50fa7b;">Hello</span><span> from printf!
+</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
 </span></code></pre>
 <p>Perfect! This code is at the <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-0"><code>walkthrough-0</code></a> tag in the repository.</p>
 <h2 id="interface-and-tests"><a class="zola-anchor" href="#interface-and-tests" aria-label="Anchor link for: interface-and-tests">🔗</a>Interface and tests</h2>
 <p>We have one more thing to do before we get into the implementation: let's set up our desired interface and some tests. For the input we'll need some config to tell us which syscalls should be allowed or blocked (omitting the <code>derive</code>s and <code>use</code>s for brevity):</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub struct </span><span>ConfigEntry {
-</span><span>    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">allow</span><span>: Option&lt;BTreeSet&lt;Sysno&gt;&gt;,
-</span><span>    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">block</span><span>: Option&lt;BTreeSet&lt;Sysno&gt;&gt;,
-</span><span>}
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">struct </span><span>ConfigEntry </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">allow</span><span>: </span><span style="font-style:italic;color:#66d9ef;">Option</span><span>&lt;BTreeSet&lt;Sysno&gt;&gt;,
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">block</span><span>: </span><span style="font-style:italic;color:#66d9ef;">Option</span><span>&lt;BTreeSet&lt;Sysno&gt;&gt;,
+</span><span style="color:#ffffff;">}
 </span><span>
-</span><span style="color:#b48ead;">pub struct </span><span>Config {
-</span><span>    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">shared_objects</span><span>: BTreeMap&lt;String, ConfigEntry&gt;,
-</span><span>}
+</span><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">struct </span><span>Config </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">shared_objects</span><span>: BTreeMap&lt;</span><span style="font-style:italic;color:#66d9ef;">String</span><span>, ConfigEntry&gt;,
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>And for the output we'll want to get the process's standard out and error, and whether it exited normally or we killed it:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub enum </span><span>ChildExit {
-</span><span>    Exited(</span><span style="color:#b48ead;">i32</span><span>),
-</span><span>    IllegalSyscall(Sysno, String),
-</span><span>}
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">enum </span><span>ChildExit </span><span style="color:#ffffff;">{
+</span><span>    Exited(</span><span style="font-style:italic;color:#8be9fd;">i32</span><span>),
+</span><span>    IllegalSyscall(Sysno, </span><span style="font-style:italic;color:#66d9ef;">String</span><span>),
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>Finally, the <code>execute</code> function itself:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">execute</span><span>(</span><span style="color:#bf616a;">_path</span><span>: &amp;CStr, </span><span style="color:#bf616a;">_args</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">_env</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">_config</span><span>: &amp;Config) -&gt; ChildExit {
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">execute</span><span>(</span><span style="font-style:italic;color:#ffb86c;">_path</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>CStr, </span><span style="font-style:italic;color:#ffb86c;">_args</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">_env</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">_config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ff79c6;">-&gt; ChildExit </span><span style="color:#ffffff;">{
 </span><span>    todo!();
-</span><span>}
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>The tests are pretty simple, we have one case where everything should go as normal (for now we'll fail open if a syscall isn't explicitly denied), and one where the child should get partway through before being killed:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#bf616a;">test</span><span>]
-</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_ok</span><span>() {
-</span><span>    </span><span style="color:#b48ead;">for</span><span> bin in [&quot;</span><span style="color:#a3be8c;">static</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">dynamic</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">all-in-one</span><span>&quot;] {
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[test]
+</span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">test_ok</span><span>() </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">for</span><span> bin </span><span style="color:#ff79c6;">in </span><span>[</span><span style="color:#f1fa8c;">&quot;static&quot;</span><span>, </span><span style="color:#f1fa8c;">&quot;dynamic&quot;</span><span>, </span><span style="color:#f1fa8c;">&quot;all-in-one&quot;</span><span>] </span><span style="color:#ffffff;">{
 </span><span>        assert_eq!(
-</span><span>            crabtrap::execute(
-</span><span>                &amp;CString::new(format!(&quot;</span><span style="color:#a3be8c;">/usr/local/bin/</span><span style="color:#d08770;">{}</span><span>&quot;, bin)).</span><span style="color:#96b5b4;">unwrap</span><span>(),
-</span><span>                &amp;[],
-</span><span>                &amp;[&amp;CString::new(&quot;</span><span style="color:#a3be8c;">LD_LIBRARY_PATH=/usr/local/lib</span><span>&quot;).</span><span style="color:#96b5b4;">unwrap</span><span>()],
-</span><span>                &amp;Config {
-</span><span>                    shared_objects: BTreeMap::new(),
-</span><span>                },
+</span><span>            </span><span style="text-decoration:underline;color:#66d9ef;">crabtrap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>execute(
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span style="text-decoration:underline;color:#66d9ef;">CString</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(format!(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/</span><span style="color:#bd93f9;">{}</span><span style="color:#f1fa8c;">&quot;</span><span>, bin))</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap</span><span>(),
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span>[],
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span style="text-decoration:underline;color:#66d9ef;">CString</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(</span><span style="color:#f1fa8c;">&quot;LD_LIBRARY_PATH=/usr/local/lib&quot;</span><span>)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap</span><span>()],
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span>Config </span><span style="color:#ffffff;">{
+</span><span>                    shared_objects: </span><span style="text-decoration:underline;color:#66d9ef;">BTreeMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(),
+</span><span>                </span><span style="color:#ffffff;">}</span><span>,
 </span><span>            ),
-</span><span>            ChildExit::Exited(</span><span style="color:#d08770;">0</span><span>),
+</span><span>            </span><span style="text-decoration:underline;color:#66d9ef;">ChildExit</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Exited(</span><span style="color:#bd93f9;">0</span><span>),
 </span><span>        );
-</span><span>    }
-</span><span>}
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
 </span><span>
-</span><span>#[</span><span style="color:#bf616a;">test</span><span>]
-</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">test_blocked</span><span>() {
-</span><span>    </span><span style="color:#b48ead;">for</span><span> bin in [&quot;</span><span style="color:#a3be8c;">static</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">dynamic</span><span>&quot;] {
+</span><span>#[test]
+</span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">test_blocked</span><span>() </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">for</span><span> bin </span><span style="color:#ff79c6;">in </span><span>[</span><span style="color:#f1fa8c;">&quot;static&quot;</span><span>, </span><span style="color:#f1fa8c;">&quot;dynamic&quot;</span><span>] </span><span style="color:#ffffff;">{
 </span><span>        assert_eq!(
-</span><span>            crabtrap::execute(
-</span><span>                &amp;CString::new(format!(&quot;</span><span style="color:#a3be8c;">/usr/local/bin/</span><span style="color:#d08770;">{}</span><span>&quot;, bin)).</span><span style="color:#96b5b4;">unwrap</span><span>(),
-</span><span>                &amp;[],
-</span><span>                &amp;[&amp;CString::new(&quot;</span><span style="color:#a3be8c;">LD_LIBRARY_PATH=/usr/local/lib</span><span>&quot;).</span><span style="color:#96b5b4;">unwrap</span><span>()],
-</span><span>                &amp;Config {
-</span><span>                    shared_objects: BTreeMap::from([(
-</span><span>                        &quot;</span><span style="color:#a3be8c;">libprintf_wrapper.so</span><span>&quot;.</span><span style="color:#96b5b4;">into</span><span>(),
-</span><span>                        ConfigEntry {
-</span><span>                            allow: None,
-</span><span>                            block: Some(BTreeSet::from([Sysno::write])),
-</span><span>                        }
+</span><span>            </span><span style="text-decoration:underline;color:#66d9ef;">crabtrap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>execute(
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span style="text-decoration:underline;color:#66d9ef;">CString</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(format!(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/</span><span style="color:#bd93f9;">{}</span><span style="color:#f1fa8c;">&quot;</span><span>, bin))</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap</span><span>(),
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span>[],
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span style="text-decoration:underline;color:#66d9ef;">CString</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(</span><span style="color:#f1fa8c;">&quot;LD_LIBRARY_PATH=/usr/local/lib&quot;</span><span>)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap</span><span>()],
+</span><span>                </span><span style="color:#ff79c6;">&amp;</span><span>Config </span><span style="color:#ffffff;">{
+</span><span>                    shared_objects: </span><span style="text-decoration:underline;color:#66d9ef;">BTreeMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from([(
+</span><span>                        </span><span style="color:#f1fa8c;">&quot;libprintf_wrapper.so&quot;</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">into</span><span>(),
+</span><span>                        ConfigEntry </span><span style="color:#ffffff;">{
+</span><span>                            allow: </span><span style="font-style:italic;color:#66d9ef;">None</span><span>,
+</span><span>                            block: </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">BTreeSet</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from([</span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>write])),
+</span><span>                        </span><span style="color:#ffffff;">}
 </span><span>                    )]),
-</span><span>                },
+</span><span>                </span><span style="color:#ffffff;">}</span><span>,
 </span><span>            ),
-</span><span>            ChildExit::IllegalSyscall(Sysno::write, &quot;</span><span style="color:#a3be8c;">libprintf_wrapper.so</span><span>&quot;.</span><span style="color:#96b5b4;">into</span><span>()),
+</span><span>            </span><span style="text-decoration:underline;color:#66d9ef;">ChildExit</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>IllegalSyscall(</span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>write, </span><span style="color:#f1fa8c;">&quot;libprintf_wrapper.so&quot;</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">into</span><span>()),
 </span><span>        );
-</span><span>    }
-</span><span>}
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>Running <code>cargo test</code> gives us the output we expect: a panic at the <code>todo!()</code>.</p>
 <h2 id="ptrace"><a class="zola-anchor" href="#ptrace" aria-label="Anchor link for: ptrace">🔗</a><code>ptrace</code></h2>
@@ -387,93 +387,93 @@ What the 🦊? | Crabtrap
 <p>By continuing this loop the child will keep executing, but every time it tries to do something the OS will pause and check with our parent process first. Eventually the child might call exit, and we can see that in the parent process as well and stop the loop.</p>
 <h2 id="running-the-child-process"><a class="zola-anchor" href="#running-the-child-process" aria-label="Anchor link for: running-the-child-process">🔗</a>Running the child process</h2>
 <p>Before we even start worrying about allowing or blocking syscalls, let's make sure we can execute a child process under <code>ptrace</code>. We'll start by forking<sup class="footnote-reference" id="fr-forking-1"><a href="#fn-forking">8</a></sup>:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">execute</span><span>(</span><span style="color:#bf616a;">path</span><span>: &amp;CStr, </span><span style="color:#bf616a;">args</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">env</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">config</span><span>: &amp;Config) -&gt; ChildExit {
-</span><span>    </span><span style="color:#b48ead;">match unsafe </span><span>{ </span><span style="color:#96b5b4;">fork</span><span>() } {
-</span><span>        Ok(ForkResult::Child) =&gt; </span><span style="color:#96b5b4;">child</span><span>(path, args, env),
-</span><span>        Ok(ForkResult::Parent { child, .. }) =&gt; </span><span style="color:#96b5b4;">parent</span><span>(child, config),
-</span><span>        Err(errno) =&gt; panic!(&quot;</span><span style="color:#a3be8c;">failed to fork: {}</span><span>&quot;, errno),
-</span><span>    }
-</span><span>}
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">execute</span><span>(</span><span style="font-style:italic;color:#ffb86c;">path</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>CStr, </span><span style="font-style:italic;color:#ffb86c;">args</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">env</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ff79c6;">-&gt; ChildExit </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">match unsafe </span><span style="color:#ffffff;">{ </span><span style="color:#8be9fd;">fork</span><span>() </span><span style="color:#ffffff;">} {
+</span><span>        </span><span style="font-style:italic;color:#66d9ef;">Ok</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">ForkResult</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Child) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#8be9fd;">child</span><span>(path, args, env),
+</span><span>        </span><span style="font-style:italic;color:#66d9ef;">Ok</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">ForkResult</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Parent </span><span style="color:#ffffff;">{</span><span> child, </span><span style="color:#ff79c6;">.. </span><span style="color:#ffffff;">}</span><span>) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#8be9fd;">parent</span><span>(child, config),
+</span><span>        </span><span style="font-style:italic;color:#66d9ef;">Err</span><span>(errno) </span><span style="color:#ff79c6;">=&gt; </span><span>panic!(</span><span style="color:#f1fa8c;">&quot;failed to fork: {}&quot;</span><span>, errno),
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>In the child we'll call <code>traceme</code> to wait for the parent, and then <code>execve</code> into our new life:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">child</span><span>(</span><span style="color:#bf616a;">path</span><span>: &amp;CStr, </span><span style="color:#bf616a;">args</span><span>: &amp;[&amp;CStr], </span><span style="color:#bf616a;">env</span><span>: &amp;[&amp;CStr]) -&gt; ! {
-</span><span>    </span><span style="color:#65737e;">// Unsafe to use `println!` (or `unwrap`) here. See https://docs.rs/nix/latest/nix/unistd/fn.fork.html#safety
-</span><span>    </span><span style="color:#65737e;">// Since we&#39;re not handling errors anyway, panics should be fine for now.
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">child</span><span>(</span><span style="font-style:italic;color:#ffb86c;">path</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>CStr, </span><span style="font-style:italic;color:#ffb86c;">args</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">env</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr]) </span><span style="color:#ff79c6;">-&gt; ! </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#6272a4;">// Unsafe to use `println!` (or `unwrap`) here. See https://docs.rs/nix/latest/nix/unistd/fn.fork.html#safety
+</span><span>    </span><span style="color:#6272a4;">// Since we&#39;re not handling errors anyway, panics should be fine for now.
 </span><span>
-</span><span>    </span><span style="color:#96b5b4;">traceme</span><span>().</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">error calling traceme</span><span>&quot;);
-</span><span>    </span><span style="color:#96b5b4;">execve</span><span>(path, args, env).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">error calling execve</span><span>&quot;);
+</span><span>    </span><span style="color:#8be9fd;">traceme</span><span>()</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;error calling traceme&quot;</span><span>);
+</span><span>    </span><span style="color:#8be9fd;">execve</span><span>(path, args, env)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;error calling execve&quot;</span><span>);
 </span><span>    unreachable!();
-</span><span>}
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>Meanwhile in the parent we wait for the child, set up our ptrace options, and then enter the loop where we tell the child to continue until the next syscall or until we see it exit:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">parent</span><span>(</span><span style="color:#bf616a;">child</span><span>: Pid, </span><span style="color:#bf616a;">_config</span><span>: &amp;Config) -&gt; ChildExit {
-</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Continuing execution in parent process, new child has pid: </span><span style="color:#d08770;">{child}</span><span>&quot;);
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">parent</span><span>(</span><span style="font-style:italic;color:#ffb86c;">child</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">_config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ff79c6;">-&gt; ChildExit </span><span style="color:#ffffff;">{
+</span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Continuing execution in parent process, new child has pid: </span><span style="color:#bd93f9;">{child}</span><span style="color:#f1fa8c;">&quot;</span><span>);
 </span><span>
-</span><span>    </span><span style="color:#65737e;">// Wait for the stop from the first exec
-</span><span>    </span><span style="color:#96b5b4;">waitpid</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to waitpid</span><span>&quot;);
+</span><span>    </span><span style="color:#6272a4;">// Wait for the stop from the first exec
+</span><span>    </span><span style="color:#8be9fd;">waitpid</span><span>(child, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to waitpid&quot;</span><span>);
 </span><span>
-</span><span>    </span><span style="color:#96b5b4;">setoptions</span><span>(
+</span><span>    </span><span style="color:#8be9fd;">setoptions</span><span>(
 </span><span>        child,
-</span><span>        Options::</span><span style="color:#d08770;">PTRACE_O_EXITKILL</span><span>.</span><span style="color:#96b5b4;">union</span><span>(Options::</span><span style="color:#d08770;">PTRACE_O_TRACESYSGOOD</span><span>),
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Options</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#bd93f9;">PTRACE_O_EXITKILL</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">union</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">Options</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span style="color:#bd93f9;">PTRACE_O_TRACESYSGOOD</span><span>),
 </span><span>    )
-</span><span>    .</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to set ptrace options</span><span>&quot;);
+</span><span>    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to set ptrace options&quot;</span><span>);
 </span><span>
-</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Starting to watch child...</span><span>&quot;);
-</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
-</span><span>        </span><span style="color:#96b5b4;">syscall</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to restart child</span><span>&quot;);
-</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#96b5b4;">waitpid</span><span>(child, None).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to get status from waitpid</span><span>&quot;) {
-</span><span>            WaitStatus::Exited(_, code) =&gt; {
-</span><span>                </span><span style="color:#b48ead;">return </span><span>ChildExit::Exited(code);
-</span><span>            }
-</span><span>            WaitStatus::PtraceSyscall(_pid) =&gt; {
-</span><span>                </span><span style="color:#65737e;">// This is where the syscall handling logic will go.
-</span><span>            }
-</span><span>            status =&gt; panic!(&quot;</span><span style="color:#a3be8c;">unexpected child process status {status:?}</span><span>&quot;),
-</span><span>        }
-</span><span>    }
-</span><span>}
+</span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Starting to watch child...&quot;</span><span>);
+</span><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#8be9fd;">syscall</span><span>(child, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to restart child&quot;</span><span>);
+</span><span>        </span><span style="color:#ff79c6;">match </span><span style="color:#8be9fd;">waitpid</span><span>(child, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to get status from waitpid&quot;</span><span>) </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="text-decoration:underline;color:#66d9ef;">WaitStatus</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Exited(</span><span style="color:#ff79c6;">_</span><span>, code) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{
+</span><span>                </span><span style="color:#ff79c6;">return </span><span style="text-decoration:underline;color:#66d9ef;">ChildExit</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Exited(code);
+</span><span>            </span><span style="color:#ffffff;">}
+</span><span>            </span><span style="text-decoration:underline;color:#66d9ef;">WaitStatus</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>PtraceSyscall(_pid) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{
+</span><span>                </span><span style="color:#6272a4;">// This is where the syscall handling logic will go.
+</span><span>            </span><span style="color:#ffffff;">}
+</span><span>            status </span><span style="color:#ff79c6;">=&gt; </span><span>panic!(</span><span style="color:#f1fa8c;">&quot;unexpected child process status {status:?}&quot;</span><span>),
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>And that's it! After running <code>cargo test</code> again we get the results we expected on the first try<sup class="footnote-reference" id="fr-first-try-1"><a href="#fn-first-try">9</a></sup>! <code>test_ok</code> passes, and <code>test_blocked</code> fails because we haven't implemented that part yet. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-1"><code>walkthrough-1</code></a> in the git repo.</p>
 <h2 id="getting-a-stack-trace"><a class="zola-anchor" href="#getting-a-stack-trace" aria-label="Anchor link for: getting-a-stack-trace">🔗</a>Getting a stack trace</h2>
 <p>Now we're starting to get into the fun stuff! Our <code>waitpid</code> call will return with a <code>WaitStatus::PtraceSyscall(pid)</code> whenever our child enters or exits a syscall<sup class="footnote-reference" id="fr-enter-exit-1"><a href="#fn-enter-exit">10</a></sup>. This is one of those things that if we were making a real system we would care about only checking on the enter side (in most cases), but for a proof of concept we'll just take the performance hit of checking every syscall twice.</p>
 <p>We'll move the syscall handling itself out into a function. The first thing we'll want to do is grab the registers so that we can tell what syscall is happening and where the child is in its execution:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">handle_syscall</span><span>(</span><span style="color:#bf616a;">pid</span><span>: Pid, </span><span style="color:#bf616a;">_config</span><span>: &amp;Config) {
-</span><span>    </span><span style="color:#b48ead;">let</span><span> regs = </span><span style="color:#96b5b4;">getregs</span><span>(pid).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">Could not get registers</span><span>&quot;);
-</span><span>    </span><span style="color:#b48ead;">let</span><span> syscall = Sysno::from(regs.regs[</span><span style="color:#d08770;">8</span><span>] as </span><span style="color:#b48ead;">u32</span><span>);
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">handle_syscall</span><span>(</span><span style="font-style:italic;color:#ffb86c;">pid</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">_config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> regs </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">getregs</span><span>(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;Could not get registers&quot;</span><span>);
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> syscall </span><span style="color:#ff79c6;">= </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from(regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">8</span><span>] </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u32</span><span>);
 </span><span>
-</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Syscall: </span><span style="color:#d08770;">{syscall}</span><span>&quot;);
+</span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Syscall: </span><span style="color:#bd93f9;">{syscall}</span><span style="color:#f1fa8c;">&quot;</span><span>);
 </span></code></pre>
 <p>Now we can start walking up the stack. If we look at the <a href="https://github.com/ARM-software/abi-aa/blob/2a70c42d62e9c3eb5887fa50b71257f20daca6f9/aapcs64/aapcs64.rst#646the-frame-pointer">ARM docs</a> we can see that the previous pc<sup class="footnote-reference" id="fr-pc-1"><a href="#fn-pc">11</a></sup> is held in the link register (<code>r30</code>) and the pointer to the first stack frame is in <code>r29</code><sup class="footnote-reference" id="fr-verify-previous-pc-1"><a href="#fn-verify-previous-pc">12</a></sup>. The docs also tells us that at each stack frame we'll have a frame pointer which points to the previous stack frame (or 0 if we're at the base).</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>    </span><span style="color:#b48ead;">let mut</span><span> frame_pointer: </span><span style="color:#b48ead;">u64 </span><span>= regs.regs[</span><span style="color:#d08770;">29</span><span>];
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> frame_pointer: </span><span style="font-style:italic;color:#8be9fd;">u64 </span><span style="color:#ff79c6;">=</span><span> regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">29</span><span>];
 </span><span>    println!(
-</span><span>        &quot;</span><span style="color:#a3be8c;">Initial pc: </span><span style="color:#d08770;">{pc:x}</span><span style="color:#a3be8c;">, lr: </span><span style="color:#d08770;">{lr:x}</span><span style="color:#a3be8c;">, fp: </span><span style="color:#d08770;">{frame_pointer:x}</span><span>&quot;,
-</span><span>        pc = regs.pc,
-</span><span>        lr = regs.regs[</span><span style="color:#d08770;">30</span><span>]
+</span><span>        </span><span style="color:#f1fa8c;">&quot;Initial pc: </span><span style="color:#bd93f9;">{pc:x}</span><span style="color:#f1fa8c;">, lr: </span><span style="color:#bd93f9;">{lr:x}</span><span style="color:#f1fa8c;">, fp: </span><span style="color:#bd93f9;">{frame_pointer:x}</span><span style="color:#f1fa8c;">&quot;</span><span>,
+</span><span>        pc </span><span style="color:#ff79c6;">=</span><span> regs</span><span style="color:#ff79c6;">.</span><span>pc,
+</span><span>        lr </span><span style="color:#ff79c6;">=</span><span> regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">30</span><span>]
 </span><span>    );
 </span></code></pre>
 <p>Finally, the docs tells us that just above the frame pointer is the saved value of the previous link register. Now we can print that and then walk our way up by following the frame pointers until we hit the base of the stack:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>    </span><span style="color:#b48ead;">let mut</span><span> saved_lr;
-</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
-</span><span>        </span><span style="color:#b48ead;">if</span><span> frame_pointer == </span><span style="color:#d08770;">0 </span><span>{
-</span><span>            </span><span style="color:#b48ead;">break</span><span>;
-</span><span>        }
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> saved_lr;
+</span><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">if</span><span> frame_pointer </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0 </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#ff79c6;">break</span><span>;
+</span><span>        </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>        saved_lr =
-</span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, (frame_pointer + </span><span style="color:#d08770;">8</span><span>) as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read saved lr</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
+</span><span>        saved_lr </span><span style="color:#ff79c6;">=
+</span><span>            </span><span style="color:#8be9fd;">read</span><span>(pid, (frame_pointer </span><span style="color:#ff79c6;">+ </span><span style="color:#bd93f9;">8</span><span>) </span><span style="color:#ff79c6;">as</span><span> AddressType)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to read saved lr&quot;</span><span>) </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>;
 </span><span>
-</span><span>        println!(&quot;</span><span style="color:#a3be8c;">saved_lr: </span><span style="color:#d08770;">{saved_lr:x}</span><span style="color:#a3be8c;">, frame pointer: </span><span style="color:#d08770;">{frame_pointer:x}</span><span>&quot;);
+</span><span>        println!(</span><span style="color:#f1fa8c;">&quot;saved_lr: </span><span style="color:#bd93f9;">{saved_lr:x}</span><span style="color:#f1fa8c;">, frame pointer: </span><span style="color:#bd93f9;">{frame_pointer:x}</span><span style="color:#f1fa8c;">&quot;</span><span>);
 </span><span>
-</span><span>        frame_pointer =
-</span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, frame_pointer as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read frame pointer</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
-</span><span>    }
+</span><span>        frame_pointer </span><span style="color:#ff79c6;">=
+</span><span>            </span><span style="color:#8be9fd;">read</span><span>(pid, frame_pointer </span><span style="color:#ff79c6;">as</span><span> AddressType)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to read frame pointer&quot;</span><span>) </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>;
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Bottom of stack.</span><span>&quot;);
+</span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Bottom of stack.&quot;</span><span>);
 </span><span>}
 </span></code></pre>
 <p>Running this we do get lots of nice stack traces! Next up we need to map the pc locations to code units. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-2"><code>walkthrough-2</code></a>.</p>
 <h2 id="mapping-to-shared-objects"><a class="zola-anchor" href="#mapping-to-shared-objects" aria-label="Anchor link for: mapping-to-shared-objects">🔗</a>Mapping to shared objects</h2>
 <p>Our goal is in sight! The last thing we need to do is map our series of program counters back to the files they come from, and then use that to make a decision about whether to allow the syscall or not. We can get this information by looking in the <a href="https://www.man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc filesystem</a>. For instance, when I run <code>cat /proc/self/maps</code> I get the following:</p>
-<pre data-lang="plain" style="background-color:#2b303b;color:#c0c5ce;" class="language-plain "><code class="language-plain" data-lang="plain"><span>aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
+<pre data-lang="plain" style="background-color:#282a36;color:#f8f8f2;" class="language-plain "><code class="language-plain" data-lang="plain"><span>aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
 </span><span>aaaad82df000-aaaad82e0000 r--p 0000f000 fe:01 188725                     /usr/bin/cat
 </span><span>aaaad82e0000-aaaad82e1000 rw-p 00010000 fe:01 188725                     /usr/bin/cat
 </span><span>aaab05aba000-aaab05adb000 rw-p 00000000 00:00 0                          [heap]
@@ -494,172 +494,172 @@ What the 🦊? | Crabtrap
 </span></code></pre>
 <p>This tells us which regions of memory are mapped to which files (as well as some other locations like the stack). By replacing <code>self</code> in the path with the PID of our child process, we can see the mapping for our child. For our purposes, what we care about are the first and second numbers which represent the location in memory that particular mapping lives at, and the final component which is (at least for the shared objects we care about) the path of the underlying file<sup class="footnote-reference" id="fr-path-ambiguity-1"><a href="#fn-path-ambiguity">13</a></sup>.</p>
 <p>Let's define some structs to help us with this:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub struct </span><span>Region {
-</span><span>    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">start</span><span>: </span><span style="color:#b48ead;">u64</span><span>,
-</span><span>    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">end</span><span>: </span><span style="color:#b48ead;">u64</span><span>,
-</span><span>    </span><span style="color:#bf616a;">path</span><span>: String,
-</span><span>}
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">struct </span><span>Region </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">start</span><span>: </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>,
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">end</span><span>: </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>,
+</span><span>    </span><span style="color:#ffffff;">path</span><span>: String,
+</span><span style="color:#ffffff;">}
 </span><span>
-</span><span style="color:#b48ead;">pub struct </span><span>MemoryMap {
-</span><span>    </span><span style="color:#b48ead;">pub </span><span style="color:#bf616a;">files</span><span>: Vec&lt;Region&gt;,
-</span><span>}
+</span><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">struct </span><span>MemoryMap </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">files</span><span>: </span><span style="font-style:italic;color:#66d9ef;">Vec</span><span>&lt;Region&gt;,
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>This post is getting long as it is, so we'll skip the details of those. They're in the git repo in <code>map.rs</code> if you want to look at them in more detail. The important part is that <code>MemoryMap</code> exposes a function <code>lookup&lt;'a&gt;(&amp;'a self, addr: u64) -&gt; Option&lt;&amp;'a str&gt;</code> which will let us move from a program counter location to a path, if it's in our mapping.</p>
 <p>We can create the map when the child gets <code>exec</code>ed into, and then pass it to our syscall handler:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">execute</span><span>(...) {
-</span><span>    ...
-</span><span>    </span><span style="color:#b48ead;">let mut</span><span> memory_map = MemoryMap::from_pid(child_id);
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">execute</span><span>(...) </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">...
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> memory_map </span><span style="color:#ff79c6;">= </span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(child_id);
 </span><span>
-</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Starting to watch child...</span><span>&quot;);
-</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
-</span><span>        ...
-</span><span>        WaitStatus::PtraceSyscall(pid) =&gt; {
-</span><span>            </span><span style="color:#96b5b4;">handle_syscall</span><span>(pid, config, &amp;</span><span style="color:#b48ead;">mut</span><span> memory_map);
-</span><span>        }
-</span><span>    }
+</span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Starting to watch child...&quot;</span><span>);
+</span><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">...
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">WaitStatus</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>PtraceSyscall(pid) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#8be9fd;">handle_syscall</span><span>(pid, config, </span><span style="color:#ff79c6;">&amp;mut</span><span> memory_map);
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>We're passing it in as mutable because if we see a syscall that might modify the process memory we'll want to rebuild the map[^rebuild]. Let's handle that part first:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">handle_syscall</span><span>(</span><span style="color:#bf616a;">pid</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config, </span><span style="color:#bf616a;">map</span><span>: &amp;</span><span style="color:#b48ead;">mut</span><span> MemoryMap) {
-</span><span>    </span><span style="color:#b48ead;">let</span><span> regs = </span><span style="color:#96b5b4;">getregs</span><span>(pid).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">Could not get registers</span><span>&quot;);
-</span><span>    </span><span style="color:#b48ead;">let</span><span> syscall = Sysno::from(regs.regs[</span><span style="color:#d08770;">8</span><span>] as </span><span style="color:#b48ead;">u32</span><span>);
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">handle_syscall</span><span>(</span><span style="font-style:italic;color:#ffb86c;">pid</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config, </span><span style="font-style:italic;color:#ffb86c;">map</span><span>: </span><span style="color:#ff79c6;">&amp;mut</span><span> MemoryMap) </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> regs </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">getregs</span><span>(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;Could not get registers&quot;</span><span>);
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> syscall </span><span style="color:#ff79c6;">= </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from(regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">8</span><span>] </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u32</span><span>);
 </span><span>
-</span><span>    </span><span style="color:#65737e;">// I don&#39;t have an exhaustive knowledge of which syscalls might affect memory.
-</span><span>    </span><span style="color:#65737e;">// For a real project I&#39;d do more research or set up some tests to see if I&#39;d missed any.
-</span><span>    </span><span style="color:#b48ead;">if </span><span>BTreeSet::from([
-</span><span>        Sysno::execve,
-</span><span>        Sysno::execveat,
-</span><span>        Sysno::clone,
-</span><span>        Sysno::mmap,
-</span><span>        Sysno::munmap,
-</span><span>        Sysno::mremap,
+</span><span>    </span><span style="color:#6272a4;">// I don&#39;t have an exhaustive knowledge of which syscalls might affect memory.
+</span><span>    </span><span style="color:#6272a4;">// For a real project I&#39;d do more research or set up some tests to see if I&#39;d missed any.
+</span><span>    </span><span style="color:#ff79c6;">if </span><span style="text-decoration:underline;color:#66d9ef;">BTreeSet</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from([
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>execve,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>execveat,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>clone,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>mmap,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>munmap,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>mremap,
 </span><span>    ])
-</span><span>    .</span><span style="color:#96b5b4;">contains</span><span>(&amp;syscall)
-</span><span>    {
-</span><span>        *map = MemoryMap::from_pid(pid);
-</span><span>    }
+</span><span>    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">contains</span><span>(</span><span style="color:#ff79c6;">&amp;</span><span>syscall)
+</span><span>    </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">*</span><span>map </span><span style="color:#ff79c6;">= </span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(pid);
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    </span><span style="color:#b48ead;">for</span><span> addr in [regs.pc, regs.regs[</span><span style="color:#d08770;">30</span><span>]] {
-</span><span>        </span><span style="color:#b48ead;">if let </span><span>Some(loc) = map.</span><span style="color:#96b5b4;">lookup</span><span>(addr) {
-</span><span>            println!(&quot;</span><span style="color:#d08770;">{syscall}</span><span style="color:#a3be8c;"> from </span><span style="color:#d08770;">{addr:x}</span><span style="color:#a3be8c;"> in </span><span style="color:#d08770;">{loc}</span><span>&quot;);
-</span><span>        }
-</span><span>    }
+</span><span>    </span><span style="color:#ff79c6;">for</span><span> addr </span><span style="color:#ff79c6;">in </span><span>[regs</span><span style="color:#ff79c6;">.</span><span>pc, regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">30</span><span>]] </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(loc) </span><span style="color:#ff79c6;">=</span><span> map</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">lookup</span><span>(addr) </span><span style="color:#ffffff;">{
+</span><span>            println!(</span><span style="color:#f1fa8c;">&quot;</span><span style="color:#bd93f9;">{syscall}</span><span style="color:#f1fa8c;"> from </span><span style="color:#bd93f9;">{addr:x}</span><span style="color:#f1fa8c;"> in </span><span style="color:#bd93f9;">{loc}</span><span style="color:#f1fa8c;">&quot;</span><span>);
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>    
-</span><span>    </span><span style="color:#b48ead;">let mut</span><span> frame_pointer: </span><span style="color:#b48ead;">u64 </span><span>= regs.regs[</span><span style="color:#d08770;">29</span><span>];
-</span><span>    </span><span style="color:#b48ead;">let mut</span><span> saved_lr;
-</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
-</span><span>        </span><span style="color:#b48ead;">if</span><span> frame_pointer == </span><span style="color:#d08770;">0 </span><span>{
-</span><span>            </span><span style="color:#b48ead;">break</span><span>;
-</span><span>        }
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> frame_pointer: </span><span style="font-style:italic;color:#8be9fd;">u64 </span><span style="color:#ff79c6;">=</span><span> regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">29</span><span>];
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> saved_lr;
+</span><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">if</span><span> frame_pointer </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0 </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#ff79c6;">break</span><span>;
+</span><span>        </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>        saved_lr =
-</span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, (frame_pointer + </span><span style="color:#d08770;">8</span><span>) as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read saved lr</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
+</span><span>        saved_lr </span><span style="color:#ff79c6;">=
+</span><span>            </span><span style="color:#8be9fd;">read</span><span>(pid, (frame_pointer </span><span style="color:#ff79c6;">+ </span><span style="color:#bd93f9;">8</span><span>) </span><span style="color:#ff79c6;">as</span><span> AddressType)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to read saved lr&quot;</span><span>) </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>;
 </span><span>
-</span><span>        </span><span style="color:#b48ead;">if let </span><span>Some(loc) = map.</span><span style="color:#96b5b4;">lookup</span><span>(saved_lr) {
-</span><span>            println!(&quot;</span><span style="color:#d08770;">{syscall}</span><span style="color:#a3be8c;"> from </span><span style="color:#d08770;">{saved_lr:x}</span><span style="color:#a3be8c;"> in </span><span style="color:#d08770;">{loc}</span><span>&quot;);
-</span><span>        }
+</span><span>        </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(loc) </span><span style="color:#ff79c6;">=</span><span> map</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">lookup</span><span>(saved_lr) </span><span style="color:#ffffff;">{
+</span><span>            println!(</span><span style="color:#f1fa8c;">&quot;</span><span style="color:#bd93f9;">{syscall}</span><span style="color:#f1fa8c;"> from </span><span style="color:#bd93f9;">{saved_lr:x}</span><span style="color:#f1fa8c;"> in </span><span style="color:#bd93f9;">{loc}</span><span style="color:#f1fa8c;">&quot;</span><span>);
+</span><span>        </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>        frame_pointer =
-</span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, frame_pointer as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read frame pointer</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
-</span><span>    }
+</span><span>        frame_pointer </span><span style="color:#ff79c6;">=
+</span><span>            </span><span style="color:#8be9fd;">read</span><span>(pid, frame_pointer </span><span style="color:#ff79c6;">as</span><span> AddressType)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to read frame pointer&quot;</span><span>) </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>;
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    println!(&quot;</span><span style="color:#a3be8c;">Reached bottom of stack.</span><span>&quot;);
-</span><span>}
+</span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Reached bottom of stack.&quot;</span><span>);
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>Finally we have all the information we need!</p>
 <h2 id="blocking-syscalls"><a class="zola-anchor" href="#blocking-syscalls" aria-label="Anchor link for: blocking-syscalls">🔗</a>Blocking syscalls</h2>
 <p>The final piece we need is to walk up the stack until we see a shared object we recognize that has a matching allow or deny rule for the current syscall, or we hit the base. We'll modify <code>Config</code> to handle this:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">pub enum </span><span>Check {
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">enum </span><span>Check </span><span style="color:#ffffff;">{
 </span><span>    Allowed,
 </span><span>    Blocked,
 </span><span>    Unknown,
-</span><span>}
+</span><span style="color:#ffffff;">}
 </span><span>
-</span><span style="color:#b48ead;">impl </span><span>Config {
-</span><span>    </span><span style="color:#b48ead;">pub fn </span><span style="color:#8fa1b3;">check</span><span>(&amp;</span><span style="color:#bf616a;">self</span><span>, </span><span style="color:#bf616a;">loc</span><span>: &amp;</span><span style="color:#b48ead;">str</span><span>, </span><span style="color:#bf616a;">syscall</span><span>: Sysno) -&gt; Check {
-</span><span>        </span><span style="color:#b48ead;">match </span><span style="color:#bf616a;">self</span><span>.shared_objects.</span><span style="color:#96b5b4;">get</span><span>(loc) {
-</span><span>            Some(entry) =&gt; {
-</span><span>                </span><span style="color:#b48ead;">if</span><span> entry
-</span><span>                    .allow
-</span><span>                    .</span><span style="color:#96b5b4;">as_ref</span><span>()
-</span><span>                    .</span><span style="color:#96b5b4;">is_some_and</span><span>(|</span><span style="color:#bf616a;">allowed</span><span>| allowed.</span><span style="color:#96b5b4;">contains</span><span>(&amp;syscall))
-</span><span>                {
-</span><span>                    </span><span style="color:#b48ead;">return </span><span>Check::Allowed;
-</span><span>                } </span><span style="color:#b48ead;">else if</span><span> entry
-</span><span>                    .block
-</span><span>                    .</span><span style="color:#96b5b4;">as_ref</span><span>()
-</span><span>                    .</span><span style="color:#96b5b4;">is_some_and</span><span>(|</span><span style="color:#bf616a;">blocked</span><span>| blocked.</span><span style="color:#96b5b4;">contains</span><span>(&amp;syscall))
-</span><span>                {
-</span><span>                    </span><span style="color:#b48ead;">return </span><span>Check::Blocked;
-</span><span>                } </span><span style="color:#b48ead;">else </span><span>{
-</span><span>                    </span><span style="color:#b48ead;">return </span><span>Check::Unknown;
-</span><span>                }
-</span><span>            }
-</span><span>            None =&gt; Check::Unknown,
-</span><span>        }
-</span><span>    }
-</span><span>}
+</span><span style="font-style:italic;color:#8be9fd;">impl </span><span>Config </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">check</span><span>(</span><span style="color:#ff79c6;">&amp;</span><span style="font-style:italic;color:#ffb86c;">self</span><span>, </span><span style="font-style:italic;color:#ffb86c;">loc</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span style="font-style:italic;color:#8be9fd;">str</span><span>, </span><span style="font-style:italic;color:#ffb86c;">syscall</span><span>: Sysno) </span><span style="color:#ff79c6;">-&gt; Check </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">match </span><span style="color:#bd93f9;">self</span><span style="color:#ff79c6;">.</span><span>shared_objects</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">get</span><span>(loc) </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(entry) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{
+</span><span>                </span><span style="color:#ff79c6;">if</span><span> entry
+</span><span>                    </span><span style="color:#ff79c6;">.</span><span>allow
+</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">as_ref</span><span>()
+</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">is_some_and</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">allowed</span><span>| allowed</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">contains</span><span>(</span><span style="color:#ff79c6;">&amp;</span><span>syscall))
+</span><span>                </span><span style="color:#ffffff;">{
+</span><span>                    </span><span style="color:#ff79c6;">return </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Allowed;
+</span><span>                </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">else if</span><span> entry
+</span><span>                    </span><span style="color:#ff79c6;">.</span><span>block
+</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">as_ref</span><span>()
+</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">is_some_and</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">blocked</span><span>| blocked</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">contains</span><span>(</span><span style="color:#ff79c6;">&amp;</span><span>syscall))
+</span><span>                </span><span style="color:#ffffff;">{
+</span><span>                    </span><span style="color:#ff79c6;">return </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Blocked;
+</span><span>                </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">else </span><span style="color:#ffffff;">{
+</span><span>                    </span><span style="color:#ff79c6;">return </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Unknown;
+</span><span>                </span><span style="color:#ffffff;">}
+</span><span>            </span><span style="color:#ffffff;">}
+</span><span>            </span><span style="font-style:italic;color:#66d9ef;">None </span><span style="color:#ff79c6;">=&gt; </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Unknown,
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>Putting everything together, our <code>handle_syscall</code> function now looks like this:</p>
-<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">handle_syscall</span><span>(</span><span style="color:#bf616a;">pid</span><span>: Pid, </span><span style="color:#bf616a;">config</span><span>: &amp;Config, </span><span style="color:#bf616a;">map</span><span>: &amp;</span><span style="color:#b48ead;">mut</span><span> MemoryMap) -&gt; Option&lt;ChildExit&gt; {
-</span><span>    </span><span style="color:#b48ead;">let</span><span> regs = </span><span style="color:#96b5b4;">getregs</span><span>(pid).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">Could not get registers</span><span>&quot;);
-</span><span>    </span><span style="color:#b48ead;">let</span><span> syscall = Sysno::from(regs.regs[</span><span style="color:#d08770;">8</span><span>] as </span><span style="color:#b48ead;">u32</span><span>);
+<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">handle_syscall</span><span>(</span><span style="font-style:italic;color:#ffb86c;">pid</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config, </span><span style="font-style:italic;color:#ffb86c;">map</span><span>: </span><span style="color:#ff79c6;">&amp;mut</span><span> MemoryMap) </span><span style="color:#ff79c6;">-&gt; </span><span style="font-style:italic;color:#66d9ef;">Option</span><span style="color:#ff79c6;">&lt;ChildExit&gt; </span><span style="color:#ffffff;">{
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> regs </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">getregs</span><span>(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;Could not get registers&quot;</span><span>);
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> syscall </span><span style="color:#ff79c6;">= </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from(regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">8</span><span>] </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u32</span><span>);
 </span><span>
-</span><span>    </span><span style="color:#65737e;">// I don&#39;t have an exhaustive knowledge of which syscalls might affect memory.
-</span><span>    </span><span style="color:#65737e;">// For a real project I&#39;d do more research or set up some tests to see if I&#39;d missed any.
-</span><span>    </span><span style="color:#b48ead;">if </span><span>BTreeSet::from([
-</span><span>        Sysno::execve,
-</span><span>        Sysno::execveat,
-</span><span>        Sysno::clone,
-</span><span>        Sysno::mmap,
-</span><span>        Sysno::munmap,
-</span><span>        Sysno::mremap,
+</span><span>    </span><span style="color:#6272a4;">// I don&#39;t have an exhaustive knowledge of which syscalls might affect memory.
+</span><span>    </span><span style="color:#6272a4;">// For a real project I&#39;d do more research or set up some tests to see if I&#39;d missed any.
+</span><span>    </span><span style="color:#ff79c6;">if </span><span style="text-decoration:underline;color:#66d9ef;">BTreeSet</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from([
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>execve,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>execveat,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>clone,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>mmap,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>munmap,
+</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">Sysno</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>mremap,
 </span><span>    ])
-</span><span>    .</span><span style="color:#96b5b4;">contains</span><span>(&amp;syscall)
-</span><span>    {
-</span><span>        *map = MemoryMap::from_pid(pid);
-</span><span>    }
+</span><span>    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">contains</span><span>(</span><span style="color:#ff79c6;">&amp;</span><span>syscall)
+</span><span>    </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">*</span><span>map </span><span style="color:#ff79c6;">= </span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(pid);
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    </span><span style="color:#b48ead;">for</span><span> addr in [regs.pc, regs.regs[</span><span style="color:#d08770;">30</span><span>]] {
-</span><span>        </span><span style="color:#b48ead;">if let </span><span>Some(loc) = map.</span><span style="color:#96b5b4;">lookup</span><span>(addr) {
-</span><span>            </span><span style="color:#b48ead;">match</span><span> config.</span><span style="color:#96b5b4;">check</span><span>(loc, syscall) {
-</span><span>                Check::Allowed =&gt; </span><span style="color:#b48ead;">return </span><span>None,
-</span><span>                Check::Blocked =&gt; </span><span style="color:#b48ead;">return </span><span>Some(ChildExit::IllegalSyscall(syscall, loc.</span><span style="color:#96b5b4;">to_string</span><span>())),
-</span><span>                Check::Unknown =&gt; {}
-</span><span>            }
-</span><span>        }
-</span><span>    }
+</span><span>    </span><span style="color:#ff79c6;">for</span><span> addr </span><span style="color:#ff79c6;">in </span><span>[regs</span><span style="color:#ff79c6;">.</span><span>pc, regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">30</span><span>]] </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(loc) </span><span style="color:#ff79c6;">=</span><span> map</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">lookup</span><span>(addr) </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#ff79c6;">match</span><span> config</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">check</span><span>(loc, syscall) </span><span style="color:#ffffff;">{
+</span><span>                </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Allowed </span><span style="color:#ff79c6;">=&gt; return </span><span style="font-style:italic;color:#66d9ef;">None</span><span>,
+</span><span>                </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Blocked </span><span style="color:#ff79c6;">=&gt; return </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">ChildExit</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>IllegalSyscall(syscall, loc</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">to_string</span><span>())),
+</span><span>                </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Unknown </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{}
+</span><span>            </span><span style="color:#ffffff;">}
+</span><span>        </span><span style="color:#ffffff;">}
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    </span><span style="color:#b48ead;">let mut</span><span> frame_pointer: </span><span style="color:#b48ead;">u64 </span><span>= regs.regs[</span><span style="color:#d08770;">29</span><span>];
-</span><span>    </span><span style="color:#b48ead;">let mut</span><span> saved_lr;
-</span><span>    </span><span style="color:#b48ead;">loop </span><span>{
-</span><span>        </span><span style="color:#b48ead;">if</span><span> frame_pointer == </span><span style="color:#d08770;">0 </span><span>{
-</span><span>            </span><span style="color:#b48ead;">break</span><span>;
-</span><span>        }
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> frame_pointer: </span><span style="font-style:italic;color:#8be9fd;">u64 </span><span style="color:#ff79c6;">=</span><span> regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">29</span><span>];
+</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> saved_lr;
+</span><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
+</span><span>        </span><span style="color:#ff79c6;">if</span><span> frame_pointer </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0 </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#ff79c6;">break</span><span>;
+</span><span>        </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>        saved_lr =
-</span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, (frame_pointer + </span><span style="color:#d08770;">8</span><span>) as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read saved lr</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
+</span><span>        saved_lr </span><span style="color:#ff79c6;">=
+</span><span>            </span><span style="color:#8be9fd;">read</span><span>(pid, (frame_pointer </span><span style="color:#ff79c6;">+ </span><span style="color:#bd93f9;">8</span><span>) </span><span style="color:#ff79c6;">as</span><span> AddressType)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to read saved lr&quot;</span><span>) </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>;
 </span><span>
-</span><span>        </span><span style="color:#b48ead;">if let </span><span>Some(loc) = map.</span><span style="color:#96b5b4;">lookup</span><span>(saved_lr) {
-</span><span>            </span><span style="color:#b48ead;">match</span><span> config.</span><span style="color:#96b5b4;">check</span><span>(loc, syscall) {
-</span><span>                Check::Allowed =&gt; </span><span style="color:#b48ead;">return </span><span>None,
-</span><span>                Check::Blocked =&gt; </span><span style="color:#b48ead;">return </span><span>Some(ChildExit::IllegalSyscall(syscall, loc.</span><span style="color:#96b5b4;">to_string</span><span>())),
-</span><span>                Check::Unknown =&gt; {}
-</span><span>            }
-</span><span>        }
+</span><span>        </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(loc) </span><span style="color:#ff79c6;">=</span><span> map</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">lookup</span><span>(saved_lr) </span><span style="color:#ffffff;">{
+</span><span>            </span><span style="color:#ff79c6;">match</span><span> config</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">check</span><span>(loc, syscall) </span><span style="color:#ffffff;">{
+</span><span>                </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Allowed </span><span style="color:#ff79c6;">=&gt; return </span><span style="font-style:italic;color:#66d9ef;">None</span><span>,
+</span><span>                </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Blocked </span><span style="color:#ff79c6;">=&gt; return </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">ChildExit</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>IllegalSyscall(syscall, loc</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">to_string</span><span>())),
+</span><span>                </span><span style="text-decoration:underline;color:#66d9ef;">Check</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Unknown </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{}
+</span><span>            </span><span style="color:#ffffff;">}
+</span><span>        </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>        frame_pointer =
-</span><span>            </span><span style="color:#96b5b4;">read</span><span>(pid, frame_pointer as AddressType).</span><span style="color:#96b5b4;">expect</span><span>(&quot;</span><span style="color:#a3be8c;">failed to read frame pointer</span><span>&quot;) as </span><span style="color:#b48ead;">u64</span><span>;
-</span><span>    }
+</span><span>        frame_pointer </span><span style="color:#ff79c6;">=
+</span><span>            </span><span style="color:#8be9fd;">read</span><span>(pid, frame_pointer </span><span style="color:#ff79c6;">as</span><span> AddressType)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;failed to read frame pointer&quot;</span><span>) </span><span style="color:#ff79c6;">as </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>;
+</span><span>    </span><span style="color:#ffffff;">}
 </span><span>
-</span><span>    None
-</span><span>}
+</span><span>    </span><span style="font-style:italic;color:#66d9ef;">None
+</span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>And if we run the tests we can see that with no restrictions both messages get printed and the child exits 0, but when we restrict the <code>write</code> syscall coming from <code>libprintf_wrapper.so</code> we only see the "Hello from printf!" before the child process gets terminated! Fantastic!</p>
-<pre data-lang="sh" style="background-color:#2b303b;color:#c0c5ce;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#bf616a;">$</span><span> ./target/debug/crabtrap /usr/local/bin/dynamic config.yaml
-</span><span style="color:#bf616a;">Continuing</span><span> execution in parent process, new child has pid: 11
-</span><span style="color:#bf616a;">Starting</span><span> to watch child...
-</span><span style="color:#bf616a;">Hello</span><span> from printf!
-</span><span style="color:#bf616a;">IllegalSyscall</span><span>(write, &quot;</span><span style="color:#a3be8c;">/usr/local/lib/libprintf_wrapper.so</span><span>&quot;)
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> ./target/debug/crabtrap /usr/local/bin/dynamic config.yaml
+</span><span style="color:#50fa7b;">Continuing</span><span> execution in parent process, new child has pid: 11
+</span><span style="color:#50fa7b;">Starting</span><span> to watch child...
+</span><span style="color:#50fa7b;">Hello</span><span> from printf!
+</span><span style="color:#50fa7b;">IllegalSyscall</span><span>(write, </span><span style="color:#f1fa8c;">&quot;/usr/local/lib/libprintf_wrapper.so&quot;</span><span>)
 </span></code></pre>
 <p>This code is at <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-3"><code>walkthrough-3</code></a>.</p>
 <h2 id="next-steps"><a class="zola-anchor" href="#next-steps" aria-label="Anchor link for: next-steps">🔗</a>Next steps</h2>
@@ -716,7 +716,6 @@ What the 🦊? | Crabtrap
 </footer>
 
           </div>
-          
         </article>
       </div>
     </div>
@@ -751,8 +750,8 @@ What the 🦊? | Crabtrap
 
 <section class="section">
   <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
+    <div class="columns">
+      <div class="column is-8 is-offset-1-desktop">
         <nav class="level">
               
           <div class="level-item has-text-centered">

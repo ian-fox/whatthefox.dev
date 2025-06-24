@@ -219,20 +219,20 @@ What the 🦊? | Fast-forwarding Videos with Javascript
 <h2 id="bookmarklets"><a class="zola-anchor" href="#bookmarklets" aria-label="Anchor link for: bookmarklets">🔗</a>Bookmarklets</h2>
 <p>We can automate this process by putting it in a <a href="https://en.wikipedia.org/wiki/Bookmarklet">bookmarklet</a>. We do that by putting our javascript in a bookmark where the URL would normally go, and it'll run when we click the bookmark. Maybe we could create a browser extension or something with a slightly nicer user interface, but that would also take more effort and I think this method is good enough for my purposes.</p>
 <p>If we package our code up into a nice function like this:</p>
-<pre data-lang="javascript" style="background-color:#2b303b;color:#c0c5ce;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="color:#b48ead;">function</span><span>() {
-</span><span>  </span><span style="color:#b48ead;">for </span><span>(</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">i </span><span>= </span><span style="color:#d08770;">0</span><span>; </span><span style="color:#bf616a;">i </span><span>&lt; </span><span style="color:#bf616a;">videos</span><span>.length; </span><span style="color:#bf616a;">i</span><span>++) {
-</span><span>    </span><span style="color:#bf616a;">videos</span><span>[</span><span style="color:#bf616a;">i</span><span>].</span><span style="color:#bf616a;">playbackRate </span><span>= </span><span style="color:#d08770;">2</span><span>;
+<pre data-lang="javascript" style="background-color:#282a36;color:#f8f8f2;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="font-style:italic;color:#8be9fd;">function</span><span>() {
+</span><span>  </span><span style="color:#ff79c6;">for </span><span>(</span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">0</span><span>; </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">&lt; </span><span style="color:#ffffff;">videos</span><span style="color:#ff79c6;">.</span><span>length; </span><span style="color:#ffffff;">i</span><span style="color:#ff79c6;">++</span><span>) {
+</span><span>    </span><span style="color:#ffffff;">videos</span><span>[</span><span style="color:#ffffff;">i</span><span>]</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">playbackRate </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">2</span><span>;
 </span><span>  }
 </span><span>})();
 </span></code></pre>
 <p>we can copy/paste this into several bookmark definitions and change the 2 to something else to have buttons for various speeds we might commonly want.</p>
 <h2 id="prompting-the-user"><a class="zola-anchor" href="#prompting-the-user" aria-label="Anchor link for: prompting-the-user">🔗</a>Prompting the User</h2>
 <p>If you don't want a billion bookmarks clogging up your bookmark bar you could also prompt the user for their desired rate.</p>
-<pre data-lang="javascript" style="background-color:#2b303b;color:#c0c5ce;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="color:#b48ead;">function</span><span>() {
-</span><span>  </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">speed </span><span>= </span><span style="color:#8fa1b3;">prompt</span><span>(&quot;</span><span style="color:#a3be8c;">Enter desired video speed</span><span>&quot;);
-</span><span>  </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">videos </span><span>= document.</span><span style="color:#96b5b4;">getElementsByTagName</span><span>(&quot;</span><span style="color:#a3be8c;">video</span><span>&quot;);
-</span><span>  </span><span style="color:#b48ead;">for </span><span>(</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">i </span><span>= </span><span style="color:#d08770;">0</span><span>; </span><span style="color:#bf616a;">i </span><span>&lt; </span><span style="color:#bf616a;">videos</span><span>.length; </span><span style="color:#bf616a;">i</span><span>++) {
-</span><span>    </span><span style="color:#bf616a;">videos</span><span>[</span><span style="color:#bf616a;">i</span><span>].</span><span style="color:#bf616a;">playbackRate </span><span>= </span><span style="color:#bf616a;">speed</span><span>;
+<pre data-lang="javascript" style="background-color:#282a36;color:#f8f8f2;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="font-style:italic;color:#8be9fd;">function</span><span>() {
+</span><span>  </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">speed </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">prompt</span><span>(</span><span style="color:#f1fa8c;">&quot;Enter desired video speed&quot;</span><span>);
+</span><span>  </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">videos </span><span style="color:#ff79c6;">= </span><span>document</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">getElementsByTagName</span><span>(</span><span style="color:#f1fa8c;">&quot;video&quot;</span><span>);
+</span><span>  </span><span style="color:#ff79c6;">for </span><span>(</span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">0</span><span>; </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">&lt; </span><span style="color:#ffffff;">videos</span><span style="color:#ff79c6;">.</span><span>length; </span><span style="color:#ffffff;">i</span><span style="color:#ff79c6;">++</span><span>) {
+</span><span>    </span><span style="color:#ffffff;">videos</span><span>[</span><span style="color:#ffffff;">i</span><span>]</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">playbackRate </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">speed</span><span>;
 </span><span>  }
 </span><span>})();
 </span></code></pre>
@@ -240,18 +240,18 @@ What the 🦊? | Fast-forwarding Videos with Javascript
 <p>If you don't enter a valid number the bookmarklet will throw an error, but since we're the only people who will be using this we aren't too worried about that. If you really wanted to you could add some checks and alert the user if they entered something that wasn't valid.</p>
 <h2 id="final-result-tl-dr"><a class="zola-anchor" href="#final-result-tl-dr" aria-label="Anchor link for: final-result-tl-dr">🔗</a>Final Result (TL;DR)</h2>
 <p>Copy the following code into a bookmark's URL field to make a button which will set the speed of all videos on a webpage to 2x. Change the number before saving to create one that sets it to a different speed. Maybe make multiple if you want e.g. one button to 2x speed, one to 3x, and one to go back to normal (1x). The world is your oyster!</p>
-<pre data-lang="javascript" style="background-color:#2b303b;color:#c0c5ce;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="color:#b48ead;">function</span><span>() {
-</span><span>  </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">videos </span><span>= document.</span><span style="color:#96b5b4;">getElementsByTagName</span><span>(&quot;</span><span style="color:#a3be8c;">video</span><span>&quot;);
-</span><span>  </span><span style="color:#b48ead;">for </span><span>(</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">i </span><span>= </span><span style="color:#d08770;">0</span><span>; </span><span style="color:#bf616a;">i </span><span>&lt; </span><span style="color:#bf616a;">videos</span><span>.length; </span><span style="color:#bf616a;">i</span><span>++) {
-</span><span>    </span><span style="color:#bf616a;">videos</span><span>[</span><span style="color:#bf616a;">i</span><span>].</span><span style="color:#bf616a;">playbackRate </span><span>= </span><span style="color:#d08770;">2</span><span>;
+<pre data-lang="javascript" style="background-color:#282a36;color:#f8f8f2;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="font-style:italic;color:#8be9fd;">function</span><span>() {
+</span><span>  </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">videos </span><span style="color:#ff79c6;">= </span><span>document</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">getElementsByTagName</span><span>(</span><span style="color:#f1fa8c;">&quot;video&quot;</span><span>);
+</span><span>  </span><span style="color:#ff79c6;">for </span><span>(</span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">0</span><span>; </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">&lt; </span><span style="color:#ffffff;">videos</span><span style="color:#ff79c6;">.</span><span>length; </span><span style="color:#ffffff;">i</span><span style="color:#ff79c6;">++</span><span>) {
+</span><span>    </span><span style="color:#ffffff;">videos</span><span>[</span><span style="color:#ffffff;">i</span><span>]</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">playbackRate </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">2</span><span>;
 </span><span>  }
 </span><span>})();
 </span></code></pre>
 <p>The following works the same, but jumps forward thirty seconds (and setting a negative number makes it jump back):</p>
-<pre data-lang="javascript" style="background-color:#2b303b;color:#c0c5ce;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="color:#b48ead;">function</span><span>() {
-</span><span>  </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">videos </span><span>= document.</span><span style="color:#96b5b4;">getElementsByTagName</span><span>(&quot;</span><span style="color:#a3be8c;">video</span><span>&quot;);
-</span><span>  </span><span style="color:#b48ead;">for </span><span>(</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">i </span><span>= </span><span style="color:#d08770;">0</span><span>; </span><span style="color:#bf616a;">i </span><span>&lt; </span><span style="color:#bf616a;">videos</span><span>.length; </span><span style="color:#bf616a;">i</span><span>++) {
-</span><span>    </span><span style="color:#bf616a;">videos</span><span>[</span><span style="color:#bf616a;">i</span><span>].</span><span style="color:#bf616a;">currentTime </span><span>+= </span><span style="color:#d08770;">30</span><span>;
+<pre data-lang="javascript" style="background-color:#282a36;color:#f8f8f2;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span>javascript:(</span><span style="font-style:italic;color:#8be9fd;">function</span><span>() {
+</span><span>  </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">videos </span><span style="color:#ff79c6;">= </span><span>document</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">getElementsByTagName</span><span>(</span><span style="color:#f1fa8c;">&quot;video&quot;</span><span>);
+</span><span>  </span><span style="color:#ff79c6;">for </span><span>(</span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">0</span><span>; </span><span style="color:#ffffff;">i </span><span style="color:#ff79c6;">&lt; </span><span style="color:#ffffff;">videos</span><span style="color:#ff79c6;">.</span><span>length; </span><span style="color:#ffffff;">i</span><span style="color:#ff79c6;">++</span><span>) {
+</span><span>    </span><span style="color:#ffffff;">videos</span><span>[</span><span style="color:#ffffff;">i</span><span>]</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">currentTime </span><span style="color:#ff79c6;">+= </span><span style="color:#bd93f9;">30</span><span>;
 </span><span>  }
 </span><span>})();
 </span></code></pre>
@@ -259,7 +259,6 @@ What the 🦊? | Fast-forwarding Videos with Javascript
 <p>I haven't yet thought about how to do this in a mobile browser, I'm not sure if bookmarklets work there but even if they did I'm assuming they'd be pretty annoying to use. If you watch a lot of videos on your phone's browser it might actually be worth looking into writing a browser extension. Generally if I'm watching videos on my phone though it's on an app which has these features already though.</p>
 
           </div>
-          
         </article>
       </div>
     </div>
@@ -294,8 +293,8 @@ What the 🦊? | Fast-forwarding Videos with Javascript
 
 <section class="section">
   <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
+    <div class="columns">
+      <div class="column is-8 is-offset-1-desktop">
         <nav class="level">
               
           <div class="level-item has-text-centered">
