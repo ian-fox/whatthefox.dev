@@ -145,7 +145,7 @@ What the 🦊? | Crabtrap
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>2868 words</span>
+  <span>2955 words</span>
 </span>
 
             </div>
@@ -230,8 +230,12 @@ What the 🦊? | Crabtrap
 <h2 id="a-toy-example"><a class="zola-anchor" href="#a-toy-example" aria-label="Anchor link for: a-toy-example">🔗</a>A toy example</h2>
 <p>With those requirements set, let's get into the coding! The code for this post will live <a href="https://github.com/ian-fox/crabtrap">here</a> if you want to follow along.</p>
 <p>The first thing we'll need is a toy binary. We'll write a simple wrapper:<sup class="footnote-reference" id="fr-c-quality-1"><a href="#fn-c-quality">7</a></sup></p>
-<p><code>printf_wrapper.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+<article class="message ">
+  <div class="message-header">
+   <p>printf_wrapper.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdarg.h&gt;
 </span><span>
 </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span style="font-style:italic;color:#ffb86c;">format</span><span>, </span><span style="color:#ff79c6;">...</span><span>) </span><span style="color:#ffffff;">{
@@ -242,9 +246,15 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ff79c6;">return</span><span> result;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
+  </div>
+</article>
 <p>And a binary that calls <code>write</code> through both that and just through normal <code>libc</code>:</p>
-<p><code>static.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+<article class="message ">
+  <div class="message-header">
+   <p>static.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span>
 </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span style="font-style:italic;color:#ffb86c;">format</span><span>, </span><span style="color:#ff79c6;">...</span><span>);
 </span><span>
@@ -254,9 +264,15 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">0</span><span>;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
+  </div>
+</article>
 <p>For fun, we can also make one that loads the library dynamically:</p>
-<p><code>dynamic.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+<article class="message ">
+  <div class="message-header">
+   <p>dynamic.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;dlfcn.h&gt;
 </span><span>
 </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ffffff;">{
@@ -282,8 +298,15 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">0</span><span>;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
+  </div>
+</article>
 <p>We'll put it in a container to make sure we have a consistent environment:</p>
-<pre data-lang="Dockerfile" style="background-color:#282a36;color:#f8f8f2;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#6272a4;"># Use rust so that it will work with the later environments
+<article class="message ">
+  <div class="message-header">
+   <p>Dockerfile</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="Dockerfile" style="background-color:#282a36;color:#f8f8f2;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#6272a4;"># Use rust so that it will work with the later environments
 </span><span style="color:#ff79c6;">FROM</span><span> rust:1
 </span><span>
 </span><span style="color:#ff79c6;">WORKDIR </span><span>/crabtrap_test
@@ -299,16 +322,23 @@ What the 🦊? | Crabtrap
 </span><span> &amp;&amp; gcc -o static static.c -lprintf_wrapper \
 </span><span> &amp;&amp; gcc -static-pie -o all-in-one static.c -L. -l:libprintf_wrapper.a
 </span></code></pre>
+  </div>
+</article>
 <p>Now we've built three versions of our binary: two that load the shared object, and one that builds <code>libprintf_wrapper</code> in statically just as a point of comparison. Let's build make sure everything works:</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> ./static
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">$</span><span> ./dynamic
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">$</span><span> ./all-in-one 
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./static
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span></code></pre>
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./dynamic
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span></code></pre>
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./all-in-one
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
 </span></code></pre>
 <p>Perfect! This code is at the <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-0"><code>walkthrough-0</code></a> tag in the repository.</p>
 <h2 id="interface-and-tests"><a class="zola-anchor" href="#interface-and-tests" aria-label="Anchor link for: interface-and-tests">🔗</a>Interface and tests</h2>
@@ -473,7 +503,7 @@ What the 🦊? | Crabtrap
 <p>Running this we do get lots of nice stack traces! Next up we need to map the pc locations to code units. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-2"><code>walkthrough-2</code></a>.</p>
 <h2 id="mapping-to-shared-objects"><a class="zola-anchor" href="#mapping-to-shared-objects" aria-label="Anchor link for: mapping-to-shared-objects">🔗</a>Mapping to shared objects</h2>
 <p>Our goal is in sight! The last thing we need to do is map our series of program counters back to the files they come from, and then use that to make a decision about whether to allow the syscall or not. We can get this information by looking in the <a href="https://www.man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc filesystem</a>. For instance, when I run <code>cat /proc/self/maps</code> I get the following:</p>
-<pre data-lang="plain" style="background-color:#282a36;color:#f8f8f2;" class="language-plain "><code class="language-plain" data-lang="plain"><span>aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
+<pre data-lang="txt" style="background-color:#282a36;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
 </span><span>aaaad82df000-aaaad82e0000 r--p 0000f000 fe:01 188725                     /usr/bin/cat
 </span><span>aaaad82e0000-aaaad82e1000 rw-p 00010000 fe:01 188725                     /usr/bin/cat
 </span><span>aaab05aba000-aaab05adb000 rw-p 00000000 00:00 0                          [heap]
@@ -655,11 +685,12 @@ What the 🦊? | Crabtrap
 </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>And if we run the tests we can see that with no restrictions both messages get printed and the child exits 0, but when we restrict the <code>write</code> syscall coming from <code>libprintf_wrapper.so</code> we only see the "Hello from printf!" before the child process gets terminated! Fantastic!</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> ./target/debug/crabtrap /usr/local/bin/dynamic config.yaml
-</span><span style="color:#50fa7b;">Continuing</span><span> execution in parent process, new child has pid: 11
-</span><span style="color:#50fa7b;">Starting</span><span> to watch child...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">IllegalSyscall</span><span>(write, </span><span style="color:#f1fa8c;">&quot;/usr/local/lib/libprintf_wrapper.so&quot;</span><span>)
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./target/debug/crabtrap</span><span> /usr/local/bin/dynamic config.yaml
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Continuing execution in parent process, new child has pid: 11
+</span><span>Starting to watch child...
+</span><span>Hello from printf!
+</span><span>IllegalSyscall(write, &quot;/usr/local/lib/libprintf_wrapper.so&quot;)
 </span></code></pre>
 <p>This code is at <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-3"><code>walkthrough-3</code></a>.</p>
 <h2 id="next-steps"><a class="zola-anchor" href="#next-steps" aria-label="Anchor link for: next-steps">🔗</a>Next steps</h2>

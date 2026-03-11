@@ -141,11 +141,11 @@ What the 🦊? | Crabtrap Part 2: Electric Boogaloo
   <span class="icon">
     <i class="far fa-clock"></i>
   </span>
-  <span>6 min,</span>
+  <span>8 min,</span>
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>1143 words</span>
+  <span>1402 words</span>
 </span>
 
             </div>
@@ -210,85 +210,93 @@ What the 🦊? | Crabtrap Part 2: Electric Boogaloo
             <p><a href="https://whatthefox.dev/posts/crabtrap/">Last time</a> we built a proof-of-concept of a tool which could run a process in linux with guardrails around syscalls based on what shared object they originated from. This time we'll fill in some of the missing functionality to be able to run more programs.</p>
 <span id="continue-reading"></span><h2 id="signals-and-grandchildren"><a class="zola-anchor" href="#signals-and-grandchildren" aria-label="Anchor link for: signals-and-grandchildren">🔗</a>Signals and grandchildren</h2>
 <p>One of the corners we cut last time was assuming that our child process would never get any signals, and that it would never fork or clone itself so we only had one child to worry about. It turns out both of these were actually pretty easy to fix! As before we'll start with a really simple toy example that does some waiting and some fork/execing:</p>
-<p><code>child.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
-</span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;unistd.h&gt;
-</span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;sys/types.h&gt;
-</span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;sys/wait.h&gt;
-</span><span>
-</span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">make_child</span><span>(</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="font-style:italic;color:#ffb86c;">i</span><span>) </span><span style="color:#ffffff;">{
-</span><span>    </span><span style="color:#ff79c6;">if </span><span>(i </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0</span><span>) </span><span style="color:#ffffff;">{
-</span><span>        </span><span style="color:#ff79c6;">return</span><span>;
-</span><span>    </span><span style="color:#ffffff;">}
-</span><span>
-</span><span>    </span><span style="font-style:italic;color:#66d9ef;">pid_t</span><span> p </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">fork</span><span>();
-</span><span>    </span><span style="color:#ff79c6;">if </span><span>(p </span><span style="color:#ff79c6;">&lt; </span><span style="color:#bd93f9;">0</span><span>) </span><span style="color:#ffffff;">{
-</span><span>        </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;fork failed&quot;</span><span>);
-</span><span>        </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
-</span><span>    </span><span style="color:#ffffff;">}
-</span><span>
-</span><span>    </span><span style="color:#ff79c6;">if </span><span>(p </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0</span><span>) </span><span style="color:#ffffff;">{
-</span><span>        </span><span style="color:#50fa7b;">make_child</span><span>(i </span><span style="color:#ff79c6;">- </span><span style="color:#bd93f9;">1</span><span>);
-</span><span>        </span><span style="color:#50fa7b;">sleep</span><span>(i);
-</span><span>        </span><span style="color:#ff79c6;">switch </span><span>(i) </span><span style="color:#ffffff;">{
-</span><span>            </span><span style="color:#ff79c6;">case </span><span style="color:#bd93f9;">3</span><span>: </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Child </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;"> calling static...</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
-</span><span>                </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#50fa7b;">execv</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/static&quot;</span><span>, </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">== -</span><span style="color:#bd93f9;">1</span><span>) </span><span style="color:#ffffff;">{
-</span><span>                    </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;execv failed&quot;</span><span>);
-</span><span>                    </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
-</span><span>                </span><span style="color:#ffffff;">}
-</span><span>            </span><span style="color:#ff79c6;">case </span><span style="color:#bd93f9;">2</span><span>: </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Child </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;"> calling dynamic...</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
-</span><span>                </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#50fa7b;">execv</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/dynamic&quot;</span><span>, </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">== -</span><span style="color:#bd93f9;">1</span><span>) </span><span style="color:#ffffff;">{
-</span><span>                    </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;execv failed&quot;</span><span>);
-</span><span>                    </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
-</span><span>                </span><span style="color:#ffffff;">}
-</span><span>            </span><span style="color:#ff79c6;">case </span><span style="color:#bd93f9;">1</span><span>: </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Child </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;"> calling all-in-one...</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
-</span><span>                </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#50fa7b;">execv</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/all-in-one&quot;</span><span>, </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">== -</span><span style="color:#bd93f9;">1</span><span>) </span><span style="color:#ffffff;">{
-</span><span>                    </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;execv failed&quot;</span><span>);
-</span><span>                    </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
-</span><span>                </span><span style="color:#ffffff;">}
-</span><span>        </span><span style="color:#ffffff;">}
-</span><span>    </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">else </span><span style="color:#ffffff;">{
-</span><span>        </span><span style="color:#50fa7b;">waitpid</span><span>(p, </span><span style="color:#bd93f9;">NULL</span><span>, </span><span style="color:#bd93f9;">0</span><span>);
-</span><span>        </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Goodbye from parent </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;">!</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
-</span><span>    </span><span style="color:#ffffff;">}
-</span><span style="color:#ffffff;">}
-</span><span>
-</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ffffff;">{
-</span><span>    </span><span style="color:#50fa7b;">make_child</span><span>(</span><span style="color:#bd93f9;">3</span><span>);
-</span><span style="color:#ffffff;">}
-</span></code></pre>
+<article class="message ">
+  <div class="message-header">
+   <p>child.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-linenos data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><table><tbody><tr><td>1</td><td><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+</span></td></tr><tr><td>2</td><td><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;unistd.h&gt;
+</span></td></tr><tr><td>3</td><td><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;sys/types.h&gt;
+</span></td></tr><tr><td>4</td><td><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;sys/wait.h&gt;
+</span></td></tr><tr><td>5</td><td><span>
+</span></td></tr><tr><td>6</td><td><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">make_child</span><span>(</span><span style="font-style:italic;color:#8be9fd;">int </span><span style="font-style:italic;color:#ffb86c;">i</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>7</td><td><span>    </span><span style="color:#ff79c6;">if </span><span>(i </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>8</td><td><span>        </span><span style="color:#ff79c6;">return</span><span>;
+</span></td></tr><tr><td>9</td><td><span>    </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>10</td><td><span>
+</span></td></tr><tr><td>11</td><td><span>    </span><span style="font-style:italic;color:#66d9ef;">pid_t</span><span> p </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">fork</span><span>();
+</span></td></tr><tr><td>12</td><td><span>    </span><span style="color:#ff79c6;">if </span><span>(p </span><span style="color:#ff79c6;">&lt; </span><span style="color:#bd93f9;">0</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>13</td><td><span>        </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;fork failed&quot;</span><span>);
+</span></td></tr><tr><td>14</td><td><span>        </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
+</span></td></tr><tr><td>15</td><td><span>    </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>16</td><td><span>
+</span></td></tr><tr><td>17</td><td><span>    </span><span style="color:#ff79c6;">if </span><span>(p </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">0</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>18</td><td><span>        </span><span style="color:#50fa7b;">make_child</span><span>(i </span><span style="color:#ff79c6;">- </span><span style="color:#bd93f9;">1</span><span>);
+</span></td></tr><tr><td>19</td><td><span>        </span><span style="color:#50fa7b;">sleep</span><span>(i);
+</span></td></tr><tr><td>20</td><td><span>        </span><span style="color:#ff79c6;">switch </span><span>(i) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>21</td><td><span>            </span><span style="color:#ff79c6;">case </span><span style="color:#bd93f9;">3</span><span>: </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Child </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;"> calling static...</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
+</span></td></tr><tr><td>22</td><td><span>                </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#50fa7b;">execv</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/static&quot;</span><span>, </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">== -</span><span style="color:#bd93f9;">1</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>23</td><td><span>                    </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;execv failed&quot;</span><span>);
+</span></td></tr><tr><td>24</td><td><span>                    </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
+</span></td></tr><tr><td>25</td><td><span>                </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>26</td><td><span>            </span><span style="color:#ff79c6;">case </span><span style="color:#bd93f9;">2</span><span>: </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Child </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;"> calling dynamic...</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
+</span></td></tr><tr><td>27</td><td><span>                </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#50fa7b;">execv</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/dynamic&quot;</span><span>, </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">== -</span><span style="color:#bd93f9;">1</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>28</td><td><span>                    </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;execv failed&quot;</span><span>);
+</span></td></tr><tr><td>29</td><td><span>                    </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
+</span></td></tr><tr><td>30</td><td><span>                </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>31</td><td><span>            </span><span style="color:#ff79c6;">case </span><span style="color:#bd93f9;">1</span><span>: </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Child </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;"> calling all-in-one...</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
+</span></td></tr><tr><td>32</td><td><span>                </span><span style="color:#ff79c6;">if </span><span>(</span><span style="color:#50fa7b;">execv</span><span>(</span><span style="color:#f1fa8c;">&quot;/usr/local/bin/all-in-one&quot;</span><span>, </span><span style="color:#bd93f9;">NULL</span><span>) </span><span style="color:#ff79c6;">== -</span><span style="color:#bd93f9;">1</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>33</td><td><span>                    </span><span style="color:#8be9fd;">perror</span><span>(</span><span style="color:#f1fa8c;">&quot;execv failed&quot;</span><span>);
+</span></td></tr><tr><td>34</td><td><span>                    </span><span style="color:#8be9fd;">exit</span><span>(</span><span style="color:#bd93f9;">1</span><span>);
+</span></td></tr><tr><td>35</td><td><span>                </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>36</td><td><span>        </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>37</td><td><span>    </span><span style="color:#ffffff;">} </span><span style="color:#ff79c6;">else </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>38</td><td><span>        </span><span style="color:#50fa7b;">waitpid</span><span>(p, </span><span style="color:#bd93f9;">NULL</span><span>, </span><span style="color:#bd93f9;">0</span><span>);
+</span></td></tr><tr><td>39</td><td><span>        </span><span style="color:#8be9fd;">printf</span><span>(</span><span style="color:#f1fa8c;">&quot;Goodbye from parent </span><span style="color:#bd93f9;">%d</span><span style="color:#f1fa8c;">!</span><span style="color:#ff79c6;">\n</span><span style="color:#f1fa8c;">&quot;</span><span>, i);
+</span></td></tr><tr><td>40</td><td><span>    </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>41</td><td><span style="color:#ffffff;">}
+</span></td></tr><tr><td>42</td><td><span>
+</span></td></tr><tr><td>43</td><td><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>44</td><td><span>    </span><span style="color:#50fa7b;">make_child</span><span>(</span><span style="color:#bd93f9;">3</span><span>);
+</span></td></tr><tr><td>45</td><td><span style="color:#ffffff;">}
+</span></td></tr></tbody></table></code></pre>
+  </div>
+</article>
 <p>This program will give us the following output, and will use some signals and forking while doing it:</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> /usr/local/bin/child
-</span><span style="color:#50fa7b;">Child</span><span> 1 calling all-in-one...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 1!
-</span><span style="color:#50fa7b;">Child</span><span> 2 calling dynamic...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 2!
-</span><span style="color:#50fa7b;">Child</span><span> 3 calling static...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 3!
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">/usr/local/bin/child
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Child 1 calling all-in-one...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 1!
+</span><span>Child 2 calling dynamic...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 2!
+</span><span>Child 3 calling static...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 3!
 </span></code></pre>
 <p>Excellent! Let's see what happens if we try to run it from <code>crabtrap</code>:</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> cargo run /usr/local/bin/child
-</span><span style="color:#50fa7b;">Continuing</span><span> execution in parent process, new child has pid: 217
-</span><span style="color:#50fa7b;">Starting</span><span> to watch child...
-</span><span style="color:#50fa7b;">Child</span><span> 1 calling all-in-one...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 1!
-</span><span style="color:#50fa7b;">Child</span><span> 2 calling dynamic...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 2!
-</span><span style="color:#50fa7b;">Child</span><span> 3 calling static...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">thread </span><span style="color:#f1fa8c;">&#39;main&#39;</span><span> panicked at src/lib.rs:117:23:
-</span><span style="color:#50fa7b;">unexpected</span><span> child process status Stopped(Pid(217)</span><span style="color:#50fa7b;">,</span><span> SIGCHLD)
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">cargo</span><span> run /usr/local/bin/child
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Continuing execution in parent process, new child has pid: 217
+</span><span>Starting to watch child...
+</span><span>Child 1 calling all-in-one...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 1!
+</span><span>Child 2 calling dynamic...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 2!
+</span><span>Child 3 calling static...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>thread &#39;main&#39; panicked at src/lib.rs:117:23:
+</span><span>unexpected child process status Stopped(Pid(217), SIGCHLD)
 </span></code></pre>
 <p>That's actually a lot farther than I thought it'd get! In the previous post we assumed that no signals or forks would happen in the child, but we didn't actually validate that. Let that be a lesson to us.</p>
 <p>Let's start by handling that unexpected child process. We'll move the <code>syscall</code> function that restarts the child to only come after an actual <code>PtraceSyscall</code> event, and add an arm for stopped children that tells us something is happening, but doesn't restart them:</p>
@@ -444,57 +452,59 @@ should restart the tracee with the call</p>
 <p>That was a lot! We can run child programs that use <code>fork</code>, <code>vfork</code>, and <code>clone</code> now<sup class="footnote-reference" id="fr-edge-cases-1"><a href="#fn-edge-cases">4</a></sup>!</p>
 <h2 id="juggling-memory-maps"><a class="zola-anchor" href="#juggling-memory-maps" aria-label="Anchor link for: juggling-memory-maps">🔗</a>Juggling memory maps</h2>
 <p>The final piece of the puzzle (for today at least) is that with multiple tracees we'll need multiple memory maps to keep track of them. Right now if we try to run our example program with the config forbidding <code>libprintf_wrapper</code> it <em>probably</em> won't block because we're only keeping track of the memory of one process. Depending on which child was last used to build the memory map, we may block or we may not! We can fix this by having a separate memory map per child<sup class="footnote-reference" id="fr-sharing-1"><a href="#fn-sharing">5</a></sup>:</p>
-<pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">parent</span><span>(</span><span style="font-style:italic;color:#ffb86c;">child</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ff79c6;">-&gt; ChildExit </span><span style="color:#ffffff;">{
-</span><span>    </span><span style="color:#ff79c6;">...
-</span><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> children: BTreeMap&lt;Pid, </span><span style="font-style:italic;color:#66d9ef;">Box</span><span>&lt;MemoryMap&gt;&gt; </span><span style="color:#ff79c6;">=
-</span><span>        </span><span style="text-decoration:underline;color:#66d9ef;">BTreeMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from([(child, </span><span style="font-style:italic;color:#66d9ef;">Box</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(</span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(child)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap</span><span>()))]);
-</span><span>    </span><span style="color:#ff79c6;">...
-</span><span>
-</span><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
-</span><span>        </span><span style="color:#ff79c6;">match </span><span style="color:#8be9fd;">waitpid</span><span>(</span><span style="font-style:italic;color:#66d9ef;">None</span><span>, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>) </span><span style="color:#ffffff;">{
-</span><span>            </span><span style="color:#ff79c6;">...
-</span><span>            </span><span style="font-style:italic;color:#66d9ef;">Ok</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">WaitStatus</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>PtraceSyscall(pid)) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{
-</span><span>                </span><span style="font-style:italic;color:#8be9fd;">let</span><span> child_mem: </span><span style="color:#ff79c6;">&amp;mut</span><span> MemoryMap </span><span style="color:#ff79c6;">=</span><span> children
-</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">entry</span><span>(pid)
-</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">or_insert</span><span>(</span><span style="font-style:italic;color:#66d9ef;">Box</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(</span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap_or_else</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">e</span><span>| </span><span style="color:#ffffff;">{
-</span><span>                        panic!(</span><span style="color:#f1fa8c;">&quot;Couldn&#39;t build map for {}: {}&quot;</span><span>, pid, e)
-</span><span>                    </span><span style="color:#ffffff;">}</span><span>)));
-</span><span>
-</span><span>                </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(exit) </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">handle_syscall</span><span>(pid, config, child_mem) </span><span style="color:#ffffff;">{
-</span><span>                    </span><span style="color:#8be9fd;">kill</span><span>(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap_or_else</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">e</span><span>| panic!(</span><span style="color:#f1fa8c;">&quot;failed to kill child {pid}: {e}&quot;</span><span>));
-</span><span>                    </span><span style="color:#ff79c6;">return</span><span> exit;
-</span><span>                </span><span style="color:#ffffff;">}
-</span><span>                </span><span style="color:#8be9fd;">syscall</span><span>(pid, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>)
-</span><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap_or_else</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">e</span><span>| panic!(</span><span style="color:#f1fa8c;">&quot;failed to restart child {pid} after syscall: {e}&quot;</span><span>));
-</span><span>            </span><span style="color:#ffffff;">}
-</span></code></pre>
+<pre data-linenos data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><table><tbody><tr><td>1</td><td><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">parent</span><span>(</span><span style="font-style:italic;color:#ffb86c;">child</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ff79c6;">-&gt; ChildExit </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>2</td><td><span>    </span><span style="color:#ff79c6;">...
+</span></td></tr><tr><td>3</td><td><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> children: BTreeMap&lt;Pid, </span><span style="font-style:italic;color:#66d9ef;">Box</span><span>&lt;MemoryMap&gt;&gt; </span><span style="color:#ff79c6;">=
+</span></td></tr><tr><td>4</td><td><span>        </span><span style="text-decoration:underline;color:#66d9ef;">BTreeMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from([(child, </span><span style="font-style:italic;color:#66d9ef;">Box</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(</span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(child)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap</span><span>()))]);
+</span></td></tr><tr><td>5</td><td><span>    </span><span style="color:#ff79c6;">...
+</span></td></tr><tr><td>6</td><td><span>
+</span></td></tr><tr><td>7</td><td><span>    </span><span style="color:#ff79c6;">loop </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>8</td><td><span>        </span><span style="color:#ff79c6;">match </span><span style="color:#8be9fd;">waitpid</span><span>(</span><span style="font-style:italic;color:#66d9ef;">None</span><span>, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>9</td><td><span>            </span><span style="color:#ff79c6;">...
+</span></td></tr><tr><td>10</td><td><span>            </span><span style="font-style:italic;color:#66d9ef;">Ok</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">WaitStatus</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>PtraceSyscall(pid)) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>11</td><td><span>                </span><span style="font-style:italic;color:#8be9fd;">let</span><span> child_mem: </span><span style="color:#ff79c6;">&amp;mut</span><span> MemoryMap </span><span style="color:#ff79c6;">=</span><span> children
+</span></td></tr><tr><td>12</td><td><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">entry</span><span>(pid)
+</span></td></tr><tr><td>13</td><td><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">or_insert</span><span>(</span><span style="font-style:italic;color:#66d9ef;">Box</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>new(</span><span style="text-decoration:underline;color:#66d9ef;">MemoryMap</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>from_pid(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap_or_else</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">e</span><span>| </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>14</td><td><span>                        panic!(</span><span style="color:#f1fa8c;">&quot;Couldn&#39;t build map for {}: {}&quot;</span><span>, pid, e)
+</span></td></tr><tr><td>15</td><td><span>                    </span><span style="color:#ffffff;">}</span><span>)));
+</span></td></tr><tr><td>16</td><td><span>
+</span></td></tr><tr><td>17</td><td><span>                </span><span style="color:#ff79c6;">if </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="font-style:italic;color:#66d9ef;">Some</span><span>(exit) </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">handle_syscall</span><span>(pid, config, child_mem) </span><span style="color:#ffffff;">{
+</span></td></tr><tr><td>18</td><td><span>                    </span><span style="color:#8be9fd;">kill</span><span>(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap_or_else</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">e</span><span>| panic!(</span><span style="color:#f1fa8c;">&quot;failed to kill child {pid}: {e}&quot;</span><span>));
+</span></td></tr><tr><td>19</td><td><span>                    </span><span style="color:#ff79c6;">return</span><span> exit;
+</span></td></tr><tr><td>20</td><td><span>                </span><span style="color:#ffffff;">}
+</span></td></tr><tr><td>21</td><td><span>                </span><span style="color:#8be9fd;">syscall</span><span>(pid, </span><span style="font-style:italic;color:#66d9ef;">None</span><span>)
+</span></td></tr><tr><td>22</td><td><span>                    </span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">unwrap_or_else</span><span>(|</span><span style="font-style:italic;color:#ffb86c;">e</span><span>| panic!(</span><span style="color:#f1fa8c;">&quot;failed to restart child {pid} after syscall: {e}&quot;</span><span>));
+</span></td></tr><tr><td>23</td><td><span>            </span><span style="color:#ffffff;">}
+</span></td></tr></tbody></table></code></pre>
 <p>At long last we can see the fruits of our effort! Note that the <code>printf_wrapper</code> call from <code>all-in-one</code> doesn't get caught, because that was the version where the function was statically compiled into the binary and thus it doesn't load the <code>libprintf_wrapper.so</code>. However as soon as we hit one of the other cases...</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> cargo run</span><span style="color:#ff79c6;"> --</span><span> --config config.yaml /usr/local/bin/child
-</span><span style="color:#50fa7b;">Continuing</span><span> execution in parent process, new child has pid: 8512
-</span><span style="color:#50fa7b;">Starting</span><span> to watch child...
-</span><span style="color:#50fa7b;">Child</span><span> 1 calling all-in-one...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 1!
-</span><span style="color:#50fa7b;">Child</span><span> 2 calling dynamic...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">IllegalSyscall</span><span>(write, </span><span style="color:#f1fa8c;">&quot;/usr/local/lib/libprintf_wrapper.so&quot;</span><span>)
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">cargo</span><span> run</span><span style="color:#ff79c6;"> --</span><span> --config config.yaml /usr/local/bin/child
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Continuing execution in parent process, new child has pid: 8512
+</span><span>Starting to watch child...
+</span><span>Child 1 calling all-in-one...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 1!
+</span><span>Child 2 calling dynamic...
+</span><span>Hello from printf!
+</span><span>IllegalSyscall(write, &quot;/usr/local/lib/libprintf_wrapper.so&quot;)
 </span></code></pre>
 <p>Bingo! We can even run things interactively, because we're not doing any input or output redirection:</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> cargo run</span><span style="color:#ff79c6;"> --</span><span> --config config.yaml /usr/bin/sh
-</span><span style="color:#50fa7b;">Continuing</span><span> execution in parent process, new child has pid: 8518
-</span><span style="color:#50fa7b;">Starting</span><span> to watch child...
-</span><span style="color:#6272a4;"># all-in-one
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#6272a4;"># child
-</span><span style="color:#50fa7b;">Child</span><span> 1 calling all-in-one...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">Goodbye</span><span> from parent 1!
-</span><span style="color:#50fa7b;">Child</span><span> 2 calling dynamic...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">IllegalSyscall</span><span>(write, </span><span style="color:#f1fa8c;">&quot;/usr/local/lib/libprintf_wrapper.so&quot;</span><span>)
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">cargo</span><span> run</span><span style="color:#ff79c6;"> --</span><span> --config config.yaml /usr/local/bin/sh
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Continuing execution in parent process, new child has pid: 8518
+</span><span>Starting to watch child...
+</span><span># all-in-one
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span># child
+</span><span>Child 1 calling all-in-one...
+</span><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span><span>Goodbye from parent 1!
+</span><span>Child 2 calling dynamic...
+</span><span>Hello from printf!
+</span><span>IllegalSyscall(write, &quot;/usr/local/lib/libprintf_wrapper.so&quot;)
 </span></code></pre>
 <p>There are still lots of details we've just sort of brushed over for the proof of concept, but it should be enough to try swapping the filtering layer out for eBPF. Tune in next time when we'll try that!</p>
 <footer class="footnotes">
