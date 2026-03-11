@@ -1,4 +1,7 @@
-@import "../../themes/DeepThought/sass/utilities/all";
+@use "../../themes/DeepThought/sass/utilities/all";
+@use "../../themes/DeepThought/sass/utilities/initial-variables";
+@use "../../themes/DeepThought/sass/utilities/mixins";
+@use "../../themes/DeepThought/sass/utilities/derived-variables";
 
 // Make the link symbol appear on hover
 .zola-anchor {
@@ -34,7 +37,7 @@ nav.level .level-item {
 // Better code listing
 
 pre {
-  border-radius: $radius-large;
+  border-radius: initial-variables.$radius-large;
 }
 
 .content code table {
@@ -64,7 +67,7 @@ pre {
 } 
 
 .content .message-body pre {
-  border-radius: 0 0 $radius-large $radius-large;
+  border-radius: 0 0 initial-variables.$radius-large initial-variables.$radius-large;
   padding: 0;
 }
 
@@ -72,9 +75,30 @@ pre {
   display: block; // Make highlights full-width
 }
 
+// Fix message background if it has a code block
+.content .message-body:has(pre code) {
+  background-color: #282a36;
+}
+
+// Fix code block themes in dark mode
+body[theme="dark"] .content {
+  .message:has(pre) {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  
+  .message-body pre {
+    filter: none;
+  }
+}
+
 // Shell sessions
 code.language-sh:before {
-  content: "$ ";
+  content: "❯ ";
+  color: #50fa7b;
+}
+
+code.language-nushell:before {
+  content: "λ ";
   color: #50fa7b;
 }
 
@@ -166,7 +190,7 @@ pre.language-shell-session + pre.language-nushell {
 
 // Sidenotes for tablet and up
 .sidenote-body {
-  @include from($tablet) {
+  @include mixins.from(initial-variables.$tablet) {
     vertical-align: baseline;
     position: relative;
     float: right;
@@ -174,24 +198,24 @@ pre.language-shell-session + pre.language-nushell {
     margin-top: 1rem;
   }
 
-  @include tablet {
+  @include mixins.tablet {
     width: 50%;
     margin-right: -60%;
   }
 
-  @include desktop {
+  @include mixins.desktop {
     width: 45%;
     margin-right: -50%;
   }
 
-  @include widescreen {
+  @include mixins.widescreen {
     width: 35%;
     margin-right: -40%;
   }
 }
 
 // Inline notes for mobile
-@include mobile {
+@include mixins.mobile {
   .sidenote-body {
     margin: 1em 0;
     padding-left: 1em;

@@ -15,9 +15,8 @@ categories = ["blog"]
 
 One of the corners we cut last time was assuming that our child process would never get any signals, and that it would never fork or clone itself so we only had one child to worry about. It turns out both of these were actually pretty easy to fix! As before we'll start with a really simple toy example that does some waiting and some fork/execing:
 
-`child.c`
-
-```c
+{% message(title="child.c") %}
+```c,linenos
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -64,11 +63,11 @@ int main() {
     make_child(3);
 }
 ```
+{% end %}
 
 This program will give us the following output, and will use some signals and forking while doing it:
 
-```sh
-$ /usr/local/bin/child
+{% shell(command="/usr/local/bin/child", dialect="sh") %}
 Child 1 calling all-in-one...
 Hello from printf!
 Hello from printf_wrapper!
@@ -81,12 +80,11 @@ Child 3 calling static...
 Hello from printf!
 Hello from printf_wrapper!
 Goodbye from parent 3!
-```
+{% end %}
 
 Excellent! Let's see what happens if we try to run it from `crabtrap`:
 
-```sh
-$ cargo run /usr/local/bin/child
+{% shell(command="cargo run /usr/local/bin/child", dialect="sh") %}
 Continuing execution in parent process, new child has pid: 217
 Starting to watch child...
 Child 1 calling all-in-one...
@@ -102,7 +100,7 @@ Hello from printf!
 Hello from printf_wrapper!
 thread 'main' panicked at src/lib.rs:117:23:
 unexpected child process status Stopped(Pid(217), SIGCHLD)
-```
+{% end %}
 
 That's actually a lot farther than I thought it'd get! In the previous post we assumed that no signals or forks would happen in the child, but we didn't actually validate that. Let that be a lesson to us.
 
@@ -281,7 +279,7 @@ That was a lot! We can run child programs that use `fork`, `vfork`, and `clone` 
 
 The final piece of the puzzle (for today at least) is that with multiple tracees we'll need multiple memory maps to keep track of them. Right now if we try to run our example program with the config forbidding `libprintf_wrapper` it _probably_ won't block because we're only keeping track of the memory of one process. Depending on which child was last used to build the memory map, we may block or we may not! We can fix this by having a separate memory map per child[^sharing]:
 
-```rust
+```rust,linenos
 fn parent(child: Pid, config: &Config) -> ChildExit {
     ...
     let mut children: BTreeMap<Pid, Box<MemoryMap>> =
@@ -309,8 +307,7 @@ fn parent(child: Pid, config: &Config) -> ChildExit {
 
 At long last we can see the fruits of our effort! Note that the `printf_wrapper` call from `all-in-one` doesn't get caught, because that was the version where the function was statically compiled into the binary and thus it doesn't load the `libprintf_wrapper.so`. However as soon as we hit one of the other cases...
 
-```sh
-$ cargo run -- --config config.yaml /usr/local/bin/child
+{% shell(command="cargo run -- --config config.yaml /usr/local/bin/child", dialect="sh") %}
 Continuing execution in parent process, new child has pid: 8512
 Starting to watch child...
 Child 1 calling all-in-one...
@@ -320,12 +317,11 @@ Goodbye from parent 1!
 Child 2 calling dynamic...
 Hello from printf!
 IllegalSyscall(write, "/usr/local/lib/libprintf_wrapper.so")
-```
+{% end %}
 
 Bingo! We can even run things interactively, because we're not doing any input or output redirection:
 
-```sh
-$ cargo run -- --config config.yaml /usr/bin/sh
+{% shell(command="cargo run -- --config config.yaml /usr/local/bin/sh", dialect="sh") %}
 Continuing execution in parent process, new child has pid: 8518
 Starting to watch child...
 # all-in-one
@@ -339,7 +335,7 @@ Goodbye from parent 1!
 Child 2 calling dynamic...
 Hello from printf!
 IllegalSyscall(write, "/usr/local/lib/libprintf_wrapper.so")
-```
+{% end %}
 
 There are still lots of details we've just sort of brushed over for the proof of concept, but it should be enough to try swapping the filtering layer out for eBPF. Tune in next time when we'll try that!
 

@@ -20,6 +20,7 @@ This will fetch the contents of the required submodules.
 
 ## To Do
 
+* Upstream zola: flag to make malformed shortcodes throw an error
 * Make nested sidenotes work
 * if enabling TOC, make sure it works with mobile, don't include anchor symbols, and calculate entries without javascript
 * Better code snippets
@@ -35,5 +36,4 @@ This will fetch the contents of the required submodules.
 UI changes to maybe post about:
 
 * Sidenotes
-* Shell listing
-* Code without selecting columns
+* Shell sessions and code highlighting

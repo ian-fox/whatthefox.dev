@@ -43,8 +43,7 @@ With those requirements set, let's get into the coding! The code for this post w
 
 The first thing we'll need is a toy binary. We'll write a simple wrapper:[^c-quality]
 
-`printf_wrapper.c`
-
+{% message(title="printf_wrapper.c") %}
 ```c
 #include <stdio.h>
 #include <stdarg.h>
@@ -57,11 +56,11 @@ int printf_wrapper(const char *format, ...) {
     return result;
 }
 ```
+{% end %}
 
 And a binary that calls `write` through both that and just through normal `libc`:
 
-`static.c`
-
+{% message(title="static.c") %}
 ```c
 #include <stdio.h>
 
@@ -73,11 +72,11 @@ int main() {
     return 0;
 }
 ```
+{% end %}
 
 For fun, we can also make one that loads the library dynamically:
 
-`dynamic.c`
-
+{% message(title="dynamic.c") %}
 ```c
 #include <stdio.h>
 #include <dlfcn.h>
@@ -105,9 +104,11 @@ int main() {
     return 0;
 }
 ```
+{% end %}
 
 We'll put it in a container to make sure we have a consistent environment:
 
+{% message(title="Dockerfile") %}
 ```Dockerfile
 # Use rust so that it will work with the later environments
 FROM rust:1
@@ -125,20 +126,22 @@ RUN gcc -c -o libprintf_wrapper.o printf_wrapper.c \
  && gcc -o static static.c -lprintf_wrapper \
  && gcc -static-pie -o all-in-one static.c -L. -l:libprintf_wrapper.a
 ```
+{% end %}
 
 Now we've built three versions of our binary: two that load the shared object, and one that builds `libprintf_wrapper` in statically just as a point of comparison. Let's build make sure everything works:
 
-```sh
-$ ./static
+{% shell(command="./static", dialect="sh") %}
 Hello from printf!
 Hello from printf_wrapper!
-$ ./dynamic
+{% end %}
+{% shell(command="./dynamic", dialect="sh") %}
 Hello from printf!
 Hello from printf_wrapper!
-$ ./all-in-one 
+{% end %}
+{% shell(command="./all-in-one", dialect="sh") %}
 Hello from printf!
 Hello from printf_wrapper!
-```
+{% end %}
 
 Perfect! This code is at the [`walkthrough-0`](https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-0) tag in the repository.
 
@@ -549,13 +552,12 @@ fn handle_syscall(pid: Pid, config: &Config, map: &mut MemoryMap) -> Option<Chil
 
 And if we run the tests we can see that with no restrictions both messages get printed and the child exits 0, but when we restrict the `write` syscall coming from `libprintf_wrapper.so` we only see the "Hello from printf!" before the child process gets terminated! Fantastic!
 
-```sh
-$ ./target/debug/crabtrap /usr/local/bin/dynamic config.yaml
+{% shell(command="./target/debug/crabtrap /usr/local/bin/dynamic config.yaml", dialect="sh") %}
 Continuing execution in parent process, new child has pid: 11
 Starting to watch child...
 Hello from printf!
 IllegalSyscall(write, "/usr/local/lib/libprintf_wrapper.so")
-```
+{% end %}
 
 This code is at [`walkthrough-3`](https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-3).
 

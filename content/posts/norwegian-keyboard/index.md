@@ -34,14 +34,13 @@ Fortunately for us, our friendly Arch wiki has a [tutorial](https://wiki.archlin
 
 To get the scancode, we can use a program called `evtest`:
 
-```txt
-$ sudo evtest
+{% shell(command="sudo evtest", dialect="sh") %}
 No device specified, trying to scan all of /dev/input/event*
 Available devices:
 /dev/input/event0:  Sleep Button
 /dev/input/event1:  Lid Switch
 ...
-```
+{% end %}
 
 Once we select the device for the keyboard (in this case `/dev/input/event3`), evtest starts listening for events and printing them to the screen. By pressing the key we're interested in we can find out what its scancode is:
 
@@ -58,10 +57,9 @@ The scancode is printed in hex even though it doesn't have the leading 0x for so
 
 We need one other piece of information before setting up our mapping: I don't want to mess with external keyboards that I plug in, so we need to find the identifier of the laptop's built-in keyboard to constrain our remapping to only that device. The arch wiki also tells us how to do this, and it's as simple as printing out the contents of a file!
 
-```txt
-$ cat /sys/class/input/event3/device/modalias
+{% shell(command="cat /sys/class/input/event3/device/modalias", dialect="sh") %}
 input:b0011v0001p0001eAB830e0,1,4,11,14,k71...
-```
+{% end %}
 
 It carries on like that for a while, but thanks to wildcards we only really have to care about that bit at the start.
 
@@ -69,7 +67,7 @@ It carries on like that for a while, but thanks to wildcards we only really have
 
 udev is modified by hardware database files, which live (among other places) in `/usr/lib/udev/hwdb.d`. We create our new mapping as follows in a file there; I called mine `90-wide-shift.hwdb`.
 
-```
+```txt
 evdev:input:b0011v0001p0001eAB83*
  KEYBOARD_KEY_56=leftshift
 ```
@@ -78,10 +76,8 @@ First we tell udev that we only want this to apply to the laptop keyboard. Then 
 
 Finally, we need to run a few commands to tell hwdb and udev that they should refresh because we've made changes:
 
-```txt
-$ sudo systemd-hwdb update
-$ sudo udevadm trigger
-```
+{{ shell(command="sudo systemd-hwdb update", dialect="sh") }}
+{{ shell(command="sudo udevadm trigger", dialect="sh") }}
 
 And that's it! Running evtest again, we can see that both scancodes get mapped to the same keycode now:
 
