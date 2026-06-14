@@ -32,6 +32,7 @@ This will fetch the contents of the required submodules.
 * add content
   * Notes on r2, x86
   * Orgmode with ox?
+* Switch to something that generates from orgmode?
 
 UI changes to maybe post about:
 

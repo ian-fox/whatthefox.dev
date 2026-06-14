@@ -11,7 +11,7 @@ serve:
 
 build:
 	grep -r '"1970-01-01T00:00:00"' content || continue
-	echo -n "Replace dates? [y/N] " && read ans && [ $${ans:-N} = y ] && sed -i -e 's/.*"3000-01-01T00:00:00"/date = "$(DATE)"/' `find content -type f` || continue
+	echo -n "Replace dates? [y/N] " && read ans && [ $${ans:-N} = y ] && sed -i -e 's/.*"1970-01-01T00:00:00"/date = "$(DATE)"/' `find content -type f` || continue
 	zola build
 	rm -rf .git_deploy/*
 	mv public/* .git_deploy
