@@ -91,7 +91,7 @@
 %-----       resume       ---------------------------------------------------------
 \vspace*{-14mm}
 \makecvtitle
-\vspace*{-14mm}
+\vspace*{-5mm}
 
 \begin{center}
 \begin{tabular}{ c c c c }
@@ -103,15 +103,26 @@
 {\begin{itemize}
   \item Programming Languages: Rust, Python, Golang
   \item Technologies: Kubernetes, Terraform, Linux internals
+  % \item Other: Identity and Access Management, process sandboxing
 \end{itemize}
 }
 
 \section{EXPERIENCE}
 
-\customcventry{Feb 2025 - Present}{Senior Security Operations Engineer}{Cognite}{Oslo, NO}{}
+\customcventry{May 2026 - Present}{Senior Security Engineer}{Cybret AI}{Oslo, NO}{}
   {\begin{itemize}
-    \item Automated incident response tasks through SIEM and SOAR tooling.
-    \item Worked with infrastructure teams to implement new access solutions.
+    \item Created and refined a process for migrating divergent codebases into a monorepo with consistent developer tooling, documentation, and testing standards.
+    \item Enabled AI adoption by writing automation for code review, documentation accuracy, and a paved path for safely running local coding agents.
+    \item Implemented security best practices with policy as code.
+  \end{itemize}
+}
+
+\customcventry{Feb 2025 - Apr 2026}{Senior Security Operations Engineer}{Cognite}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Automated incident response tasks with SIEM and SOAR tooling.
+    \item Created workflows to manage SIEM and SOAR automation and configuration as code.
+    \item Worked with infrastructure team to implement new access solutions for cloud environments.
+    \item Enabled engineering teams to see security scan results corresponding to their own services with live dashboards.
   \end{itemize}
 }
 
@@ -154,6 +165,8 @@
   \end{itemize}
 }
 
+\newpage
+
 \customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath}{Sunnyvale, US}{}
   {\begin{itemize}
     \item Designed, implemented, and open sourced the yFuzz fuzzing orchestration tool.
@@ -169,13 +182,11 @@
   \end{itemize}
 }
 
-\newpage
-
-\customcventry{May 2016 - Aug 2016}{Junior Developer Intern}{OpenText Corporation}{Waterloo, CA}{}
-  {\begin{itemize}
-    \item Developed features and fixed bugs in the OpenText Core desktop client
-  \end{itemize}
-}
+% \customcventry{May 2016 - Aug 2016}{Junior Developer Intern}{OpenText Corporation}{Waterloo, CA}{}
+%   {\begin{itemize}
+%     \item Developed features and fixed bugs in the OpenText Core desktop client
+%   \end{itemize}
+% }
 
 \customcventry{Jun 2014 - Aug 2014, Feb 2015 – Jun 2015}{High School Intern}{OpenText Corporation}{Waterloo, CA}{}
   {\begin{itemize}
@@ -193,7 +204,6 @@
   {\begin{itemize}
     \item Proof of concept for syscall blocking similar to seccomp-bpf at the shared object level instead of process level.
     \item Runs a child process under ptrace and uses the proc filesystem to map stack traces for syscalls to shared objects, then allows or denies them based on policy.
-    \item Blog post explaining the design at whatthefox.dev/posts/crabtrap
   \end{itemize}
 }
 
