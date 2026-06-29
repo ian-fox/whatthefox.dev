@@ -20,6 +20,7 @@ This will fetch the contents of the required submodules.
 
 ## To Do
 
+* Update to zola 0.22 to fix the [breaking changes](https://github.com/getzola/zola/blob/master/CHANGELOG.md#0220-2026-01-09)
 * Upstream zola: flag to make malformed shortcodes throw an error
 * Make nested sidenotes work
 * if enabling TOC, make sure it works with mobile, don't include anchor symbols, and calculate entries without javascript
