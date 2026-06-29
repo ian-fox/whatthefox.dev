@@ -1,0 +1,244 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2013 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+% on mac: lualatex cv.tex
+%
+% todo:
+% * https://resumeworded.com/resume-bullet-points
+
+\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% modern themes 
+\moderncvtheme[orange]{banking}                             % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+\renewcommand{\familydefault}{\sfdefault}         % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[utf8]{inputenc}
+\usepackage{fontawesome5}
+\usepackage{fontspec}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+\usepackage{multicol}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvtitlenamewidth}{10cm}           % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+
+\usepackage{import}
+
+% personal data
+\name{Ian}{Fox}
+% \title{Curriculum Vitae}                               % optional, remove / comment the line if not wanted
+%\address{500 College Ave, Swarthmore, PA 19081 }{}{}% optional, remove / comment the line if not wanted; the "postcode city" and and "country" arguments can be omitted or provided empty
+% \phone[mobile]{909-839-3097}                   % optional, remove / comment the line if not wanted
+% \phone[fixed]{01234 123456}                    % optional, remove / comment the line if not wanted
+%\phone[fax]{+3~(456)~789~012}                      % optional, remove / comment the line if not wanted
+% \email{xpan1@swarthmore.edu}                               % optional, remove / comment the line if not wanted
+% \homepage{shawnpan.me}                         % optional, remove / comment the line if not wanted
+
+ 
+\newcommand*{\customcventry}[7][.25em]{
+  \begin{tabular}{@{}l} 
+    {\bfseries #4}
+  \end{tabular}
+  \hfill% move it to the right
+  \vspace{0.25mm}
+  \begin{tabular}{l@{}}
+     {\bfseries #5}
+  \end{tabular} \\
+  \begin{tabular}{@{}l} 
+    {\itshape #3}
+  \end{tabular}
+  \hfill% move it to the right
+  \begin{tabular}{l@{}}
+     {\itshape #2}
+  \end{tabular}
+  \ifx&#7&%
+  \else{\\%
+    \begin{minipage}{\maincolumnwidth}%
+      \small#7%
+    \end{minipage}}\fi%
+  \par\addvspace{#1}}
+
+\newcommand*{\customcvproject}[4][.25em]{
+%   \vfill\noindent
+  \begin{tabular}{@{}l} 
+    {\bfseries #2}
+  \end{tabular}
+  \hfill% move it to the right
+  \begin{tabular}{l@{}}
+     {\itshape #3}
+  \end{tabular}
+  \ifx&#4&%
+  \else{\\%
+    \begin{minipage}{\maincolumnwidth}%
+      \small#4%
+    \end{minipage}}\fi%
+  \par\addvspace{#1}}
+
+\setlength{\tabcolsep}{12pt}
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%-----       resume       ---------------------------------------------------------
+\vspace*{-14mm}
+\makecvtitle
+\vspace*{-5mm}
+
+\begin{center}
+\begin{tabular}{ c c c c }
+ \faGlobe\enspace whatthefox.dev & \faEnvelope\enspace iansfox@pm.me & \faGithub\enspace ian-fox & \faLinkedin\enspace iansfox \\  
+\end{tabular}
+\end{center}
+
+\section{SKILLS}
+{\begin{itemize}
+  \item Programming Languages: Rust, Python, Golang
+  \item Technologies: Kubernetes, Terraform, Linux internals
+  % \item Other: Identity and Access Management, process sandboxing
+\end{itemize}
+}
+
+\section{EXPERIENCE}
+
+\customcventry{May 2026 - Present}{Senior Security Engineer}{Cybret AI}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Created and refined a process for migrating divergent codebases into a monorepo with consistent developer tooling, documentation, and testing standards.
+    \item Enabled AI adoption by writing automation for code review, documentation accuracy, and a paved path for safely running local coding agents.
+    \item Implemented security best practices with policy as code.
+  \end{itemize}
+}
+
+\customcventry{Feb 2025 - Apr 2026}{Senior Security Operations Engineer}{Cognite}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Automated incident response tasks with SIEM and SOAR tooling.
+    \item Created workflows to manage SIEM and SOAR automation and configuration as code.
+    \item Worked with infrastructure team to implement new access solutions for cloud environments.
+    \item Enabled engineering teams to see security scan results corresponding to their own services with live dashboards.
+  \end{itemize}
+}
+
+\customcventry{Nov 2024 - Feb 2025}{Security Analyst}{Defendable}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Developed automation for Palo Alto XSOAR to assist SOC analysts.
+    \item Created a platform to give CTF participants access to a terminal in a container through their phones.
+  \end{itemize}
+}
+
+\customcventry{Oct 2021 - Aug 2024}{Senior Security Researcher}{Omny Security}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Created document parsing tools using OpenCV and GPT4-V.
+    \item Created demonstrations of simulated ICS environments and attacks against them.
+    \item Wrote and presented talks at DEFCON ICS Village, BSides Oslo, S4x2023.
+    \item Developed and debugged CI/CD tooling and infrastructure.
+  \end{itemize}
+}
+
+\customcventry{Jul 2020 - Sept 2021}{Cloud Security Engineer}{Splunk}{Waterloo, CA}{}
+  {\begin{itemize}
+    \item Developed and maintained automation for various security processes such as vulnerability scanning.
+    \item Worked with stakeholders to plan and deliver enhancements to the vulnerability reporting process.
+    \item Delivered webinar on using terraform to manage firewall rules with Signal Sciences
+  \end{itemize}
+}
+
+\customcventry{Sep 2019 - Dec 2019}{Software Development Intern}{Cognite}{Oslo, NO}{}
+  {\begin{itemize}
+    \item Implemented new authentication mechanism using Hashicorp's Vault.
+    \item Fixed security vulnerabilities related to authorization.
+  \end{itemize}
+}
+
+\customcventry{Jan 2019 - Apr 2019}{Software Engineering Intern}{Splunk}{San Jose, US}{}
+  {\begin{itemize}
+    \item Designed and developed integrations between GitLab CI and static code analysis tools, streamlining developer workflow.
+    \item Built systems to automate tool deployments for the Product Security team.
+    \item Created and delivered training on CI best practices.
+  \end{itemize}
+}
+
+\newpage
+
+\customcventry{Jan 2018 - Aug 2018}{Technical Intern}{Oath}{Sunnyvale, US}{}
+  {\begin{itemize}
+    \item Designed, implemented, and open sourced the yFuzz fuzzing orchestration tool.
+    \item Developed a slack bot with Flask for a security engagement initiative encouraging employees to lock their \newline computers.
+    \item Conducted physical penetration tests and reconnaissance for Oath’s red team.
+  \end{itemize}
+}
+
+\customcventry{May 2017 – Aug 2017}{Technical Intern}{Yahoo}{Sunnyvale, US}{}
+  {\begin{itemize}
+    \item Added a new authentication mechanism for the Screwdriver CD tool with Ember.js and Hapi.js.
+    \item Developed a plugin to queue Screwdriver jobs with Redis, enabling more complex pipeline structure.
+  \end{itemize}
+}
+
+% \customcventry{May 2016 - Aug 2016}{Junior Developer Intern}{OpenText Corporation}{Waterloo, CA}{}
+%   {\begin{itemize}
+%     \item Developed features and fixed bugs in the OpenText Core desktop client
+%   \end{itemize}
+% }
+
+\customcventry{Jun 2014 - Aug 2014, Feb 2015 – Jun 2015}{High School Intern}{OpenText Corporation}{Waterloo, CA}{}
+  {\begin{itemize}
+    \item Developed web applications in a small team setting.
+    \item Created integration allowing OpenText Core files to be opened in Google Docs for online editing with OAuth.
+  \end{itemize}
+}
+
+\section{EDUCATION}
+{\customcventry{June 2020}{Bachelor of Honours Computer Science}{University of Waterloo}{Waterloo, ON, Canada}{}{}}
+
+\section{PROJECTS}
+
+\customcvproject{Crabtrap}{Jun 2024}
+  {\begin{itemize}
+    \item Proof of concept for syscall blocking similar to seccomp-bpf at the shared object level instead of process level.
+    \item Runs a child process under ptrace and uses the proc filesystem to map stack traces for syscalls to shared objects, then allows or denies them based on policy.
+  \end{itemize}
+}
+
+\customcvproject{Vault JWT Backend}{Oct 2019}
+  {\begin{itemize}
+    \item JWT-signing plugin for Hashicorp's Vault, allowing JWTs to be signed without the private key ever leaving Vault.
+  \end{itemize}
+}
+
+\customcvproject{yFuzz}{Mar 2018}
+  {\begin{itemize}
+    \item Tool to allow orchestration of parallel of fuzzing jobs with Docker and Kubernetes.
+    \item Server and CLI written in Go, offering authentication through mutual TLS and RBAC through Yahoo's Athenz.
+  \end{itemize}
+}
+
+
+\section{ADDITIONAL EXPERIENCE}
+
+\customcvproject{BSidesLV Volunteer - Sponsor Ops}{Aug 2024 - Present}
+  {\begin{itemize}
+    \item Assisted in conference planning and on-site operations.
+  \end{itemize}
+}
+
+\customcvproject{Øvelse Bukkesprang (Large simulated incident response exercise)}{Nov 2023}
+  {\begin{itemize}
+    \item Wrote a ransomware decrypting tool based on a threat intelligence report, enabling attribution of an attack.
+  \end{itemize}
+}
+
+
+%-----       letter       ---------------------------------------------------------
+
+\end{document}
+
+
+%% end of file `template.tex'.

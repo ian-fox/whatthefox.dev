@@ -1,0 +1,473 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: nushell
+scope: source.nushell
+contexts:
+  main:
+    - include: define-variable
+    - include: define-alias
+    - include: function
+    - include: extern
+    - include: module
+    - include: use-module
+    - include: expression
+    - include: comment
+  comment:
+    - match: (#.*)$
+      scope: comment.nushell
+  binary:
+    - match: '\b(0x)(\[)'
+      captures:
+        1: constant.numeric.nushell
+        2: meta.brace.square.begin.nushell
+      push:
+        - meta_scope: constant.binary.nushell
+        - match: '\]'
+          captures:
+            0: meta.brace.square.begin.nushell
+          pop: true
+        - match: "[0-9a-fA-F]{2}"
+          scope: constant.numeric.nushell
+  braced-expression:
+    - match: '\{'
+      captures:
+        0: punctuation.section.block.begin.bracket.curly.nushell
+      push:
+        - meta_scope: meta.expression.braced.nushell
+        - match: '\}'
+          captures:
+            0: punctuation.section.block.end.bracket.curly.nushell
+          pop: true
+        - match: '(?<=\{)\s*\|'
+          push:
+            - meta_scope: meta.closure.parameters.nushell
+            - match: \|
+              pop: true
+            - include: function-parameter
+        - match: (\w+)\s*(:)\s*
+          captures:
+            1: variable.other.nushell
+            2: keyword.control.nushell
+        - match: '(\$"((?:[^"\\]|\\.)*)")\s*(:)\s*'
+          scope: meta.record-entry.nushell
+          captures:
+            1: variable.other.nushell
+            2: variable.other.nushell
+            3: keyword.control.nushell
+        - match: '("(?:[^"\\]|\\.)*")\s*(:)\s*'
+          scope: meta.record-entry.nushell
+          captures:
+            1: variable.other.nushell
+            2: keyword.control.nushell
+        - match: '(\$''([^'']*)'')\s*(:)\s*'
+          scope: meta.record-entry.nushell
+          captures:
+            1: variable.other.nushell
+            2: variable.other.nushell
+            3: keyword.control.nushell
+        - match: '(''[^'']*'')\s*(:)\s*'
+          scope: meta.record-entry.nushell
+          captures:
+            1: variable.other.nushell
+            2: keyword.control.nushell
+        - include: spread
+        - include: scope:source.nushell
+  command:
+    - match: '(?<!\w)(?:(\^)|(?![0-9]|\$))([\w.!]+(?:(?: (?!-)[\w\-.!]+(?:(?= |\))|$)|[\w\-.!]+))*|(?<=\^)\$?(?:"[^"]+"|''[^'']+''))'
+      captures:
+        1: keyword.operator.nushell
+      push:
+        - meta_scope: meta.command.nushell
+        - match: '(?=\||\)|\}|;)|$'
+          pop: true
+        - include: parameters
+        - include: spread
+        - include: value
+  constant-keywords:
+    - match: \b(?:true|false|null)\b
+      scope: constant.language.nushell
+  constant-value:
+    - include: constant-keywords
+    - include: datetime
+    - include: numbers
+    - include: numbers-hexa
+    - include: numbers-octal
+    - include: numbers-binary
+    - include: binary
+  control-keywords:
+    - match: '(?<![0-9a-zA-Z_\-.\/:\\])(?:break|continue|else(?: if)?|for|if|loop|mut|return|try|while)(?![0-9a-zA-Z_\-.\/:\\])'
+      comment: Regex generated with list-to-tree (https://github.com/glcraft/list-to-tree)
+      scope: keyword.control.nushell
+  datetime:
+    - match: '\b\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:\+\d{2}:?\d{2}|Z)?)?\b'
+      scope: constant.numeric.nushell
+  define-alias:
+    - match: '((?:export )?alias)\s+([\w\-!]+)\s*(=)'
+      captures:
+        1: entity.name.function.nushell
+        2: entity.name.type.nushell
+  define-variable:
+    - match: (let|mut|(?:export\s+)?const)\s+(\w+)\s+(=)
+      captures:
+        1: keyword.other.nushell
+        2: variable.other.nushell
+  expression:
+    - include: pre-command
+    - include: for-loop
+    - include: operators
+    - match: \|
+      scope: keyword.control.nushell
+    - include: control-keywords
+    - include: constant-value
+    - include: string-raw
+    - include: command
+    - include: value
+  extern:
+    - match: '((?:export\s+)?extern)\s+([\w\-]+|"[\w\- ]+")'
+      captures:
+        1: entity.name.function.nushell
+        2: entity.name.type.nushell
+      push:
+        - match: '(?<=\])'
+          captures:
+            0: punctuation.definition.function.end.nushell
+          pop: true
+        - include: function-parameters
+  for-loop:
+    - match: '(for)\s+(\$?\w+)\s+(in)\s+(.+)\s*(\{)'
+      captures:
+        1: keyword.other.nushell
+        2: variable.other.nushell
+        3: keyword.other.nushell
+        5: punctuation.section.block.begin.bracket.curly.nushell
+      push:
+        - meta_scope: meta.for-loop.nushell
+        - match: '\}'
+          captures:
+            0: punctuation.section.block.end.bracket.curly.nushell
+          pop: true
+        - include: scope:source.nushell
+  function:
+    - match: '((?:export\s+)?def(?:\s+--\w+)*)\s+([\w\-]+|"[\w\- ]+"|''[\w\- ]+''|`[\w\- ]+`)(\s+--\w+)*'
+      captures:
+        1: entity.name.function.nushell
+        2: entity.name.type.nushell
+        3: entity.name.function.nushell
+      push:
+        - match: '(?<=\})'
+          pop: true
+        - include: function-parameters
+        - include: function-body
+        - include: function-inout
+  function-body:
+    - match: '\{'
+      captures:
+        0: punctuation.definition.function.begin.nushell
+      push:
+        - meta_scope: meta.function.body.nushell
+        - match: '\}'
+          captures:
+            0: punctuation.definition.function.end.nushell
+          pop: true
+        - include: scope:source.nushell
+  function-inout:
+    - include: types
+    - match: "->"
+      scope: keyword.operator.nushell
+    - include: function-multiple-inout
+  function-multiple-inout:
+    - match: '(?<=]\s*)(:)\s+(\[)'
+      captures:
+        1: punctuation.definition.in-out.nushell
+        2: meta.brace.square.begin.nushell
+      push:
+        - match: '\]'
+          captures:
+            0: meta.brace.square.end.nushell
+          pop: true
+        - include: types
+        - match: \s*(,)\s*
+          captures:
+            1: punctuation.separator.nushell
+        - match: \s+(->)\s+
+          captures:
+            1: keyword.operator.nushell
+  function-parameter:
+    - match: '(-{0,2}|\.{3})[\w-]+(?:\((-[\w?])\))?'
+      scope: variable.parameter.nushell
+      captures:
+        1: keyword.control.nushell
+    - match: \??:\s*
+      push:
+        - match: '(?=(?:\s+(?:-{0,2}|\.{3})[\w-]+)|(?:\s*(?:,|\]|\||@|=|#|$)))'
+          pop: true
+        - include: types
+    - match: '@(?="|'')'
+      push:
+        - match: (?<="|')
+          pop: true
+        - include: string
+    - match: '=\s*'
+      push:
+        - meta_scope: default.value.nushell
+        - match: '(?=(?:\s+-{0,2}[\w-]+)|(?:\s*(?:,|\]|\||#|$)))'
+          pop: true
+        - include: value
+  function-parameters:
+    - match: '\['
+      captures:
+        0: meta.brace.square.begin.nushell
+      push:
+        - meta_scope: meta.function.parameters.nushell
+        - match: '\]'
+          captures:
+            0: meta.brace.square.end.nushell
+          pop: true
+        - include: function-parameter
+        - include: comment
+  internal-variables:
+    - match: \$(?:nu|env)\b
+      scope: variable.language.nushell
+  keyword:
+    - match: (?:def(?:-env)?)
+      scope: keyword.other.nushell
+  module:
+    - match: '((?:export\s+)?module)\s+([\w\-]+)\s*\{'
+      captures:
+        1: entity.name.function.nushell
+        2: entity.name.namespace.nushell
+      push:
+        - meta_scope: meta.module.nushell
+        - match: '\}'
+          captures:
+            0: punctuation.definition.module.end.nushell
+          pop: true
+        - include: scope:source.nushell
+  numbers:
+    - match: '(?<![\w-])_*+[-+]?_*+(?:(?i:NaN|infinity|inf)_*+|(?:\d[\d_]*+\.?|\._*+\d)[\d_]*+(?i:E_*+[-+]?_*+\d[\d_]*+)?)(?i:ns|us|µs|ms|sec|min|hr|day|wk|b|kb|mb|gb|tb|pt|eb|zb|kib|mib|gib|tib|pit|eib|zib)?(?:(?![\w.])|(?=\.\.))'
+      scope: constant.numeric.nushell
+  numbers-binary:
+    - match: '(?<![\w-])_*+0_*+b_*+[01][01_]*+(?![\w.])'
+      scope: constant.numeric.nushell
+  numbers-hexa:
+    - match: '(?<![\w-])_*+0_*+x_*+[0-9a-fA-F][0-9a-fA-F_]*+(?![\w.])'
+      scope: constant.numeric.nushell
+  numbers-octal:
+    - match: '(?<![\w-])_*+0_*+o_*+[0-7][0-7_]*+(?![\w.])'
+      scope: constant.numeric.nushell
+  operators:
+    - include: operators-word
+    - include: operators-symbols
+    - include: ranges
+  operators-symbols:
+    - match: '(?<= )(?:(?:\+|\-|\*|\/)=?|\/\/|\*\*|!=|[<>=]=?|[!=]~|\+\+=?)(?= |$)'
+      scope: keyword.control.nushell
+  operators-word:
+    - match: (?<= |\()(?:mod|in|not-(?:in|like|has)|not|and|or|xor|bit-(?:or|and|xor|shl|shr)|starts-with|ends-with|like|has)(?= |\)|$)
+      scope: keyword.control.nushell
+  parameters:
+    - match: '(?<=\s)(-{1,2})[\w-]+'
+      scope: variable.parameter.nushell
+      captures:
+        1: keyword.control.nushell
+  paren-expression:
+    - match: \(
+      captures:
+        0: meta.brace.round.begin.nushell
+      push:
+        - meta_scope: meta.expression.parenthesis.nushell
+        - match: \)
+          captures:
+            0: meta.brace.round.end.nushell
+          pop: true
+        - include: expression
+  pre-command:
+    - match: (\w+)(=)
+      captures:
+        1: variable.other.nushell
+      push:
+        - match: (?=\s+)
+          pop: true
+        - include: value
+  ranges:
+    - match: \.\.<?
+      scope: keyword.control.nushell
+  spread:
+    - match: '\.\.\.(?=[^\s\]}])'
+      scope: keyword.control.nushell
+  string:
+    - include: string-single-quote
+    - include: string-backtick
+    - include: string-double-quote
+    - include: string-interpolated-double
+    - include: string-interpolated-single
+    - include: string-raw
+    - include: string-bare
+  string-backtick:
+    - match: "`"
+      captures:
+        0: punctuation.definition.string.begin.nushell
+      push:
+        - meta_scope: string.quoted.single.nushell
+        - match: "`"
+          captures:
+            0: punctuation.definition.string.end.nushell
+          pop: true
+  string-bare:
+    - match: '[^$\[{("'',|#\s|;][^\[\]{}()"''\s,|;]*'
+      scope: string.bare.nushell
+  string-double-quote:
+    - match: '"'
+      captures:
+        0: punctuation.definition.string.begin.nushell
+      push:
+        - meta_scope: string.quoted.double.nushell
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.end.nushell
+          pop: true
+        - match: \w+
+        - include: string-escape
+  string-escape:
+    - match: '\\(?:[bfrnt\\''"/]|u[0-9a-fA-F]{4})'
+      scope: constant.character.escape.nushell
+  string-interpolated-double:
+    - match: \$"
+      captures:
+        0: punctuation.definition.string.begin.nushell
+      push:
+        - meta_scope: string.interpolated.double.nushell
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.end.nushell
+          pop: true
+        - match: '\\[()]'
+          scope: constant.character.escape.nushell
+        - include: string-escape
+        - include: paren-expression
+  string-interpolated-single:
+    - match: \$'
+      captures:
+        0: punctuation.definition.string.begin.nushell
+      push:
+        - meta_scope: string.interpolated.single.nushell
+        - match: "'"
+          captures:
+            0: punctuation.definition.string.end.nushell
+          pop: true
+        - include: paren-expression
+  string-raw:
+    - match: r(#+)'
+      captures:
+        0: punctuation.definition.string.begin.nushell
+      push:
+        - meta_scope: string.raw.nushell
+        - match: '''\1'
+          captures:
+            0: punctuation.definition.string.end.nushell
+          pop: true
+  string-single-quote:
+    - match: "'"
+      captures:
+        0: punctuation.definition.string.begin.nushell
+      push:
+        - meta_scope: string.quoted.single.nushell
+        - match: "'"
+          captures:
+            0: punctuation.definition.string.end.nushell
+          pop: true
+  table:
+    - match: '\['
+      captures:
+        0: meta.brace.square.begin.nushell
+      push:
+        - meta_scope: meta.table.nushell
+        - match: '\]'
+          captures:
+            0: meta.brace.square.end.nushell
+          pop: true
+        - include: spread
+        - include: value
+        - match: ","
+          scope: punctuation.separator.nushell
+  types:
+    - match: \b(list)\s*<
+      captures:
+        1: entity.name.type.nushell
+      push:
+        - meta_scope: meta.list.nushell
+        - match: ">"
+          pop: true
+        - include: types
+    - match: \b(record)\s*<
+      captures:
+        1: entity.name.type.nushell
+      push:
+        - meta_scope: meta.record.nushell
+        - match: ">"
+          pop: true
+        - match: '([\w\-]+|"[\w\- ]+"|''[^'']+'')\s*:\s*'
+          captures:
+            1: variable.parameter.nushell
+        - include: types
+    - match: \b(\w+)\b
+      scope: entity.name.type.nushell
+  use-module:
+    - match: '^\s*((?:export )?use)\s+([\w\-]+|"[\w\- ]+"|''[\w\- ]+'')(?:\s+([\w\-]+|"[\w\- ]+"|''[\w\- ]+''|\*))?\s*;?$'
+      captures:
+        1: entity.name.function.nushell
+        2: entity.name.namespace.nushell
+        3: keyword.other.nushell
+    - match: '^\s*((?:export )?use)\s+([\w\-]+|"[\w\- ]+"|''[\w\- ]+'')\s*\['
+      captures:
+        1: entity.name.function.nushell
+        2: entity.name.namespace.nushell
+      push:
+        - match: '(\])\s*;?\s*$'
+          captures:
+            1: meta.brace.square.end.nushell
+          pop: true
+        - match: '([\w\-]+|"[\w\- ]+"|''[\w\- ]+''|\*),?'
+          captures:
+            1: keyword.other.nushell
+        - include: comment
+    - match: '(?<path>(?:/|\\|~[\/\\]|\.\.?[\/\\])?(?:[^\/\\]+[\/\\])*[\w\- ]+(?:\.nu)?){0}^\s*((?:export )?use)\s+("\g<path>"|''\g<path>\''|(?!["''])\g<path>)(?:\s+([\w\-]+|"[\w\- ]+"|''[^'']+''|\*))?\s*;?$'
+      captures:
+        2: entity.name.function.nushell
+        3: string.bare.nushell
+        4: keyword.other.nushell
+    - match: '(?<path>(?:/|\\|~[\/\\]|\.\.?[\/\\])?(?:[^\/\\]+[\/\\])*[\w\- ]+(?:\.nu)?){0}^\s*((?:export )?use)\s+("\g<path>"|''\g<path>\''|(?!["''])\g<path>)\s+\['
+      captures:
+        2: entity.name.function.nushell
+        3: string.bare.nushell
+      push:
+        - match: '(\])\s*;?\s*$'
+          captures:
+            1: meta.brace.square.end.nushell
+          pop: true
+        - match: '([\w\-]+|"[\w\- ]+"|''[\w\- ]+''|\*),?'
+          captures:
+            0: keyword.other.nushell
+        - include: comment
+    - match: ^\s*(?:export )?use\b
+      captures:
+        0: entity.name.function.nushell
+  value:
+    - include: variables
+    - include: variable-fields
+    - include: control-keywords
+    - include: constant-value
+    - include: table
+    - include: operators
+    - include: paren-expression
+    - include: braced-expression
+    - include: string
+    - include: comment
+  variable-fields:
+    - match: '(?<=\)|\}|\])(?:\.(?:[\w-]+|"[\w\- ]+"))+'
+      scope: variable.other.nushell
+  variables:
+    - match: '(\$[a-zA-Z0-9_]+)((?:\.(?:[\w-]+|"[\w\- ]+"))*)'
+      captures:
+        2: variable.other.nushell

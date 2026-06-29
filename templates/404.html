@@ -1,0 +1,22 @@
+{% extends "DeepThought/templates/404.html" %}
+
+{% block header %}
+<header class='hero'>
+  <div class='hero-body pb-0'>
+    <div class='container'>
+      <div class="content">
+        <h1 class='title has-text-centered'>HTTP 404</h1>
+        <p class='subtitle has-text-centered'>
+          Not all who wander are lost... but you sure are.
+        </p>
+        {% if config.extra.author.avatar %}
+        <figure class="image is-flex is-justify-content-center is-align-items-center">
+          <img class="is-rounded" src='{{ config.extra.author.avatar }}' style="max-width: 192px" />
+        </figure>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+{% endblock %}
+

@@ -1,0 +1,229 @@
+@use "../../themes/DeepThought/sass/utilities/all";
+@use "../../themes/DeepThought/sass/utilities/initial-variables";
+@use "../../themes/DeepThought/sass/utilities/mixins";
+@use "../../themes/DeepThought/sass/utilities/derived-variables";
+
+// Make the link symbol appear on hover
+.zola-anchor {
+  margin-left: -4rem;
+  margin-right: 2rem;
+  text-decoration: none;
+  border-bottom-color: transparent;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.zola-anchor:hover {
+  opacity: 1;
+}
+
+*:hover > .zola-anchor {
+  opacity: 1;
+}
+
+// Tweaking bulma for personal preference
+.message-body {
+  padding: 0.75em 1em;
+}
+
+.message-header {
+  justify-content: normal;
+}
+
+nav.level .level-item {
+  padding: 0em 0.5em;
+}
+
+// Better code listing
+
+pre {
+  border-radius: initial-variables.$radius-large;
+}
+
+.content code table {
+  margin: 0.25em 0;
+}
+
+.content code table td {
+  border: 0;
+  padding: 0;
+}
+
+.content code table td mark {
+    color: currentColor;
+}
+
+.content code table td:first-of-type {
+  text-align: end;
+  user-select: none;
+}
+
+.content code table td span:first-of-type {
+  margin-left: 1em;
+}
+
+.content .message-body:has(code table) {
+  padding: 0;
+} 
+
+.content .message-body pre {
+  border-radius: 0 0 initial-variables.$radius-large initial-variables.$radius-large;
+  padding: 0;
+}
+
+.content .message-body pre mark {
+  display: block; // Make highlights full-width
+}
+
+// Fix message background if it has a code block
+.content .message-body:has(pre code) {
+  background-color: #282a36;
+}
+
+// Fix code block themes in dark mode
+body[theme="dark"] .content {
+  .message:has(pre) {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  
+  .message-body pre {
+    filter: none;
+  }
+}
+
+// Shell sessions
+code.language-sh:before {
+  content: "❯ ";
+  color: #50fa7b;
+}
+
+code.language-nushell:before {
+  content: "λ ";
+  color: #50fa7b;
+}
+
+pre + pre {
+  padding-top: 0 !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+pre:has(+ pre) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+nav.level .level-item {
+  padding: 0em 0.5em;
+}
+
+// Better code listing
+pre {
+  border-radius: $radius-large;
+}
+
+.content code table {
+  margin: 0.25em 0;
+}
+
+.content code table td {
+  border: 0;
+  padding: 0;
+}
+
+.content code table td mark {
+    color: currentColor;
+}
+
+.content code table td:first-of-type {
+  text-align: end;
+  user-select: none;
+}
+
+.content code table td span:first-of-type {
+  margin-left: 1em;
+}
+
+.content .message-body:has(code table) {
+  padding: 0;
+} 
+
+.content .message-body pre {
+  border-radius: 0 0 $radius-large $radius-large;
+  padding: 0;
+}
+
+.content .message-body pre mark {
+  display: block; // Make highlights full-width
+}
+
+// Shell sessions
+code.language-shell-session:before {
+  content: "$ ";
+  color: #50fa7b;
+  user-select: none;
+}
+
+pre.language-shell-session:has(+ pre.language-nushell) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+pre.language-shell-session + pre.language-nushell {
+  padding-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+// Sidenotes
+.sidenote-label:hover + .sidenote-body {
+  background-color: yellow;
+}
+
+.sidenote-label:has(+ .sidenote-body:hover) {
+  background-color: yellow;
+}
+
+// Sidenotes for tablet and up
+.sidenote-body {
+  @include mixins.from(initial-variables.$tablet) {
+    vertical-align: baseline;
+    position: relative;
+    float: right;
+    clear: right;
+    margin-top: 1rem;
+  }
+
+  @include mixins.tablet {
+    width: 50%;
+    margin-right: -60%;
+  }
+
+  @include mixins.desktop {
+    width: 45%;
+    margin-right: -50%;
+  }
+
+  @include mixins.widescreen {
+    width: 35%;
+    margin-right: -40%;
+  }
+}
+
+// Inline notes for mobile
+@include mixins.mobile {
+  .sidenote-body {
+    margin: 1em 0;
+    padding-left: 1em;
+    display: block;
+    border-left: 1px solid gray;
+  }
+
+  .sidenote label {
+    display: none;
+  }
+}
