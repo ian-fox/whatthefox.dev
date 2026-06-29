@@ -60,52 +60,33 @@ The stuff here will be both in the post, and in the preview on the index page.
 This content is under the cut and won't show up unless you're actually looking at the post!
 ```
 
-Depending on what static site generator you use, there is often support for the notion of templates{% sidenote() %}In Zola these are called [shortcodes](https://www.getzola.org/documentation/content/shortcodes/).{% end %} where you can define your own components for further reuse. In particular, I've made some for things like [sidenotes](todo_) and [numbered figures](todo). The world is your oyster!{% sidenote() %}Or any other mollusc of your choosing!{% end %}
+Depending on what static site generator you use, there is often support for the notion of templates{% sidenote() %}In Zola these are called [shortcodes](https://www.getzola.org/documentation/content/shortcodes/).{% end %} where you can define your own components for further reuse. In particular, I've made some for things like [sidenotes](https://github.com/ian-fox/whatthefox.dev/blob/master/templates/shortcodes/sidenote.md?plain=1) and [numbered figures](https://github.com/ian-fox/whatthefox.dev/blob/master/templates/shortcodes/figure.html). The world is your oyster!{% sidenote() %}Or any other mollusc of your choosing!{% end %}
 
 In general static sites are a bit limited in what they can do without a backend, but there are still ways to embed things like widgets allowing people to leave comments. The theme I'm using has [options](https://deepthought-theme.netlify.app/docs/config-options) to turn those on, as well as things like using javascript to render $\LaTeX$ properly.
 
-## Deploying
+## Building and Deploying
 
 The source for the site itself has until this point lived in a private git repository. This is because GitHub pages is free for public repos, but I still wanted to keep some parts (like drafts of future posts) private until I felt they were ready.
 
-There's a `Makefile` with a few basic commands:
+GitHub pages is only free for public repos though, so the way I did it was to have a subdirectory (I called it `.git_deploy`) which was a) gitignored and b) itself a git repo.
 
-* Run the site locally for previewing changes
-* Build the site into the static components
-* Show any changes in the built files compared to what's already deployed
-* Moving the generated files into a submodule pointed at the [repo for the GitHub pages site](https://github.com/ian-fox/whatthefox.dev),
+Deploying then meant a task in a Makefile which generated the rendered site, moved all those files into the `.git_deploy` repo, committed, and pushed!
 
-```Makefile
-.PHONY: serve build diff publish
-.SILENT: serve build diff publish
-
-# DATE=$(shell date +"%Y-%m-%dT%H:%M:%S%:z")
-DATE=$(shell date -Iseconds)
-date:
-	@echo $(DATE)
-
-serve:
-	zola serve
-
-build:
-	grep -r '"3000-01-01T00:00:00"' content || continue
-	echo -n "Replace dates? [y/N] " && read ans && [ $${ans:-N} = y ] && sed -i -e 's/.*"3000-01-01T00:00:00"/date = "$(DATE)"/' `find content -type f` || continue
-	zola build
-	rm -rf .git_deploy/*
-	mv public/* .git_deploy
-
-diff:
-	cd .git_deploy && git diff
-
-publish: build
-	cd .git_deploy && git add .
-	cd .git_deploy && git commit -m "Deploy $(DATE)"
-	cd .git_deploy && git push origin master
-```
+It's [much simpler now](https://github.com/ian-fox/whatthefox.dev/blob/master/Makefile), but I mention this just so you know it's possible in case that's something you want to do.
 
 ### Placeholder Dates
 
-The build step also includes a find-and-replace operation for the placeholder date value I use in posts before they actually get published.
+The build step also includes a find-and-replace operation for the placeholder date value I use in posts before they actually get published:
+
+```Makefile
+build:
+	grep -r '"3000-01-02T00:00:00"' content && \
+	  echo -n "Replace dates? [y/N] " && \
+	  read ans && \
+	  [ $${ans:-N} = y ] && \
+	  sed -i -e 's/.*"3000-01-02T00:00:00"/date = "$(DATE)"/' `find content -type f` || continue
+	zola build -o docs -f
+```
 
 It's a real date because Zola throws an error if you use something like "placeholderDate", and it's in the future so that when running locally the new posts with the placeholder date will show up at the front of the list. This way when I do go to deploy I can easily set the post timestamp to when the article is actually going live, rather than when I started writing it!
 
@@ -117,7 +98,7 @@ If you don't do this step you can still have a static site, it will just be at `
 
 ## Wrap-up
 
-With the release of this post I'll be making a change to have the markdown files and everything directly in the public repo. That way if you're curious about how I did something, you can just look! Do be warned though, a lot of it is ugly (and frankly somewhat embarassing to look back on), so there may well be better ways to do the things you're looking for. 
+With the release of this post I've made a change to have the markdown files and everything directly in the [public repo](https://github.com/ian-fox/whatthefox.dev). That way if you're curious about how I did something, you can just look! Do be warned though, a lot of it is ugly{% sidenote() %}And frankly kind of embarrassing with how hacky some of it is; maybe it can at least help somebody with impostor syndrome 😅{% end %}, so there may well be better ways to do the things you're looking for.
 
 As mentioned above, I've been reading a lot recently about lightweight markup languages and things like [orgmode](https://orgmode.org/), and at some point I may change the site over to using something like that. For now though, this is the setup.
 

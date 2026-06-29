@@ -55,10 +55,17 @@
         <loc>https://whatthefox.dev/posts/page/2/</loc>
     </url>
     <url>
+        <loc>https://whatthefox.dev/posts/static-sites/</loc>
+        <lastmod>3000-01-01T00:00:00+02:00</lastmod>
+    </url>
+    <url>
         <loc>https://whatthefox.dev/tags/</loc>
     </url>
     <url>
         <loc>https://whatthefox.dev/tags/adhd/</loc>
+    </url>
+    <url>
+        <loc>https://whatthefox.dev/tags/blogging/</loc>
     </url>
     <url>
         <loc>https://whatthefox.dev/tags/browser/</loc>

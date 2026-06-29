@@ -145,7 +145,7 @@ What the 🦊? | Crabtrap
   <span class="icon">
     <i class="fas fa-pencil-alt"></i>
   </span>
-  <span>2868 words</span>
+  <span>2955 words</span>
 </span>
 
             </div>
@@ -207,31 +207,35 @@ What the 🦊? | Crabtrap
             </div>
           </div>
           <div class="content mt-2">
-            <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">[1]</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
+            <p>I once read a blog post about the capabilities model in WASM, and specifically the idea that you can, when calling another module, give that module some subset of the capabilities you have. The idea being that if I'm, say, calling a function in a compression library, that function doesn't need to be able to talk on the network<sup class="footnote-reference" id="fr-xz-1"><a href="#fn-xz">1</a></sup>. I was looking for a project to do to get back into OS-level programming (my job for the past few years has been very much the opposite of that) and thought it would be fun to try to implement something similar with binaries in Linux. The first part of that project is what this post is about.</p>
 <p>If you just want to see the code, it's on <a href="https://github.com/ian-fox/crabtrap">github</a>!</p>
 <span id="continue-reading"></span><h2 id="what-are-we-building"><a class="zola-anchor" href="#what-are-we-building" aria-label="Anchor link for: what-are-we-building">🔗</a>What are we building?</h2>
-<p>The core idea is a pretty simple one: <a href="https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html">seccomp-bpf</a> is a system which allows you to restrict which syscalls<sup class="footnote-reference" id="fr-syscalls-1"><a href="#fn-syscalls">[2]</a></sup> an application can make. It operates at the process level. We can get some more fine-grained information on where syscalls are coming from with tools like <a href="https://strace.io/">strace</a> though; it has a <code>--stack-trace</code> flag which will, when it intercepts a syscall, trace the syscall all the way back up the stack.</p>
+<p>The core idea is a pretty simple one: <a href="https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html">seccomp-bpf</a> is a system which allows you to restrict which syscalls<sup class="footnote-reference" id="fr-syscalls-1"><a href="#fn-syscalls">2</a></sup> an application can make. It operates at the process level. We can get some more fine-grained information on where syscalls are coming from with tools like <a href="https://strace.io/">strace</a> though; it has a <code>--stack-trace</code> flag which will, when it intercepts a syscall, trace the syscall all the way back up the stack.</p>
 <p>We're going to combine these ideas to make a more fine-grained version of a <code>seccomp-bpf</code>-like system. The goal is to make something that will allow us to filter different sets of syscalls based on which code units within the process are making them. It's entirely possible that this has been done already, but because a quick search didn't turn anything up and the primary goal of this is to learn I'm not too concerned with reimplementing things.</p>
-<p>The basic goal for our first proof of concept is simple: given a configuration profile and a binary, run the binary and filter syscalls based on what shared<sup class="footnote-reference" id="fr-shared-object-1"><a href="#fn-shared-object">[3]</a></sup> object they originate from.</p>
+<p>The basic goal for our first proof of concept is simple: given a configuration profile and a binary, run the binary and filter syscalls based on what shared<sup class="footnote-reference" id="fr-shared-object-1"><a href="#fn-shared-object">3</a></sup> object they originate from.</p>
 <h2 id="nongoals"><a class="zola-anchor" href="#nongoals" aria-label="Anchor link for: nongoals">🔗</a>Nongoals</h2>
 <p>For this first step, there are a whole <em>bunch</em> of things we're not going to worry about:</p>
 <ul>
 <li>Performance: for a first pass I decided to do a proof of concept fully in userland with <code>ptrace</code>. Since this will involve a lot of context switches we know it's going to be slow, but in future iterations I want to reimplement it with a kernel module and possibly with eBPF, if it proves strong enough.</li>
 <li>Shared objects as the unit of code: I think in theory it should be possible to map out where the various parts of a statically compiled dependency end up in your code and filter based on that, but for the first pass we're only going to worry about whether a syscall originates from your binary directly, or goes through one (or more) shared objects on the way.</li>
-<li>One architecture: anything dealing with syscalls is going to be architecture dependent. Since I'm doing this mostly as a proof of concept and learning project, I decided to implement it for aarch64<sup class="footnote-reference" id="fr-arm-1"><a href="#fn-arm">[4]</a></sup>.</li>
+<li>One architecture: anything dealing with syscalls is going to be architecture dependent. Since I'm doing this mostly as a proof of concept and learning project, I decided to implement it for aarch64<sup class="footnote-reference" id="fr-arm-1"><a href="#fn-arm">4</a></sup>.</li>
 <li>Kill on violation: in theory we could fail the banned syscalls by modifying their return values. For now we'll just kill the child instead.</li>
 <li>Minimal error handling: for the first pass there's going to be a lot of <code>.expect</code>s.</li>
 <li>Small dependency graph: especially for a security-related program we'd like to keep our list of dependencies small. Again, since this is just a proof of concept, not going to worry about it.</li>
-<li>We aren't going to worry about redirecting <code>stdin</code>, <code>stdout</code>, or <code>stderr</code><sup class="footnote-reference" id="fr-redirects-1"><a href="#fn-redirects">[5]</a></sup>.</li>
-<li>Ignoring some edge cases: we'll come across some edge cases which will be possible to handle but at the cost of complexity. At least for the first pass we're going to ignore some of those and worry about them another time<sup class="footnote-reference" id="fr-signals-1"><a href="#fn-signals">[6]</a></sup>.</li>
+<li>We aren't going to worry about redirecting <code>stdin</code>, <code>stdout</code>, or <code>stderr</code><sup class="footnote-reference" id="fr-redirects-1"><a href="#fn-redirects">5</a></sup>.</li>
+<li>Ignoring some edge cases: we'll come across some edge cases which will be possible to handle but at the cost of complexity. At least for the first pass we're going to ignore some of those and worry about them another time<sup class="footnote-reference" id="fr-signals-1"><a href="#fn-signals">6</a></sup>.</li>
 <li>No grandchildren. For the proof of concept managing one child is enough.</li>
 </ul>
 <p>I'm also using this as an excuse to write some rust again, which is another thing I haven't used in a while. This also gives us a great pun-based naming opportunity: we're building a jail (or jail-like object at least) in rust, so we can call it "crab trap!"</p>
 <h2 id="a-toy-example"><a class="zola-anchor" href="#a-toy-example" aria-label="Anchor link for: a-toy-example">🔗</a>A toy example</h2>
 <p>With those requirements set, let's get into the coding! The code for this post will live <a href="https://github.com/ian-fox/crabtrap">here</a> if you want to follow along.</p>
-<p>The first thing we'll need is a toy binary. We'll write a simple wrapper:<sup class="footnote-reference" id="fr-c-quality-1"><a href="#fn-c-quality">[7]</a></sup></p>
-<p><code>printf_wrapper.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+<p>The first thing we'll need is a toy binary. We'll write a simple wrapper:<sup class="footnote-reference" id="fr-c-quality-1"><a href="#fn-c-quality">7</a></sup></p>
+<article class="message ">
+  <div class="message-header">
+   <p>printf_wrapper.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdarg.h&gt;
 </span><span>
 </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span style="font-style:italic;color:#ffb86c;">format</span><span>, </span><span style="color:#ff79c6;">...</span><span>) </span><span style="color:#ffffff;">{
@@ -242,9 +246,15 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ff79c6;">return</span><span> result;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
+  </div>
+</article>
 <p>And a binary that calls <code>write</code> through both that and just through normal <code>libc</code>:</p>
-<p><code>static.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+<article class="message ">
+  <div class="message-header">
+   <p>static.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span>
 </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">printf_wrapper</span><span>(</span><span style="color:#ff79c6;">const </span><span style="font-style:italic;color:#8be9fd;">char </span><span style="color:#ff79c6;">*</span><span style="font-style:italic;color:#ffb86c;">format</span><span>, </span><span style="color:#ff79c6;">...</span><span>);
 </span><span>
@@ -254,9 +264,15 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">0</span><span>;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
+  </div>
+</article>
 <p>For fun, we can also make one that loads the library dynamically:</p>
-<p><code>dynamic.c</code></p>
-<pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
+<article class="message ">
+  <div class="message-header">
+   <p>dynamic.c</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="c" style="background-color:#282a36;color:#f8f8f2;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;stdio.h&gt;
 </span><span style="color:#ff79c6;">#include </span><span style="color:#f1fa8c;">&lt;dlfcn.h&gt;
 </span><span>
 </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#50fa7b;">main</span><span>() </span><span style="color:#ffffff;">{
@@ -282,8 +298,15 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ff79c6;">return </span><span style="color:#bd93f9;">0</span><span>;
 </span><span style="color:#ffffff;">}
 </span></code></pre>
+  </div>
+</article>
 <p>We'll put it in a container to make sure we have a consistent environment:</p>
-<pre data-lang="Dockerfile" style="background-color:#282a36;color:#f8f8f2;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#6272a4;"># Use rust so that it will work with the later environments
+<article class="message ">
+  <div class="message-header">
+   <p>Dockerfile</p>
+  </div>
+  <div class="message-body">
+    <pre data-lang="Dockerfile" style="background-color:#282a36;color:#f8f8f2;" class="language-Dockerfile "><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#6272a4;"># Use rust so that it will work with the later environments
 </span><span style="color:#ff79c6;">FROM</span><span> rust:1
 </span><span>
 </span><span style="color:#ff79c6;">WORKDIR </span><span>/crabtrap_test
@@ -299,16 +322,23 @@ What the 🦊? | Crabtrap
 </span><span> &amp;&amp; gcc -o static static.c -lprintf_wrapper \
 </span><span> &amp;&amp; gcc -static-pie -o all-in-one static.c -L. -l:libprintf_wrapper.a
 </span></code></pre>
+  </div>
+</article>
 <p>Now we've built three versions of our binary: two that load the shared object, and one that builds <code>libprintf_wrapper</code> in statically just as a point of comparison. Let's build make sure everything works:</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> ./static
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">$</span><span> ./dynamic
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
-</span><span style="color:#50fa7b;">$</span><span> ./all-in-one 
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">Hello</span><span> from printf_wrapper!
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./static
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span></code></pre>
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./dynamic
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
+</span></code></pre>
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./all-in-one
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Hello from printf!
+</span><span>Hello from printf_wrapper!
 </span></code></pre>
 <p>Perfect! This code is at the <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-0"><code>walkthrough-0</code></a> tag in the repository.</p>
 <h2 id="interface-and-tests"><a class="zola-anchor" href="#interface-and-tests" aria-label="Anchor link for: interface-and-tests">🔗</a>Interface and tests</h2>
@@ -386,7 +416,7 @@ What the 🦊? | Crabtrap
 </ul>
 <p>By continuing this loop the child will keep executing, but every time it tries to do something the OS will pause and check with our parent process first. Eventually the child might call exit, and we can see that in the parent process as well and stop the loop.</p>
 <h2 id="running-the-child-process"><a class="zola-anchor" href="#running-the-child-process" aria-label="Anchor link for: running-the-child-process">🔗</a>Running the child process</h2>
-<p>Before we even start worrying about allowing or blocking syscalls, let's make sure we can execute a child process under <code>ptrace</code>. We'll start by forking<sup class="footnote-reference" id="fr-forking-1"><a href="#fn-forking">[8]</a></sup>:</p>
+<p>Before we even start worrying about allowing or blocking syscalls, let's make sure we can execute a child process under <code>ptrace</code>. We'll start by forking<sup class="footnote-reference" id="fr-forking-1"><a href="#fn-forking">8</a></sup>:</p>
 <pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">execute</span><span>(</span><span style="font-style:italic;color:#ffb86c;">path</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>CStr, </span><span style="font-style:italic;color:#ffb86c;">args</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">env</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>[</span><span style="color:#ff79c6;">&amp;</span><span>CStr], </span><span style="font-style:italic;color:#ffb86c;">config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ff79c6;">-&gt; ChildExit </span><span style="color:#ffffff;">{
 </span><span>    </span><span style="color:#ff79c6;">match unsafe </span><span style="color:#ffffff;">{ </span><span style="color:#8be9fd;">fork</span><span>() </span><span style="color:#ffffff;">} {
 </span><span>        </span><span style="font-style:italic;color:#66d9ef;">Ok</span><span>(</span><span style="text-decoration:underline;color:#66d9ef;">ForkResult</span><span style="text-decoration:underline;color:#ff79c6;">::</span><span>Child) </span><span style="color:#ff79c6;">=&gt; </span><span style="color:#8be9fd;">child</span><span>(path, args, env),
@@ -433,9 +463,9 @@ What the 🦊? | Crabtrap
 </span><span>    </span><span style="color:#ffffff;">}
 </span><span style="color:#ffffff;">}
 </span></code></pre>
-<p>And that's it! After running <code>cargo test</code> again we get the results we expected on the first try<sup class="footnote-reference" id="fr-first-try-1"><a href="#fn-first-try">[9]</a></sup>! <code>test_ok</code> passes, and <code>test_blocked</code> fails because we haven't implemented that part yet. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-1"><code>walkthrough-1</code></a> in the git repo.</p>
+<p>And that's it! After running <code>cargo test</code> again we get the results we expected on the first try<sup class="footnote-reference" id="fr-first-try-1"><a href="#fn-first-try">9</a></sup>! <code>test_ok</code> passes, and <code>test_blocked</code> fails because we haven't implemented that part yet. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-1"><code>walkthrough-1</code></a> in the git repo.</p>
 <h2 id="getting-a-stack-trace"><a class="zola-anchor" href="#getting-a-stack-trace" aria-label="Anchor link for: getting-a-stack-trace">🔗</a>Getting a stack trace</h2>
-<p>Now we're starting to get into the fun stuff! Our <code>waitpid</code> call will return with a <code>WaitStatus::PtraceSyscall(pid)</code> whenever our child enters or exits a syscall<sup class="footnote-reference" id="fr-enter-exit-1"><a href="#fn-enter-exit">[10]</a></sup>. This is one of those things that if we were making a real system we would care about only checking on the enter side (in most cases), but for a proof of concept we'll just take the performance hit of checking every syscall twice.</p>
+<p>Now we're starting to get into the fun stuff! Our <code>waitpid</code> call will return with a <code>WaitStatus::PtraceSyscall(pid)</code> whenever our child enters or exits a syscall<sup class="footnote-reference" id="fr-enter-exit-1"><a href="#fn-enter-exit">10</a></sup>. This is one of those things that if we were making a real system we would care about only checking on the enter side (in most cases), but for a proof of concept we'll just take the performance hit of checking every syscall twice.</p>
 <p>We'll move the syscall handling itself out into a function. The first thing we'll want to do is grab the registers so that we can tell what syscall is happening and where the child is in its execution:</p>
 <pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#8be9fd;">fn </span><span style="color:#50fa7b;">handle_syscall</span><span>(</span><span style="font-style:italic;color:#ffb86c;">pid</span><span>: Pid, </span><span style="font-style:italic;color:#ffb86c;">_config</span><span>: </span><span style="color:#ff79c6;">&amp;</span><span>Config) </span><span style="color:#ffffff;">{
 </span><span>    </span><span style="font-style:italic;color:#8be9fd;">let</span><span> regs </span><span style="color:#ff79c6;">= </span><span style="color:#8be9fd;">getregs</span><span>(pid)</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">expect</span><span>(</span><span style="color:#f1fa8c;">&quot;Could not get registers&quot;</span><span>);
@@ -443,7 +473,7 @@ What the 🦊? | Crabtrap
 </span><span>
 </span><span>    println!(</span><span style="color:#f1fa8c;">&quot;Syscall: </span><span style="color:#bd93f9;">{syscall}</span><span style="color:#f1fa8c;">&quot;</span><span>);
 </span></code></pre>
-<p>Now we can start walking up the stack. If we look at the <a href="https://github.com/ARM-software/abi-aa/blob/2a70c42d62e9c3eb5887fa50b71257f20daca6f9/aapcs64/aapcs64.rst#646the-frame-pointer">ARM docs</a> we can see that the previous pc<sup class="footnote-reference" id="fr-pc-1"><a href="#fn-pc">[11]</a></sup> is held in the link register (<code>r30</code>) and the pointer to the first stack frame is in <code>r29</code><sup class="footnote-reference" id="fr-verify-previous-pc-1"><a href="#fn-verify-previous-pc">[12]</a></sup>. The docs also tells us that at each stack frame we'll have a frame pointer which points to the previous stack frame (or 0 if we're at the base).</p>
+<p>Now we can start walking up the stack. If we look at the <a href="https://github.com/ARM-software/abi-aa/blob/2a70c42d62e9c3eb5887fa50b71257f20daca6f9/aapcs64/aapcs64.rst#646the-frame-pointer">ARM docs</a> we can see that the previous pc<sup class="footnote-reference" id="fr-pc-1"><a href="#fn-pc">11</a></sup> is held in the link register (<code>r30</code>) and the pointer to the first stack frame is in <code>r29</code><sup class="footnote-reference" id="fr-verify-previous-pc-1"><a href="#fn-verify-previous-pc">12</a></sup>. The docs also tells us that at each stack frame we'll have a frame pointer which points to the previous stack frame (or 0 if we're at the base).</p>
 <pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span>    </span><span style="font-style:italic;color:#8be9fd;">let </span><span style="color:#ff79c6;">mut</span><span> frame_pointer: </span><span style="font-style:italic;color:#8be9fd;">u64 </span><span style="color:#ff79c6;">=</span><span> regs</span><span style="color:#ff79c6;">.</span><span>regs[</span><span style="color:#bd93f9;">29</span><span>];
 </span><span>    println!(
 </span><span>        </span><span style="color:#f1fa8c;">&quot;Initial pc: </span><span style="color:#bd93f9;">{pc:x}</span><span style="color:#f1fa8c;">, lr: </span><span style="color:#bd93f9;">{lr:x}</span><span style="color:#f1fa8c;">, fp: </span><span style="color:#bd93f9;">{frame_pointer:x}</span><span style="color:#f1fa8c;">&quot;</span><span>,
@@ -473,7 +503,7 @@ What the 🦊? | Crabtrap
 <p>Running this we do get lots of nice stack traces! Next up we need to map the pc locations to code units. This code is at the tag <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-2"><code>walkthrough-2</code></a>.</p>
 <h2 id="mapping-to-shared-objects"><a class="zola-anchor" href="#mapping-to-shared-objects" aria-label="Anchor link for: mapping-to-shared-objects">🔗</a>Mapping to shared objects</h2>
 <p>Our goal is in sight! The last thing we need to do is map our series of program counters back to the files they come from, and then use that to make a decision about whether to allow the syscall or not. We can get this information by looking in the <a href="https://www.man7.org/linux/man-pages/man5/proc_pid_maps.5.html">proc filesystem</a>. For instance, when I run <code>cat /proc/self/maps</code> I get the following:</p>
-<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
+<pre data-lang="txt" style="background-color:#282a36;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>aaaad82c0000-aaaad82c9000 r-xp 00000000 fe:01 188725                     /usr/bin/cat
 </span><span>aaaad82df000-aaaad82e0000 r--p 0000f000 fe:01 188725                     /usr/bin/cat
 </span><span>aaaad82e0000-aaaad82e1000 rw-p 00010000 fe:01 188725                     /usr/bin/cat
 </span><span>aaab05aba000-aaab05adb000 rw-p 00000000 00:00 0                          [heap]
@@ -492,7 +522,7 @@ What the 🦊? | Crabtrap
 </span><span>ffff9e2ea000-ffff9e2ec000 rw-p 00030000 fe:01 319946                     /usr/lib/aarch64-linux-gnu/ld-linux-aarch64.so.1
 </span><span>ffffdaf66000-ffffdaf87000 rw-p 00000000 00:00 0                          [stack]
 </span></code></pre>
-<p>This tells us which regions of memory are mapped to which files (as well as some other locations like the stack). By replacing <code>self</code> in the path with the PID of our child process, we can see the mapping for our child. For our purposes, what we care about are the first and second numbers which represent the location in memory that particular mapping lives at, and the final component which is (at least for the shared objects we care about) the path of the underlying file<sup class="footnote-reference" id="fr-path-ambiguity-1"><a href="#fn-path-ambiguity">[13]</a></sup>.</p>
+<p>This tells us which regions of memory are mapped to which files (as well as some other locations like the stack). By replacing <code>self</code> in the path with the PID of our child process, we can see the mapping for our child. For our purposes, what we care about are the first and second numbers which represent the location in memory that particular mapping lives at, and the final component which is (at least for the shared objects we care about) the path of the underlying file<sup class="footnote-reference" id="fr-path-ambiguity-1"><a href="#fn-path-ambiguity">13</a></sup>.</p>
 <p>Let's define some structs to help us with this:</p>
 <pre data-lang="rust" style="background-color:#282a36;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#ff79c6;">pub </span><span style="font-style:italic;color:#8be9fd;">struct </span><span>Region </span><span style="color:#ffffff;">{
 </span><span>    </span><span style="color:#ff79c6;">pub </span><span style="color:#ffffff;">start</span><span>: </span><span style="font-style:italic;color:#8be9fd;">u64</span><span>,
@@ -655,11 +685,12 @@ What the 🦊? | Crabtrap
 </span><span style="color:#ffffff;">}
 </span></code></pre>
 <p>And if we run the tests we can see that with no restrictions both messages get printed and the child exits 0, but when we restrict the <code>write</code> syscall coming from <code>libprintf_wrapper.so</code> we only see the "Hello from printf!" before the child process gets terminated! Fantastic!</p>
-<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">$</span><span> ./target/debug/crabtrap /usr/local/bin/dynamic config.yaml
-</span><span style="color:#50fa7b;">Continuing</span><span> execution in parent process, new child has pid: 11
-</span><span style="color:#50fa7b;">Starting</span><span> to watch child...
-</span><span style="color:#50fa7b;">Hello</span><span> from printf!
-</span><span style="color:#50fa7b;">IllegalSyscall</span><span>(write, </span><span style="color:#f1fa8c;">&quot;/usr/local/lib/libprintf_wrapper.so&quot;</span><span>)
+<pre data-lang="sh" style="background-color:#282a36;color:#f8f8f2;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#50fa7b;">./target/debug/crabtrap</span><span> /usr/local/bin/dynamic config.yaml
+</span></code></pre>
+<pre style="background-color:#282a36;color:#f8f8f2;"><code><span>Continuing execution in parent process, new child has pid: 11
+</span><span>Starting to watch child...
+</span><span>Hello from printf!
+</span><span>IllegalSyscall(write, &quot;/usr/local/lib/libprintf_wrapper.so&quot;)
 </span></code></pre>
 <p>This code is at <a href="https://github.com/ian-fox/crabtrap/releases/tag/walkthrough-3"><code>walkthrough-3</code></a>.</p>
 <h2 id="next-steps"><a class="zola-anchor" href="#next-steps" aria-label="Anchor link for: next-steps">🔗</a>Next steps</h2>
@@ -670,7 +701,8 @@ What the 🦊? | Crabtrap
 <li>Start trying to map code units smaller than shared objects for dependencies that are statically compiled into a program</li>
 </ul>
 <p>I'm not sure which I'll tackle first, if you have any thoughts (or have just found this interesting) feel free to drop me an <a href="mailto:ian@whatthefox.dev">email</a> any time!</p>
-<hr><ol class="footnotes-list">
+<footer class="footnotes">
+<ol class="footnotes-list">
 <li id="fn-xz">
 <p>I looked a bit into how the xz backdoor worked and I'm not 100% sure that something as simple as this would have stopped it. Later on once I have a working sandbox I'll see if I can test that! <a href="#fr-xz-1">↩</a></p>
 </li>
@@ -712,6 +744,7 @@ What the 🦊? | Crabtrap
 [^rebuild] Unfortunately, because the "files" in the <code>/proc/</code> filesystem aren't actually files, we can't just subscribe to get notified and rebuild the map any time it changes. This is a case where we actually would want to do the work at the syscall return, since the map wouldn't be updated until that point. <a href="#fr-path-ambiguity-1">↩</a></p>
 </li>
 </ol>
+</footer>
 
           </div>
         </article>
