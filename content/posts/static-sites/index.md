@@ -1,6 +1,6 @@
 +++
 title = "Static Sites"
-date = "3000-01-01T00:00:00+02:00"
+date = "2026-06-30T02:20:15+02:00"
 
 [taxonomies]
 tags = ["computers", "blogging"]
@@ -78,14 +78,27 @@ It's [much simpler now](https://github.com/ian-fox/whatthefox.dev/blob/master/Ma
 
 The build step also includes a find-and-replace operation for the placeholder date value I use in posts before they actually get published:
 
-```Makefile
-build:
-	grep -r '"3000-01-02T00:00:00"' content && \
-	  echo -n "Replace dates? [y/N] " && \
-	  read ans && \
-	  [ $${ans:-N} = y ] && \
-	  sed -i -e 's/.*"3000-01-02T00:00:00"/date = "$(DATE)"/' `find content -type f` || continue
-	zola build -o docs -f
+```bash
+#!/bin/bash
+
+set -euo pipefail
+
+# Replace placeholder dates in posts
+
+PLACEHOLDER_REGEX='^date = "3000-01-02T00:00:00+00:00"$'
+PLACEHOLDER_DATE_FILES=($(grep -rl "${PLACEHOLDER_REGEX}" content))
+if [[ -z "${PLACEHOLDER_DATE_FILES[@]}" ]]; then
+  # No placeholders to process
+  exit 0
+fi
+
+DATE=$(date -Iseconds)
+
+echo "Found placeholder date in $PLACEHOLDER_DATE_FILES"
+
+for FILE in $PLACEHOLDER_DATE_FILES; do
+  sed -i.swp -e "s/${PLACEHOLDER_REGEX}/date = \"${DATE}\"/" "${FILE}" && rm "${FILE}.swp"
+done
 ```
 
 It's a real date because Zola throws an error if you use something like "placeholderDate", and it's in the future so that when running locally the new posts with the placeholder date will show up at the front of the list. This way when I do go to deploy I can easily set the post timestamp to when the article is actually going live, rather than when I started writing it!

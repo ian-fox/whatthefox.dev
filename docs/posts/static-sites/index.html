@@ -131,7 +131,7 @@ What the 🦊? | Static Sites
   <span class="icon">
     <i class="far fa-calendar-alt"></i>
   </span>
-  <span><time datetime="3000-01-01T00:00:00+02:00">January 01, 3000</time></span>
+  <span><time datetime="2026-06-30T02:20:15+02:00">June 30, 2026</time></span>
 </span>
 
             </div>
@@ -279,13 +279,26 @@ What the 🦊? | Static Sites
 <p>It's <a href="https://github.com/ian-fox/whatthefox.dev/blob/master/Makefile">much simpler now</a>, but I mention this just so you know it's possible in case that's something you want to do.</p>
 <h3 id="placeholder-dates"><a class="zola-anchor" href="#placeholder-dates" aria-label="Anchor link for: placeholder-dates">🔗</a>Placeholder Dates</h3>
 <p>The build step also includes a find-and-replace operation for the placeholder date value I use in posts before they actually get published:</p>
-<pre data-lang="Makefile" style="background-color:#282a36;color:#f8f8f2;" class="language-Makefile "><code class="language-Makefile" data-lang="Makefile"><span style="color:#50fa7b;">build</span><span style="color:#ff79c6;">:
-</span><span>	</span><span style="color:#50fa7b;">grep</span><span style="font-style:italic;color:#ffb86c;"> -r </span><span style="color:#f1fa8c;">&#39;&quot;3000-01-02T00:00:00&quot;&#39;</span><span> content </span><span style="color:#ff79c6;">&amp;&amp; </span><span>\
-</span><span>	  </span><span style="color:#8be9fd;">echo </span><span style="font-style:italic;color:#ffb86c;">-n </span><span style="color:#f1fa8c;">&quot;Replace dates? [y/N] &quot; </span><span style="color:#ff79c6;">&amp;&amp; </span><span>\
-</span><span>	  </span><span style="color:#8be9fd;">read</span><span> ans </span><span style="color:#ff79c6;">&amp;&amp; </span><span>\
-</span><span>	  </span><span style="color:#8be9fd;">[ </span><span style="font-style:italic;color:#ff79c6;">$${</span><span style="font-style:italic;color:#ffb86c;">ans:-N</span><span style="font-style:italic;color:#ff79c6;">} </span><span style="color:#ff79c6;">=</span><span> y </span><span style="color:#8be9fd;">] </span><span style="color:#ff79c6;">&amp;&amp; </span><span>\
-</span><span>	  </span><span style="color:#50fa7b;">sed</span><span style="font-style:italic;color:#ffb86c;"> -i -e </span><span style="color:#f1fa8c;">&#39;s/.*&quot;3000-01-02T00:00:00&quot;/date = &quot;</span><span style="font-style:italic;color:#ff79c6;">$(</span><span style="font-style:italic;color:#ffb86c;">DATE</span><span style="font-style:italic;color:#ff79c6;">)</span><span style="color:#f1fa8c;">&quot;/&#39; </span><span>`</span><span style="color:#50fa7b;">find</span><span> content</span><span style="font-style:italic;color:#ffb86c;"> -type</span><span> f` </span><span style="color:#ff79c6;">|| continue
-</span><span>	</span><span style="color:#50fa7b;">zola</span><span> build</span><span style="font-style:italic;color:#ffb86c;"> -o</span><span> docs</span><span style="font-style:italic;color:#ffb86c;"> -f
+<pre data-lang="bash" style="background-color:#282a36;color:#f8f8f2;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#6272a4;">#!/bin/bash
+</span><span>
+</span><span style="color:#8be9fd;">set</span><span> -euo pipefail
+</span><span>
+</span><span style="color:#6272a4;"># Replace placeholder dates in posts
+</span><span>
+</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#ff79c6;">=</span><span style="color:#f1fa8c;">&#39;^date = &quot;3000-01-02T00:00:00+00:00&quot;$&#39;
+</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES</span><span style="color:#ff79c6;">=</span><span>($(</span><span style="color:#50fa7b;">grep</span><span style="font-style:italic;color:#ffb86c;"> -rl </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#f1fa8c;">}&quot;</span><span> content))
+</span><span style="color:#ff79c6;">if </span><span style="color:#8be9fd;">[[ </span><span style="font-style:italic;color:#ffb86c;">-z </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES[</span><span style="color:#bd93f9;">@</span><span style="color:#ffffff;">]</span><span style="color:#f1fa8c;">}&quot; </span><span style="color:#8be9fd;">]]</span><span style="color:#ff79c6;">; then
+</span><span>  </span><span style="color:#6272a4;"># No placeholders to process
+</span><span>  </span><span style="color:#8be9fd;">exit</span><span> 0
+</span><span style="color:#ff79c6;">fi
+</span><span>
+</span><span style="color:#ffffff;">DATE</span><span style="color:#ff79c6;">=</span><span style="color:#f1fa8c;">$(</span><span style="color:#50fa7b;">date</span><span style="font-style:italic;color:#ffb86c;"> -Iseconds</span><span style="color:#f1fa8c;">)
+</span><span>
+</span><span style="color:#8be9fd;">echo </span><span style="color:#f1fa8c;">&quot;Found placeholder date in $</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES</span><span style="color:#f1fa8c;">&quot;
+</span><span>
+</span><span style="color:#ff79c6;">for</span><span> FILE </span><span style="color:#ff79c6;">in </span><span>$</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES</span><span style="color:#ff79c6;">; do
+</span><span>  </span><span style="color:#50fa7b;">sed</span><span style="font-style:italic;color:#ffb86c;"> -i</span><span>.swp</span><span style="font-style:italic;color:#ffb86c;"> -e </span><span style="color:#f1fa8c;">&quot;s/${</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#f1fa8c;">}/date = </span><span style="color:#ff79c6;">\&quot;</span><span style="color:#f1fa8c;">${</span><span style="color:#ffffff;">DATE</span><span style="color:#f1fa8c;">}</span><span style="color:#ff79c6;">\&quot;</span><span style="color:#f1fa8c;">/&quot; &quot;${</span><span style="color:#ffffff;">FILE</span><span style="color:#f1fa8c;">}&quot; </span><span style="color:#ff79c6;">&amp;&amp; </span><span style="color:#50fa7b;">rm </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">FILE</span><span style="color:#f1fa8c;">}.swp&quot;
+</span><span style="color:#ff79c6;">done
 </span></code></pre>
 <p>It's a real date because Zola throws an error if you use something like "placeholderDate", and it's in the future so that when running locally the new posts with the placeholder date will show up at the front of the list. This way when I do go to deploy I can easily set the post timestamp to when the article is actually going live, rather than when I started writing it!</p>
 <h2 id="domain"><a class="zola-anchor" href="#domain" aria-label="Anchor link for: domain">🔗</a>Domain</h2>
