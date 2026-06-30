@@ -1,6 +1,6 @@
 +++
 title = "Static Sites"
-date = "2026-06-30T02:20:15+02:00"
+date = "2026-06-30T02:32:02+02:00"
 
 [taxonomies]
 tags = ["computers", "blogging"]
@@ -85,10 +85,11 @@ set -euo pipefail
 
 # Replace placeholder dates in posts
 
-PLACEHOLDER_REGEX='^date = "3000-01-02T00:00:00+00:00"$'
-PLACEHOLDER_DATE_FILES=($(grep -rl "${PLACEHOLDER_REGEX}" content))
-if [[ -z "${PLACEHOLDER_DATE_FILES[@]}" ]]; then
-  # No placeholders to process
+PLACEHOLDER_REGEX='^date = "3001-01-01T00:00:00+00:00"$'
+PLACEHOLDER_DATE_FILES=()
+while IFS='' read -r line; do PLACEHOLDER_DATE_FILES+=("$line"); done < <(grep -rl "${PLACEHOLDER_REGEX}" content)
+if [[ -z "${PLACEHOLDER_DATE_FILES[*]}" ]]; then
+  echo "No placeholder dates found."
   exit 0
 fi
 

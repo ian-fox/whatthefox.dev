@@ -131,7 +131,7 @@ What the 🦊? | Static Sites
   <span class="icon">
     <i class="far fa-calendar-alt"></i>
   </span>
-  <span><time datetime="2026-06-30T02:20:15+02:00">June 30, 2026</time></span>
+  <span><time datetime="2026-06-30T02:32:02+02:00">June 30, 2026</time></span>
 </span>
 
             </div>
@@ -285,10 +285,11 @@ What the 🦊? | Static Sites
 </span><span>
 </span><span style="color:#6272a4;"># Replace placeholder dates in posts
 </span><span>
-</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#ff79c6;">=</span><span style="color:#f1fa8c;">&#39;^date = &quot;3000-01-02T00:00:00+00:00&quot;$&#39;
-</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES</span><span style="color:#ff79c6;">=</span><span>($(</span><span style="color:#50fa7b;">grep</span><span style="font-style:italic;color:#ffb86c;"> -rl </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#f1fa8c;">}&quot;</span><span> content))
-</span><span style="color:#ff79c6;">if </span><span style="color:#8be9fd;">[[ </span><span style="font-style:italic;color:#ffb86c;">-z </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES[</span><span style="color:#bd93f9;">@</span><span style="color:#ffffff;">]</span><span style="color:#f1fa8c;">}&quot; </span><span style="color:#8be9fd;">]]</span><span style="color:#ff79c6;">; then
-</span><span>  </span><span style="color:#6272a4;"># No placeholders to process
+</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#ff79c6;">=</span><span style="color:#f1fa8c;">&#39;^date = &quot;3001-01-01T00:00:00+00:00&quot;$&#39;
+</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES</span><span style="color:#ff79c6;">=</span><span>()
+</span><span style="color:#ff79c6;">while </span><span style="color:#50fa7b;">IFS</span><span>=</span><span style="color:#f1fa8c;">&#39;&#39;</span><span> read</span><span style="font-style:italic;color:#ffb86c;"> -r</span><span> line</span><span style="color:#ff79c6;">; do </span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES</span><span style="color:#ff79c6;">+=</span><span>(</span><span style="color:#f1fa8c;">&quot;$</span><span style="color:#ffffff;">line</span><span style="color:#f1fa8c;">&quot;</span><span>)</span><span style="color:#ff79c6;">; done &lt; &lt;</span><span>(</span><span style="color:#50fa7b;">grep</span><span style="font-style:italic;color:#ffb86c;"> -rl </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">PLACEHOLDER_REGEX</span><span style="color:#f1fa8c;">}&quot;</span><span> content)
+</span><span style="color:#ff79c6;">if </span><span style="color:#8be9fd;">[[ </span><span style="font-style:italic;color:#ffb86c;">-z </span><span style="color:#f1fa8c;">&quot;${</span><span style="color:#ffffff;">PLACEHOLDER_DATE_FILES[</span><span style="color:#bd93f9;">*</span><span style="color:#ffffff;">]</span><span style="color:#f1fa8c;">}&quot; </span><span style="color:#8be9fd;">]]</span><span style="color:#ff79c6;">; then
+</span><span>  </span><span style="color:#8be9fd;">echo </span><span style="color:#f1fa8c;">&quot;No placeholder dates found.&quot;
 </span><span>  </span><span style="color:#8be9fd;">exit</span><span> 0
 </span><span style="color:#ff79c6;">fi
 </span><span>

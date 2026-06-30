@@ -5,5 +5,5 @@ serve:
 	zola serve
 
 build:
-	$(shell ./replace_dates.sh) 
+	bash replace_dates.sh
 	zola build -o docs -f
